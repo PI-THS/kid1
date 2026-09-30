@@ -800,13 +800,14 @@ function building(cx,cz,ang,w,d,h,side,row){const k=srand(),kind=k<.2?0:k<.42?1:
   if(srand()<.3)EQC.add(new THREE.CylinderGeometry(0.05,0.07,sr(4,9),5),cx+F.x*sr(-tw/3,tw/3),topH+3,cz+F.z*sr(-tw/3,tw/3),0,0,0,1,0x77777a);
   CITY.push({cx,cz,w,d,h:topH,ang,side,row,kind});}
 function bldOK(cx,cz,ang,w,d,side){const F=[-Math.sin(ang),-Math.cos(ang)],R=[Math.cos(ang),-Math.sin(ang)],m=side<0?11:22.5;for(const a of [-1,1])for(const b of [-1,1]){if(trackDist(cx+R[0]*a*d/2+F[0]*b*w/2,cz+R[1]*a*d/2+F[1]*b*w/2)<m)return false;}return true;}
-function zoneSkip(sc,side,w,lat){if(inPark(sc,side,lat))return true;if(Math.abs(sc-ROAD_S)<w/2+9)return true;if(Math.abs(sc-RIVER_S)<w/2+24)return true;
+function zoneSkip(sc,side,w,lat){if(inPark(sc,side,lat))return true;if(side>0&&lat<126&&ST.some(q=>sc>q.stop-LMA-90-w/2&&sc<q.stop-LMA+110+w/2))return true;if(Math.abs(sc-ROAD_S)<w/2+9)return true;if(Math.abs(sc-RIVER_S)<w/2+24)return true;
   if(side<0&&sc>ST[0].stop-215&&sc<ST[0].stop+70&&lat<95)return true;return false;}
 function buildCity(){
   for(const side of [-1,1]){let s=-40;
     while(s<L+20){const w=sr(11,24),sc=s+w/2,P=posAt(sc),F=dirAt(sc),rx=-F.z,rz=F.x,ang=angOf(F);let lat=side<0?13:23.5;
-      for(let row=0;row<4;row++){const d=sr(12,22),h=row===0?sr(10,34):row===1?sr(16,48):row===2?sr(20,62):sr(26,85);const latC=side*(lat+d/2),cx=P.x+rx*latC,cz=P.z+rz*latC;
-        if(!zoneSkip(sc,side,w,lat)&&bldOK(cx,cz,ang,w,d,side))(row>=2&&srand()<.35?houseCluster(cx,cz,ang,w,d):building(cx,cz,ang,w,d,h,side,row));
+      for(let row=0;row<4;row++){const low=side>0&&row<2&&ST.some(q=>sc>q.stop-LMA-250&&sc<q.stop-LMA-90);   // 入站前右邊近路軌嘅樓矮啲，由車頭望得到前面嘅地標
+        const d=sr(12,22),h=low?sr(7,11):row===0?sr(10,34):row===1?sr(16,48):row===2?sr(20,62):sr(26,85);const latC=side*(lat+d/2),cx=P.x+rx*latC,cz=P.z+rz*latC;
+        if(!zoneSkip(sc,side,w,lat)&&bldOK(cx,cz,ang,w,d,side))((low||row>=2)&&srand()<(low?.5:.35)?houseCluster(cx,cz,ang,w,d):building(cx,cz,ang,w,d,h,side,row));
         lat+=d+sr(3,9);}
       s+=w+sr(2,6);}}
   FACM.forEach((m,k)=>bgMesh('f'+k,m,false));SHOPM.forEach((m,k)=>bgMesh('shop'+k,m,false));bgMesh('roof',MC.roof,false);bgMesh('rim',MC.roof,false);bgMesh('equip',MC.equip,false);
@@ -1023,6 +1024,212 @@ const texCloud2=(()=>{const [c,x]=cv(512,256);for(let i=0;i<70;i++){const X=70+M
 function buildClouds2(){const cm=new THREE.SpriteMaterial({map:texCloud2,transparent:true,depthWrite:false,fog:false,opacity:.96});
   for(let i=0;i<30;i++){const s=new THREE.Sprite(cm),a=srand()*6.2832,r=sr(2200,4800),k=sr(900,1900);s.position.set(150+Math.cos(a)*r,sr(380,1150),-800+Math.sin(a)*r);s.scale.set(k,k*0.45,1);scene.add(s);}}
 function buildScenery2(){buildParks();buildHills();buildTokyoTower();buildBoats();buildClouds2();}
+
+
+/* ======================= 沿途景物：山手線 30 個站各自嘅地標 ======================= */
+// 每個站一套，放喺月台對面（路軌右邊）預留嘅空地；換段時搬去嗰個站所在嘅位
+// 本地座標：x＝離路軌嘅橫向距離（25…125）、z＝沿路軌（負＝行車方向前面，−110…90）、y＝地面起計
+const LMM={v:std({vertexColors:true,roughness:.72,metalness:.04}),glass:std({vertexColors:true,roughness:.12,metalness:.62,envMapIntensity:1.2}),lamp:new THREE.MeshBasicMaterial({vertexColors:true})};
+const LMK={built:{},shv:[]};
+function lmNew(){const c={g:new THREE.Group(),M:{},anim:[],occ:[],noOcc:false};c.mg=k=>c.M[k]||(c.M[k]=new Merger(true));return c;}
+const lmOcc=(c,x0,x1,z0,z1)=>{if(!c.noOcc)c.occ.push([Math.min(x0,x1),Math.max(x0,x1),Math.min(z0,z1),Math.max(z0,z1)]);};
+const lmBoxR=(c,k,x,y,z,w,h,d,col,rx=0,ry=0,rz=0)=>{const cs=Math.abs(Math.cos(ry)),sn=Math.abs(Math.sin(ry)),ex=(w*cs+d*sn)/2,ez=(w*sn+d*cs)/2;lmOcc(c,x-ex,x+ex,z-ez,z+ez);c.mg(k).add(new THREE.BoxGeometry(w,h,d),x,y,z,rx,ry,rz,1,col);};
+const lmBox=(c,x,z,w,h,d,col,y=0,ry=0,k='v')=>lmBoxR(c,k,x,y+h/2,z,w,h,d,col,0,ry,0);
+const lmCyl=(c,x,y,z,rt,rb,h,col,seg=16,k='v')=>{const r=Math.max(rt,rb);lmOcc(c,x-r,x+r,z-r,z+r);c.mg(k).add(new THREE.CylinderGeometry(rt,rb,h,seg),x,y+h/2,z,0,0,0,1,col);};
+const lmSph=(c,x,y,z,r,col,s=1,k='v')=>{const S=Array.isArray(s)?s:[s,s,s];lmOcc(c,x-r*S[0],x+r*S[0],z-r*S[2],z+r*S[2]);c.mg(k).add(new THREE.SphereGeometry(r,16,12),x,y,z,0,0,0,s,col);};
+const lmBar=(c,a,b,r,col,seg=6)=>cyl(c.mg('v'),new THREE.Vector3(...a),new THREE.Vector3(...b),r,seg,col);
+function lmOccLine(c,a,b,r){const n=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/r);for(let i=0;i<=n;i++){const x=a[0]+(b[0]-a[0])*i/n,z=a[1]+(b[1]-a[1])*i/n;lmOcc(c,x-r,x+r,z-r,z+r);}}
+function lmGround(c,col,x0=25,x1=125,z0=-110,z1=90){c.noOcc=true;lmBox(c,(x0+x1)/2,(z0+z1)/2,x1-x0,0.12,z1-z0,col,0.03);c.noOcc=false;}
+function lmTree(c,x,z,s=1,col=0x4c9a3b){lmCyl(c,x,0,z,0.28*s,0.42*s,3.4*s,0x6b4a2e,6);for(const [dx,dy,dz,r] of [[0,5,0,2.6],[1.4,4.3,0.6,1.8],[-1.3,4.4,-0.5,1.9],[0.3,6.4,-0.3,1.7]])lmSph(c,x+dx*s,dy*s,z+dz*s,r*s,col);}
+const SKR=[0xf6b3c8,0xf9c6d6,0xf29bb8,0xfadbe4];
+function lmSakura(c,x,z,s=1){lmTree(c,x,z,s,SKR[Math.floor(Math.random()*SKR.length)]);}
+function lmTower(c,x,z,w,d,h,kind=1){c.bgUsed=true;lmOcc(c,x-d/2,x+d/2,z-w/2,z+w/2);bx('LMf'+kind,x,z,0,w,d,0,h,14.4,13.6,Math.floor(Math.random()*4)*0.25,0,new THREE.Color(sr(.9,1),sr(.9,1),sr(.9,1)),'LMroof');}
+function lmSign(c,t,fg,bg,x,y,z,w,h,vert=false,ry=-Math.PI/2){const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:boardTex(t,fg,bg,vert),color:HDR(0xffffff,1.25)}));m.position.set(x,y,z);m.rotation.y=ry;c.g.add(m);return m;}
+function lmTexPlane(c,tex,x,y,z,w,h,ry=-Math.PI/2,k=1.2){const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:tex,color:HDR(0xffffff,k)}));m.position.set(x,y,z);m.rotation.y=ry;c.g.add(m);return m;}
+function lmWater(c,x0,x1,z0,z1){lmOcc(c,x0,x1,z0,z1);const m=new THREE.Mesh(new THREE.PlaneGeometry(x1-x0,z1-z0),WATER);m.rotation.x=-Math.PI/2;m.position.set((x0+x1)/2,0.3,(z0+z1)/2);c.g.add(m);}
+// 切妻屋頂（沿 z 嘅三角柱）
+function lmRoof(c,x,y,z,d,w,h,col){const s=new THREE.Shape();s.moveTo(-d/2,0);s.lineTo(d/2,0);s.lineTo(0,h);s.closePath();const g=new THREE.ExtrudeGeometry(s,{depth:w,bevelEnabled:false});g.translate(0,0,-w/2);c.mg('v').add(g,x,y,z,0,0,0,1,col);}
+function lmTorii(c,x,z,s,col){const h=10*s;for(const dz of [-5.2*s,5.2*s])lmCyl(c,x,0,z+dz,0.55*s,0.72*s,h,col,12);lmBoxR(c,'v',x,h+0.35*s,z,1.7*s,0.9*s,15.4*s,col===0x8d6e4a?0x5d4037:0x1b1b1b);
+  lmBoxR(c,'v',x,h-0.5*s,z,1.3*s,0.6*s,13.6*s,col);lmBoxR(c,'v',x,h-2.3*s,z,0.9*s,0.7*s,12*s,col);lmBox(c,x,z,0.5*s,1.8*s,0.8*s,col,h-2.3*s);}
+function lmHall(c,x,z,s,pil=0xd6452f,wall=0xf3efe6,rf=0x3f4a4f){const W=18*s,D=14*s;lmBox(c,x,z,D+4*s,1.2*s,W+4*s,0xb8b2a6);for(const dx of [-1,1])for(const dz of [-1,-0.33,0.33,1])lmCyl(c,x+dx*D*0.45,1.2*s,z+dz*W*0.45,0.45*s,0.45*s,6*s,pil,10);
+  lmBox(c,x,z,D*0.85,6*s,W*0.85,wall,1.2*s);lmRoof(c,x,7.2*s,z,D+7*s,W+7*s,5.5*s,rf);lmBoxR(c,'v',x,12.8*s,z,1.1*s,0.7*s,W*0.75,0xd4b04a);}
+function lmTrainGroup(n,len,w,h,body,band,band2,mono=false){const c=lmNew();for(let i=0;i<n;i++){const z=i*(len+0.6)-(n-1)*(len+0.6)/2;lmBox(c,0,z,w,h,len,body,0);lmBox(c,0,z,w+0.02,h*0.28,len*0.92,0x1d2a36,h*0.5);lmBox(c,0,z,w+0.04,0.3,len,band,h*0.36);if(band2)lmBox(c,0,z,w+0.04,0.18,len,band2,h*0.3);}
+  const fz=-(n*(len+0.6))/2;lmSph(c,0,h*0.5,fz,1,body,[w/2,h/2,1.6]);lmSph(c,0,h*0.5,-fz,1,body,[w/2,h/2,1.6]);if(mono)lmBox(c,0,0,0.9,1.2,n*(len+0.6),0x9aa1a7,-1.1);return lmFinish(c);}
+function lmShinkansen(c,x,z0,n,kind){const [body,top,band]=kind==='e5'?[0xf4f6f7,0x1f8a5a,0xe8588f]:kind==='e7'?[0xf4f6f7,0x2a4d9a,0xb87333]:[0xf7f8f9,0xf7f8f9,0x1e5aa8];const L=25;
+  for(let i=0;i<n;i++){const z=z0+i*(L+1);lmBox(c,x,z,3.4,2.3,L,body,0.6);lmBox(c,x,z,3.4,1.2,L,top,2.9);lmBox(c,x,z,3.42,0.32,L,band,2.75);lmBoxR(c,'v',x,2.25,z,3.44,0.6,L*0.9,0x1d2a36);}
+  const g=new THREE.SphereGeometry(1,20,12);g.scale(1.7,1.5,kind==='n700'?7:9);c.mg('v').add(g,x,2.3,z0-L/2-(kind==='n700'?4:6),0,0,0,1,body);}
+// ⚠ 城市大廈（BG 'LM…'）只有用過 lmTower 嗰個先收；唔係車／船呢啲內層組會偷咗外層未收嘅大廈，大廈會跟住火車一齊郁
+function lmFinish(c){for(const k in c.M){const o=c.M[k].mesh(LMM[k]||LMM.v,false,true);if(o)c.g.add(o);}
+  if(c.bgUsed)for(const k of Object.keys(BG)){if(!k.startsWith('LM'))continue;const A=BG[k],g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(A.p,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(A.n,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(A.u,2));g.setAttribute('color',new THREE.Float32BufferAttribute(A.c,3));
+    const m=new THREE.Mesh(g,k==='LMroof'?MC.roof:(FACM[+k.slice(3)]||FACM[0]));m.receiveShadow=true;c.g.add(m);delete BG[k];}
+  c.g.userData.anim=c.anim;return c.g;}
+function screenTex(t='TOKYO'){const [cc,x]=cv(256,144);const g=x.createLinearGradient(0,0,256,144);g.addColorStop(0,'#ff4081');g.addColorStop(.5,'#7c4dff');g.addColorStop(1,'#00e5ff');x.fillStyle=g;x.fillRect(0,0,256,144);x.fillStyle='rgba(255,255,255,.9)';x.font=`900 44px ${JPF}`;x.textAlign='center';x.textBaseline='middle';x.fillText(t,128,76,236);return T(cc);}
+function latticeTex(){const [cc,x]=cv(256,256);x.fillStyle='#35607e';x.fillRect(0,0,256,256);x.strokeStyle='#f4f6f7';x.lineWidth=10;for(let i=-4;i<8;i++){x.beginPath();x.moveTo(i*48,0);x.lineTo(i*48+256,256);x.stroke();x.beginPath();x.moveTo(i*48+256,0);x.lineTo(i*48,256);x.stroke();}const t=T(cc,1);t.repeat.set(4,6);return t;}
+function crossTex(){const [cc,x]=cv(512,512);x.fillStyle='#3a3a3c';x.fillRect(0,0,512,512);x.fillStyle='#f2f2f0';for(let i=0;i<14;i++){x.fillRect(100+i*22,34,11,58);x.fillRect(100+i*22,420,11,58);x.fillRect(34,100+i*22,58,11);x.fillRect(420,100+i*22,58,11);}
+  x.save();x.translate(256,256);for(const r of [Math.PI/4,-Math.PI/4]){x.save();x.rotate(r);for(let i=-6;i<=6;i++)x.fillRect(-150,i*20-5,300,10);x.restore();}x.restore();return T(cc);}
+function tudorTex(){const [cc,x]=cv(256,128);x.fillStyle='#f6f1e6';x.fillRect(0,0,256,128);x.strokeStyle='#4e342e';x.lineWidth=7;for(let i=0;i<=8;i++){x.beginPath();x.moveTo(i*32,0);x.lineTo(i*32,128);x.stroke();}x.beginPath();x.moveTo(0,64);x.lineTo(256,64);x.stroke();
+  for(let i=0;i<8;i+=2){x.beginPath();x.moveTo(i*32,64);x.lineTo(i*32+32,0);x.stroke();x.beginPath();x.moveTo(i*32+32,128);x.lineTo(i*32+64,64);x.stroke();}return T(cc,1);}
+
+const LMB={},LMA=-60;const LMNOFILL=[4,7,8,9,13,18];   // LMA：地標區原點喺停車位之前幾多米（負＝停車位之後；本地 z＝−LMA 係停車位，即係 z＝60），地標大多喺停車位前面：入站一路望到、停車時喺右前方、開車時經過；LMNOFILL：公園／車廠／樹林類唔補大廈
+// 0 東京：八重洲雙塔＋白色大屋頂
+LMB[0]=c=>{lmGround(c,0xb9b6ae);lmTower(c,72,-62,40,34,120,1);lmTower(c,72,48,40,34,112,1);lmBox(c,44,-8,16,0.8,96,0xf4f4f2,17);
+  for(let z=-50;z<=40;z+=18){lmCyl(c,37,0,z,0.5,0.5,17,0xdadfe3,8);lmCyl(c,51,0,z,0.5,0.5,17,0xdadfe3,8);}for(const z of [-100,-30,20,80])lmTree(c,30,z,1.1);lmTower(c,110,-5,26,22,64,3);};
+// 1 神田：神田明神
+LMB[1]=c=>{lmGround(c,0xcfc4ad);lmTorii(c,32,-20,1.3,0xd6452f);lmBox(c,45,-20,22,0.1,7,0xe4ddcf,0.15);lmHall(c,68,-20,1.25);for(const [x,z] of [[48,-50],[48,10],[86,-56],[88,18],[40,-76],[40,44]])lmTree(c,x,z,1.3,0x3f8a35);
+  lmTower(c,100,78,26,24,46,2);lmTower(c,62,82,20,20,34,4);lmTower(c,104,-98,22,22,52,0);};
+// 2 秋葉原：電氣街
+LMB[2]=c=>{lmGround(c,0x9a9a98);const S=[['電気街','#ffd400','#d81b60'],['アニメ','#ffffff','#e53935'],['ゲーム','#ffffff','#1e88e5'],['AKIBA','#ffffff','#c62828'],['ホビー','#222222','#ffeb3b'],['カメラ','#ffffff','#43a047'],['フィギュア','#ffffff','#00897b'],['カラオケ','#ffffff','#fb8c00']];
+  const B=[[42,-86,24,20,44],[42,-52,22,20,36],[45,-14,28,24,52],[42,26,24,20,40],[44,64,26,22,58],[90,-70,34,30,64],[94,0,36,30,74],[92,62,32,28,50]];
+  B.forEach(([x,z,w,d,h],i)=>{lmTower(c,x,z,w,d,h,[2,3,5][i%3]);if(x<60){const a=S[i%S.length],b=S[(i+3)%S.length];lmSign(c,a[0],a[1],a[2],x-d/2-0.4,h*0.55,z-w*0.25,3.4,Math.min(h-10,16),true);lmSign(c,b[0],b[1],b[2],x-d/2-0.4,6.6,z+w*0.1,Math.min(w-4,14),3.4);}});
+  lmTexPlane(c,screenTex(),45-12-0.5,30,-14,16,9,-Math.PI/2,1.35);};
+// 3 御徒町：アメ横
+LMB[3]=c=>{lmGround(c,0x8e8b86);const aw=[0xe53935,0xfdd835,0x1e88e5,0x43a047,0xfb8c00],pr=[0xff7043,0x8bc34a,0xffeb3b,0xe53935,0xffffff];
+  for(let z=-100;z<=70;z+=10){const i=Math.round((z+100)/10);for(const sd of [0,1]){const x=sd?59:39;lmBox(c,x,z,7,4.2,9,0xe9e2d4);lmBoxR(c,'v',sd?54.4:43.6,4.4,z,4.6,0.3,9,aw[(i+sd)%5],0,0,sd?-0.3:0.3);
+      for(let k=0;k<4;k++)lmBox(c,sd?54.2:43.8,z-3.2+k*2.1,1.6,0.9,1.6,pr[(i+k)%5],0.3);}lmCyl(c,49,6.4,z,0.4,0.4,1,0xe53935,10,'lamp');}
+  for(const z of [-60,20]){for(const dz of [-6,6])lmBox(c,33,z+dz,0.6,9,0.6,0x4e4e4e);lmSign(c,'アメ横','#ffffff','#d32f2f',32.6,8,z,11,3);}
+  lmTower(c,96,-40,56,40,42,0);lmSign(c,'デパート','#ffffff','#1565c0',96-20-0.4,30,-40,4,14,true);lmTower(c,102,50,36,30,55,4);};
+// 4 上野：公園、不忍池、熊貓、博物館
+function lmPanda(c,x,z,s){lmBox(c,x,z,4*s,1.2,4*s,0x9e9e9e);const y=1.2;lmSph(c,x,y+2.2*s,z,2.1*s,0xf7f7f5,[1,0.95,0.9]);lmSph(c,x,y+4.9*s,z,1.5*s,0xf7f7f5);lmSph(c,x-1.45*s,y+4.6*s,z,0.25*s,0x1b1b1b);
+  for(const e of [-1,1]){lmSph(c,x-0.2*s,y+6.1*s,z+e*1.1*s,0.55*s,0x1b1b1b);lmSph(c,x-1.25*s,y+5.1*s,z+e*0.55*s,0.42*s,0x1b1b1b,[0.5,1.2,0.9]);lmSph(c,x-1.46*s,y+5.18*s,z+e*0.55*s,0.14*s,0xffffff);
+    lmSph(c,x-0.6*s,y+2.9*s,z+e*1.9*s,0.75*s,0x1b1b1b,[1,1.6,1]);lmSph(c,x-0.9*s,y+0.8*s,z+e*1.2*s,0.8*s,0x1b1b1b);}}
+LMB[4]=c=>{lmGround(c,0x7fb05a);lmWater(c,74,122,-100,-28);for(let i=0;i<10;i++)lmCyl(c,80+Math.random()*36,0.3,-94+Math.random()*60,1.3+Math.random(),1.3+Math.random(),0.12,0x4f8f3a,12);
+  for(let z=-104;z<=76;z+=9){if(z>-24&&z<8)continue;lmSakura(c,30+Math.random()*3,z,1.15);lmSakura(c,40+Math.random()*3,z+4.5,1.15);}for(let i=0;i<7;i++)lmSakura(c,76+i*7,-18+Math.random()*6,1.2);
+  lmPanda(c,54,-42,2.2);for(const dz of [-7,7])lmBox(c,36,-8+dz,1.2,8,1.2,0x6d4c33);lmBox(c,36,-8,1.6,1.4,16,0x4e342e,8);lmSign(c,'上野動物園','#ffffff','#2e7d32',35.1,6.6,-8,12,2.6);
+  lmBox(c,100,45,24,14,62,0xd9d2c3);lmRoof(c,100,14,45,30,68,8,0x39444a);lmBox(c,87.6,45,1.2,8,14,0x6d6358);};
+// 5 鶯谷：寺、五重塔、墓地
+function lmPagoda(c,x,z,s){let y=1.4*s;lmBox(c,x,z,11*s,1.4*s,11*s,0xb8b2a6);for(let i=0;i<5;i++){const w=(8.4-i*0.9)*s;lmBox(c,x,z,w,4*s,w,0xd6452f,y);y+=4*s;lmBox(c,x,z,w+4.4*s,0.8*s,w+4.4*s,0x2f3a3f,y);y+=0.8*s;}
+  lmCyl(c,x,y,z,0.3*s,0.4*s,7*s,0xc9a54a,8);for(let k=0;k<5;k++)lmCyl(c,x,y+1+k*1.1*s,z,0.8*s,0.8*s,0.25*s,0xc9a54a,10);}
+LMB[5]=c=>{lmGround(c,0xc9c1ad);lmPagoda(c,62,-40,1.25);lmHall(c,100,25,1.3,0x8d3a2a,0xf1ead9,0x37474f);for(let i=0;i<5;i++)for(let j=0;j<6;j++)lmBox(c,36+i*4,32+j*7,1.2,1.6+Math.random()*0.7,0.6,0x9ea3a6);
+  for(const [x,z] of [[40,-90],[52,-72],[88,-92],[112,-60],[46,90],[112,70],[82,82]])lmTree(c,x,z,1.4,0x3a7d33);for(const z of [-4,16]){lmCyl(c,74,0,z,0.5,0.7,1.6,0x9e9e9e,8);lmBox(c,74,z,1.3,1.1,1.3,0xbdbdbd,1.6);lmCyl(c,74,2.7,z,0.2,1.1,0.8,0x8d8d8d,4);}};
+// 6 日暮里：舍人線（會行）＋高樓
+LMB[6]=c=>{lmGround(c,0xa8a59e);const gx=38;lmBox(c,gx,-29,3.4,1.4,158,0xcfd3d6,11.3);for(let z=-104;z<=46;z+=15)lmBox(c,gx,z,1.7,11.3,1.7,0xbfc4c8);
+  lmBox(c,gx+1,60,12,5,22,0xe8ecef,10.5);lmBoxR(c,'glass',gx-5.1,13,60,0.3,3.2,20,0x9dbad0);lmBox(c,gx+1,60,13,0.6,23,0x9aa1a7,15.5);for(const dz of [-9,9])lmBox(c,gx+1,60+dz,1.6,10.5,1.6,0xbfc4c8);lmSign(c,'舎人ライナー','#ffffff','#e91e63',gx-5.6,17.3,60,10,1.6);
+  const tr=lmTrainGroup(3,10,2.6,3.2,0xf5f7f8,0x1e88e5,0xec407a);c.g.add(tr);c.anim.push(t=>{const k=(Math.sin(t*0.12)+1)/2;tr.position.set(gx,12.7,-92+k*135);});
+  lmTower(c,96,-58,28,28,82,1);lmTower(c,104,22,26,26,70,3);for(const [x,z] of [[56,40],[60,-20],[62,-82]])lmTree(c,x,z,1.2);};
+// 7 西日暮里：小山公園＋遊樂場
+LMB[7]=c=>{lmGround(c,0x86b861);const hx=84,hz=-55;lmSph(c,hx,0,hz,38,0x6aa84f,[1,0.3,1.2]);for(let i=0;i<14;i++){const a=i/14*Math.PI*2;lmTree(c,hx+Math.cos(a)*25,hz+Math.sin(a)*30,1.1);}
+  lmBox(c,hx,hz,10,1,8,0xa0764a,11.2);for(const dx of [-4,4])for(const dz of [-3,3])lmCyl(c,hx+dx,12.2,hz+dz,0.18,0.18,2.2,0x6d4c33,6);lmBoxR(c,'v',hx,14.3,hz,10.2,0.25,8.2,0x6d4c33);
+  const x=40,z=-5;lmBox(c,x,z,3,5,3,0xf4511e);lmBoxR(c,'v',x+4.6,2.6,z,7.6,0.4,2.2,0xffca28,0,0,-0.58);for(let i=0;i<5;i++)lmBox(c,x-1.9,z,0.3,0.2,2,0x1e88e5,i);
+  for(const dz of [-4,4]){lmBoxR(c,'v',x+14,2.6,z+dz,0.3,5.4,0.3,0x43a047,0,0,0.3);lmBoxR(c,'v',x+17,2.6,z+dz,0.3,5.4,0.3,0x43a047,0,0,-0.3);}lmBoxR(c,'v',x+15.5,5.2,z,0.3,0.3,8.6,0x43a047);for(const dz of [-2,2])lmBox(c,x+15.5,z+dz,1.2,0.15,0.5,0xe53935,1.2);
+  for(let i=0;i<4;i++)for(let j=0;j<4;j++)lmCyl(c,x+2+i*1.6,0,z+11+j*1.6,0.08,0.08,4,0x1e88e5,5);for(const [xx,zz] of [[40,40],[52,72],[34,86]])lmTree(c,xx,zz,1.2);};
+// 8 田端：新幹線車廠
+LMB[8]=c=>{lmGround(c,0x8d8274);for(const x of [36,50,64,78,92,106])for(const dz of [-0.75,0.75])lmBoxR(c,'v',x+dz,0.2,-10,0.15,0.2,200,0x777777);
+  lmShinkansen(c,36,-62,4,'e5');lmShinkansen(c,50,-24,4,'e7');lmShinkansen(c,64,-84,4,'e5');lmShinkansen(c,78,8,3,'e7');lmShinkansen(c,92,-52,4,'e5');
+  lmBox(c,70,74,90,1,4,0xd8dcdf,8);for(const x of [30,110])lmBox(c,x,74,2,8,2,0xbfc4c8);for(const x of [30,110])lmBoxR(c,'v',70,9.4,74+(x<60?-1.8:1.8),90,0.9,0.1,0x9aa1a7);};
+// 9 駒込：杜鵑花＋日本庭園
+function lmPine(c,x,z,s){lmCyl(c,x,0,z,0.3*s,0.45*s,5*s,0x6b4a2e,6);for(const [y,r,dx] of [[5,3.2,0],[6.5,2.5,0.8],[7.9,1.7,-0.4]])lmSph(c,x+dx*s,y*s,z,r*s,0x2e6b35,[1,0.34,1]);}
+LMB[9]=c=>{lmGround(c,0x7fb05a);const AZ=[0xe91e63,0xf06292,0xf8bbd0,0xffffff,0xd81b60];for(let z=-106;z<=86;z+=3.2)lmSph(c,28+Math.random()*2,1.2,z,1.9,AZ[Math.floor(Math.random()*5)],[1,0.7,1]);
+  lmWater(c,58,112,-72,8);lmSph(c,86,0,-32,9,0x6aa84f,[1,0.25,1]);lmPine(c,86,-32,1.2);lmPine(c,68,-58,1);lmPine(c,104,-8,1.1);lmPine(c,50,30,1.2);
+  for(let i=0;i<=12;i++){const t=i/12,a=(t-0.5)*Math.PI*0.8;lmBox(c,72,-4+(t-0.5)*18,4,0.4,1.6,0xd6452f,Math.cos(a)*3.2-0.4);}lmBox(c,100,52,8,3,10,0xd9c8a8);lmRoof(c,100,3,52,11,13,3.6,0x8d6e4a);
+  for(const [x,z] of [[50,60],[62,82],[116,-92],[46,-92]])lmTree(c,x,z,1.3,0x3a7d33);};
+// 10 巣鴨：地蔵通り商店街＋寺＋地藏
+LMB[10]=c=>{lmGround(c,0xa8a39a);lmBox(c,75,-20,100,0.06,10,0x8a8580,0.13);for(let x=35;x<=120;x+=9)for(const zz of [-31,-9]){lmBox(c,x,zz,8,7,10,[0xe7dcc8,0xefe6d6,0xddd2bd][Math.round(x/9)%3]);lmBoxR(c,'v',x,4.2,zz+(zz<-20?5.5:-5.5),8,0.3,2,[0xc62828,0x1565c0,0xf9a825][Math.round(x/9)%3],zz<-20?0.35:-0.35,0,0);}
+  for(const dz of [-7,7])lmBox(c,30,-20+dz,0.6,9,0.6,0x4e4e4e);lmSign(c,'すがも地蔵通り','#ffffff','#b71c1c',29.6,8,-20,14,2.8);lmHall(c,72,-76,1.1,0x6d4c41,0xf1ead9,0x37474f);
+  for(let i=0;i<6;i++){const x=40+i*2.4;lmCyl(c,x,0,-56,0.45,0.55,1.2,0x9e9e9e,10);lmSph(c,x,1.55,-56,0.42,0x9e9e9e);lmBoxR(c,'v',x-0.3,1.05,-56,0.3,0.5,0.9,0xd32f2f);}};
+// 11 大塚：都電荒川線（路面電車會行）＋玫瑰
+function lmTram(){const c=lmNew();lmBox(c,0,0,13,2.6,3.2,0xfff3d6,0.5);lmBox(c,0,0,13.02,0.9,3.22,0x1d2a36,1.7);lmBox(c,0,0,13.04,0.35,3.24,0xe57373,1.1);lmBox(c,0,0,12.4,0.4,2.8,0xd7ccc8,3.1);
+  lmBoxR(c,'v',0,4.2,0,0.08,1.6,0.08,0x444444,0,0,0.4);lmBoxR(c,'v',0.4,4.9,0,0.08,0.08,1.6,0x444444);for(const dx of [-4,4])lmBox(c,dx,0,0.9,0.5,2.6,0x222222,0.05);return lmFinish(c);}
+LMB[11]=c=>{lmGround(c,0x9d9a93);lmBox(c,75,-50,100,0.06,7,0x7b7b78,0.13);for(const dz of [-0.75,0.75])lmBoxR(c,'v',75,0.25,-50+dz,100,0.12,0.12,0x5f5f5f);
+  const RS=[0xe53935,0xf06292,0xffeb3b,0xffffff];for(let x=28;x<124;x+=2.6)for(const dz of [-5.2,5.2]){lmSph(c,x,0.8,-50+dz,1,0x3f7d33,[1,0.8,1]);lmSph(c,x+0.4,1.5,-50+dz*1.02,0.36,RS[Math.floor(Math.random()*4)]);}
+  lmBox(c,50,-43.8,10,0.5,3.5,0xcfd3d6,0.3);lmBox(c,50,-42.8,10,0.2,3.2,0x1565c0,2.8);for(const dx of [-4,4])lmBox(c,50+dx,-42.8,0.2,2.8,0.2,0x9aa1a7);
+  lmOcc(c,25,125,-57,-43);const tram=lmTram();c.g.add(tram);c.anim.push(t=>{const k=(Math.sin(t*0.15)+1)/2;tram.position.set(32+k*84,0.3,-50);});lmTower(c,96,-92,30,26,28,4);lmTower(c,60,-72,24,22,22,2);lmTower(c,100,60,30,26,26,0);};
+// 12 池袋：Sunshine 60＋百貨公司＋貓頭鷹像
+LMB[12]=c=>{lmGround(c,0xa9a6a0);lmTower(c,100,-86,44,44,128,0);lmBox(c,100,-86,40,6,40,0xd9dcdf,128);lmTower(c,64,-20,60,40,44,2);lmSign(c,'デパート','#ffffff','#2e7d32',64-20-0.4,32,-20,4,16,true);lmTower(c,106,56,32,30,52,3);
+  const x=38,z=-40,s=1.7,y=1.4;lmBox(c,x,z,3*s,1.4,3*s,0xb0a58f);lmSph(c,x,y+2*s,z,1.6*s,0x8d6e4a,[0.9,1.15,1]);lmSph(c,x-0.3*s,y+3.9*s,z,1.3*s,0x8d6e4a);
+  for(const e of [-1,1]){lmSph(c,x-1.35*s,y+4.1*s,z+e*0.55*s,0.5*s,0xfff8e1,[0.4,1,1]);lmSph(c,x-1.6*s,y+4.1*s,z+e*0.55*s,0.25*s,0x1b1b1b,[0.4,1,1]);lmCyl(c,x-0.3*s,y+4.9*s,z+e*0.75*s,0.1*s,0.38*s,0.9*s,0x8d6e4a,6);}
+  lmBoxR(c,'v',x-1.6*s,y+3.55*s,z,0.5*s,0.42*s,0.32*s,0xffa000,0,0,0.6);for(const zz of [-92,-8,82])lmTree(c,32,zz,1.1);};
+// 13 目白：大學紅磚校舍＋校園樹林
+LMB[13]=c=>{lmGround(c,0x7fae5c);for(let i=0;i<46;i++){const x=40+Math.random()*82,z=-105+Math.random()*190;if(x>42&&x<72&&z>-85&&z<-25)continue;lmTree(c,x,z,1+Math.random()*0.5,[0x3a7d33,0x4c9a3b,0x2e6b35][i%3]);}
+  lmBox(c,56,-55,18,12,50,0xa0462f);lmRoof(c,56,12,-55,20,52,5,0x37474f);lmBox(c,56,-55,8,20,8,0xa0462f);lmRoof(c,56,20,-55,9,9,4,0x37474f);for(let k=-2;k<=2;k++)lmBox(c,46.9,-55+k*9,0.2,3,2.2,0xf5f0e0,5);
+  for(let z=-100;z<=85;z+=4)lmBox(c,30,z,0.3,2.2,0.3,0x2b2b2b);lmBoxR(c,'v',30,2.1,-8,0.2,0.2,190,0x2b2b2b);};
+// 14 高田馬場：大學鐘樓
+LMB[14]=c=>{lmGround(c,0xa9a59b);lmBox(c,80,-60,20,14,50,0xb5651d);lmRoof(c,80,14,-60,22,52,4,0x455a64);lmBox(c,60,-60,9,42,9,0xb5651d);lmBox(c,60,-60,10,1,10,0x8d6e63,42);lmCyl(c,60,43,-60,0.1,5.4,9,0x455a64,4);
+  const ck=new THREE.Mesh(new THREE.CircleGeometry(3.4,32),new THREE.MeshBasicMaterial({map:watchTex(),color:HDR(0xffffff,1.1)}));ck.position.set(55.4,34,-60);ck.rotation.y=-Math.PI/2;c.g.add(ck);
+  lmTower(c,104,20,30,28,40,4);lmTower(c,106,62,26,24,34,2);for(const [x,z] of [[40,-20],[45,60],[35,20],[46,-100]])lmTree(c,x,z,1.3);};
+// 15 新大久保：韓國街
+LMB[15]=c=>{lmGround(c,0x9d9a93);const S=[['한국','#ffffff','#e91e63'],['치킨','#ffffff','#ff6f00'],['K-POP','#ffffff','#7b1fa2'],['韓国料理','#ffffff','#c62828'],['コスメ','#ffffff','#ec407a'],['카페','#3e2723','#ffcc80'],['チーズ','#ffffff','#f9a825'],['아이돌','#ffffff','#1e88e5']];
+  let i=0;for(let z=-100;z<=80;z+=20){const h=12+Math.random()*16;lmTower(c,42,z,18,16,h,[2,3,4][i%3]);const a=S[i%S.length],b=S[(i+4)%S.length];lmSign(c,a[0],a[1],a[2],42-8-0.4,h*0.6,z-3,2.8,Math.min(h-5,9),true);lmSign(c,b[0],'#ffffff',b[2],42-8-0.4,5.6,z+3,10,2.6);i++;}
+  lmTower(c,96,-50,30,28,46,1);lmTower(c,100,40,32,28,54,3);};
+// 16 新宿：都廳雙塔＋蠶繭大廈＋高樓
+LMB[16]=c=>{lmGround(c,0xa6a39c);const x=100,z=-78;lmTower(c,x,z,60,34,62,0);for(const dz of [-18,18]){lmTower(c,x,z+dz,24,24,112,0);lmBox(c,x,z+dz,17,10,17,0xb0b6bb,112,Math.PI/4);lmBox(c,x,z+dz,11,6,11,0x9aa1a7,122);}
+  const pts=[];for(let i=0;i<=20;i++){const t=i/20;pts.push(new THREE.Vector2(10*Math.sin(Math.PI*(0.08+t*0.84))*(1-t*0.3)+2.2,t*112));}pts.push(new THREE.Vector2(0,112));const co=new THREE.Mesh(new THREE.LatheGeometry(pts,32),std({map:latticeTex(),roughness:.22,metalness:.5}));co.position.set(48,0,-40);c.g.add(co);lmOcc(c,37,59,-51,-29);
+  lmTower(c,56,-88,30,26,96,1);lmTower(c,108,58,32,28,110,3);};
+// 17 代々木：Docomo 大廈（大鐘）＋國立代代木體育館
+LMB[17]=c=>{lmGround(c,0x8fb06a);const x=100,z=-88;lmTower(c,x,z,30,30,70,0);lmTower(c,x,z,24,24,92,0);lmTower(c,x,z,16,16,108,0);lmBox(c,x,z,12,6,12,0x6d7a82,108);lmCyl(c,x,114,z,0.4,1.2,26,0x9aa1a7,8);
+  for(const [dx,dz,ry] of [[-8.1,0,-Math.PI/2],[0,8.1,0],[8.1,0,Math.PI/2],[0,-8.1,Math.PI]]){const m=new THREE.Mesh(new THREE.CircleGeometry(4,28),new THREE.MeshBasicMaterial({map:watchTex(),color:HDR(0xffffff,1.1)}));m.position.set(x+dx,101,z+dz);m.rotation.y=ry;c.g.add(m);}
+  const gx=56,gz=-30;c.mg('v').add(new THREE.CylinderGeometry(22,22,6,40),gx,3,gz,0,0,0,[1,1,1.5],0xd9d6cf);const rg=new THREE.PlaneGeometry(50,72,24,24);rg.rotateX(-Math.PI/2);disp(rg,v=>{v.y=13+0.005*v.z*v.z-0.009*v.x*v.x;});c.mg('v').add(rg,gx,0,gz,0,0,0,1,0xe8ebee);
+  for(const dz of [-30,30])lmCyl(c,gx,0,gz+dz,0.8,1.2,26,0x9aa1a7,10);for(let i=0;i<14;i++)lmTree(c,36+Math.random()*28,26+Math.random()*60,1.2);};
+// 18 原宿：明治神宮大鳥居＋森林＋木造舊站舍
+LMB[18]=c=>{lmGround(c,0x6f9c50);for(let i=0;i<55;i++)lmTree(c,56+Math.random()*66,-104+Math.random()*190,1.4+Math.random()*0.6,[0x2e6b35,0x3a7d33,0x285e2e][i%3]);lmTorii(c,42,-20,1.5,0x8d6e4a);
+  const tb=new THREE.Mesh(new THREE.BoxGeometry(12,7,22),[new THREE.MeshStandardMaterial({color:0xf4efe4}),new THREE.MeshStandardMaterial({map:tudorTex(),roughness:.8}),new THREE.MeshStandardMaterial({color:0x4e342e}),new THREE.MeshStandardMaterial({color:0x4e342e}),new THREE.MeshStandardMaterial({map:tudorTex()}),new THREE.MeshStandardMaterial({map:tudorTex()})]);tb.position.set(40,3.5,-70);c.g.add(tb);lmOcc(c,34,46,-81,-59);
+  lmRoof(c,40,7,-70,14,24,6,0x4e342e);lmBox(c,38,-78,4,13,4,0xf4efe4);lmCyl(c,38,13,-78,0.1,3,5,0x4e342e,4);for(const dz of [-5.6,5.6])lmBox(c,29.4,14+dz,0.3,8.4,0.3,0x5d4037);lmSign(c,'竹下通り','#ffffff','#ec407a',29,7,14,12,2.6);};
+// 19 渋谷：十字路口＋八公像＋大螢幕
+LMB[19]=c=>{lmGround(c,0x4a4a4c);const cr=new THREE.Mesh(new THREE.PlaneGeometry(58,58),new THREE.MeshStandardMaterial({map:crossTex(),roughness:.85}));cr.rotation.x=-Math.PI/2;cr.position.set(76,0.2,-50);c.g.add(cr);lmOcc(c,47,105,-79,-21);
+  const hx=40,hz=-8,s=1.8;lmBox(c,hx,hz,4,1.6,3,0x9e9e9e);const hy=1.6;lmSph(c,hx,hy+1.6*s,hz,1.1*s,0x6d4c33,[1.2,1,0.8]);lmSph(c,hx-1.1*s,hy+2.7*s,hz,0.7*s,0x6d4c33);lmSph(c,hx-1.7*s,hy+2.6*s,hz,0.35*s,0x5d4037,[1.2,0.8,0.9]);
+  for(const e of [-1,1]){lmCyl(c,hx-0.9*s,hy+3.2*s,hz+e*0.35*s,0.05*s,0.25*s,0.5*s,0x6d4c33,4);lmCyl(c,hx-0.9*s,hy,hz+e*0.45*s,0.18*s,0.2*s,1.6*s,0x6d4c33,8);}
+  lmTower(c,110,-96,26,26,122,1);lmTower(c,110,62,30,26,48,3);lmTexPlane(c,screenTex('HELLO!'),110-13-0.4,32,62,20,11,-Math.PI/2,1.35);lmTower(c,40,-98,24,22,46,2);lmTexPlane(c,screenTex('TOKYO'),40-11-0.4,30,-98,16,9,-Math.PI/2,1.35);
+  lmCyl(c,36,0,-60,10,10,42,0xc8ccd0,24);lmSign(c,'SHIBUYA','#ffffff','#e91e63',25.7,34,-60,3,10,true);};
+// 20 恵比寿：紅磚廣場＋玻璃拱廊＋歐式大樓
+LMB[20]=c=>{lmGround(c,0xb9ae9c);for(const z of [-92,-6]){lmBox(c,62,z,22,14,34,0x9c4a32);lmRoof(c,62,14,z,24,36,5,0x3e4a52);for(let k=-3;k<=3;k++)lmBox(c,50.95,z+k*4.6,0.2,4,2.4,0x2b3a44,4);}
+  for(let i=0;i<9;i++)c.mg('glass').add(new THREE.TorusGeometry(8,0.3,6,24,Math.PI),62,9,-70+i*6.2,0,0,0,1,0xeef2f4);lmBoxR(c,'glass',62,17.2,-45,16,0.2,50,0xcfe3ee);
+  lmTower(c,100,-90,30,30,78,5);lmCyl(c,100,78,-90,0.2,15,12,0x6d4c41,4);for(const [x,z] of [[40,-100],[40,60],[92,20]])lmTree(c,x,z,1.2);};
+// 21 目黒：目黑川兩岸櫻花
+LMB[21]=c=>{lmGround(c,0x9d9a93);lmWater(c,25,125,-28,-14);for(const zz of [-30,-12])lmBoxR(c,'v',75,0.9,zz,100,1.8,1.2,0x9e9a92);for(let x=28;x<124;x+=6.4){lmSakura(c,x,-36,1.25);lmSakura(c,x+3,-6,1.25);}
+  for(const x of [55,95])lmBoxR(c,'v',x,1.6,-21,4,0.5,18,0xb0a58f);lmTower(c,70,-82,30,26,30,4);lmTower(c,106,-86,26,24,26,2);lmTower(c,70,46,34,30,34,0);lmTower(c,108,52,26,24,28,3);};
+// 22 五反田：池上線（喺大樓上面嘅車站）
+LMB[22]=c=>{lmGround(c,0xa6a39c);lmBoxR(c,'v',50,14,-40,40,1.2,6,0xc9ccd0);for(const x of [34,46,58])lmBox(c,x,-40,1.8,13.4,1.8,0xbfc4c8);lmTower(c,86,-40,30,26,34,2);lmSign(c,'池上線','#ffffff','#1565c0',86-13-0.4,23,-40,10,2.6);
+  const tr=lmTrainGroup(3,11,2.8,3.2,0xdfe4e8,0x2e7d32,0x1565c0);tr.rotation.y=Math.PI/2;tr.position.set(52,14.7,-40);c.g.add(tr);lmTower(c,70,-94,30,30,72,1);lmTower(c,112,-90,28,26,60,3);lmTower(c,106,72,30,26,50,0);};
+// 23 大崎：雙子玻璃塔＋空中步道＋車廠
+LMB[23]=c=>{lmGround(c,0xa9a6a0);lmTower(c,96,-88,36,32,96,1);lmTower(c,92,40,36,32,100,1);lmBox(c,70,-10,20,1,90,0xd8dcdf,9);for(const z of [-50,-10,30])lmBox(c,70,z,1.4,9,1.4,0xbfc4c8);
+  for(const x of [34,44]){for(const dz of [-0.75,0.75])lmBoxR(c,'v',x+dz,0.2,-10,0.12,0.2,190,0x777777);for(let i=0;i<4;i++){const z=(x<40?-70:0)+i*21;lmBox(c,x,z,3,3.4,20,0xdfe4e8,0.6);lmBox(c,x,z,3.02,0.3,20,0x00ac9a,2.4);lmBoxR(c,'v',x,2.9,z,3.04,0.8,18,0x1d2a36);}}};
+// 24 品川：Intercity 高樓＋車站＋新幹線 N700
+LMB[24]=c=>{lmGround(c,0xa9a6a0);for(const z of [-75,-12,50])lmTower(c,106,z,30,26,100+Math.random()*25,1);lmBox(c,76,-20,30,16,60,0xe8ecef);lmBoxR(c,'glass',60.9,8,-20,0.3,12,56,0x9dbad0);lmSign(c,'品川','#ffffff','#2e7d32',60.5,14.5,-20,8,2.4);
+  for(const dz of [-0.75,0.75])lmBoxR(c,'v',44+dz,0.2,-10,0.12,0.2,190,0x777777);lmShinkansen(c,44,-52,4,'n700');lmBox(c,50.2,-15,4,1.1,96,0xd6d6d2);lmBox(c,50.2,-15,5.4,0.3,84,0xeef1f3,5.6);for(let z=-54;z<=24;z+=13)lmBox(c,50.8,z,0.4,5.6,0.4,0xbfc4c8);};
+// 25 高輪ゲートウェイ：摺紙屋頂新車站＋起重機
+LMB[25]=c=>{lmGround(c,0xb5b1a8);lmBox(c,55,-20,24,9,50,0xdfe6ea);lmBoxR(c,'glass',42.9,4.5,-20,0.3,8,48,0x9dbad0);
+  const p=[],n=10,W=30,Lz=56,x=55,z=-20;for(let i=0;i<n;i++){const z0=z-Lz/2+i*Lz/n,z1=z0+Lz/n,ya=11+(i%2)*3,yb=11+((i+1)%2)*3;p.push(x-W/2,ya,z0,x+W/2,ya-2,z0,x+W/2,yb-2,z1,x-W/2,ya,z0,x+W/2,yb-2,z1,x-W/2,yb,z1);}
+  const og=new THREE.BufferGeometry();og.setAttribute('position',new THREE.Float32BufferAttribute(p,3));og.computeVertexNormals();c.g.add(new THREE.Mesh(og,std({color:0xf7f7f5,roughness:.5,side:THREE.DoubleSide})));lmOcc(c,40,70,-48,8);
+  for(const [tx,tz,h] of [[100,-60,70],[100,45,58]]){lmTower(c,tx,tz,30,28,h,1);for(let i=0;i<10;i++)lmBox(c,tx,tz,1.4,2.4,1.4,0xffc107,h+i*2.4);lmBoxR(c,'v',tx-10,h+24,tz,34,0.9,0.9,0xffc107);lmBox(c,tx+6,tz,3,2.5,2.5,0x455a64,h+22.5);lmCyl(c,tx-24,h+10,tz,0.05,0.05,14,0x333333,4);}};
+// 26 田町：運河＋屋形船（會郁）
+function lmBoat(){const c=lmNew();lmBox(c,0,0,4,1.2,16,0x6d4c33);lmBox(c,0,0,3.4,2.2,11,0xf1e4c8,1.2);lmBox(c,0,0,4.2,0.4,12.4,0x4e342e,3.4);for(let k=-2;k<=2;k++)lmCyl(c,-2.1,2.7,k*2.4,0.3,0.3,0.6,0xe53935,8,'lamp');return lmFinish(c);}
+LMB[26]=c=>{lmGround(c,0xa3a097);lmWater(c,36,58,-110,90);for(const x of [35,59])lmBoxR(c,'v',x,0.8,-10,1.2,1.6,200,0x9e9a92);const boat=lmBoat();c.g.add(boat);c.anim.push(t=>{boat.position.set(47,0.35+Math.sin(t*1.3)*0.08,-30+Math.sin(t*0.05)*55);});
+  lmBoxR(c,'v',47,3.2,52,26,0.6,4,0x8d6e4a);for(const zz of [50,54])lmBoxR(c,'v',47,4.1,zz,26,0.9,0.12,0xd6452f);for(let z=-100;z<=80;z+=15)lmTree(c,65,z,1.05);lmTower(c,106,-60,30,28,70,1);lmTower(c,108,30,28,26,62,3);};
+// 27 浜松町：東京鐵塔＋單軌電車（會行）
+LMB[27]=c=>{lmGround(c,0xa6a39c);const x=90,z=-92,H=112;lmOcc(c,x-12,x+12,z-12,z+12);const col=y=>Math.floor(y/(H/12))%2?0xffffff:0xf05a28;
+  for(let i=0;i<24;i++){const y0=i*H/24,y1=(i+1)*H/24,w0=Math.max(1.4,24*Math.pow(1-y0/H,1.45)),w1=Math.max(1.4,24*Math.pow(1-y1/H,1.45));
+    for(const [dx,dz] of [[-1,-1],[1,-1],[1,1],[-1,1]])lmBar(c,[x+dx*w0/2,y0,z+dz*w0/2],[x+dx*w1/2,y1,z+dz*w1/2],0.55,col(y0));
+    if(i%2===0&&i<20)for(const [ax,az,bx2,bz] of [[-1,-1,1,-1],[1,-1,1,1],[1,1,-1,1],[-1,1,-1,-1]])lmBar(c,[x+ax*w0/2,y0,z+az*w0/2],[x+bx2*w1/2,y1,z+bz*w1/2],0.25,col(y0));}
+  lmBox(c,x,z,15,4,15,0xffffff,H*0.35);lmBox(c,x,z,8,3,8,0xffffff,H*0.72);lmCyl(c,x,H,z,0.2,1.2,18,0xf05a28,8);
+  lmBoxR(c,'v',40,10,-10,1.2,1.6,200,0xcfd3d6);for(let zz=-100;zz<=80;zz+=20)lmBox(c,40,zz,1.4,9.2,1.4,0xbfc4c8);
+  const mono=lmTrainGroup(3,10,2.6,3.2,0xf2f4f5,0x1565c0,0x42a5f5,true);c.g.add(mono);c.anim.push(t=>{const k=(Math.sin(t*0.1)+1)/2;mono.position.set(40,12.9,-92+k*168);});lmTower(c,106,10,30,28,80,1);lmTower(c,72,68,26,24,36,4);};
+// 28 新橋：SL 廣場蒸汽火車＋汐留高樓＋百合海鷗號（會行）
+function lmSL(){const c=lmNew(),x=0,y=0;   // D51 蒸汽火車（車頭向 −z）
+  c.mg('v').add(new THREE.CylinderGeometry(1.5,1.5,9,24).rotateX(Math.PI/2),x,y+3.4,-1.5,0,0,0,1,0x1f1f22);c.mg('v').add(new THREE.CylinderGeometry(1.55,1.55,1.4,24).rotateX(Math.PI/2),x,y+3.4,-6.4,0,0,0,1,0x2b2b2e);
+  lmCyl(c,x,y+4.6,-5.3,0.45,0.6,1.8,0x1f1f22,12);lmSph(c,x,y+4.9,-1.5,0.7,0x1f1f22,[1,0.8,1]);lmBox(c,x,4.2,3.4,3.8,3.2,0x1f1f22,y+1.8);lmBox(c,x,4.2,3.8,0.3,3.6,0x111111,y+5.6);lmBox(c,x,7,3,2.2,3,0x1f1f22,y+1.2);
+  for(const sd of [-1,1]){for(const zz of [-4,-1.4,1.2])c.mg('v').add(new THREE.CylinderGeometry(1.1,1.1,0.3,20).rotateZ(Math.PI/2),x+sd*1.35,y+1.1,zz,0,0,0,1,0xd32f2f);lmBoxR(c,'v',x+sd*1.45,y+1.1,-1.4,0.12,0.2,5.4,0xbdbdbd);
+    lmBox(c,x+sd*1.2,-6.9,0.5,0.5,0.3,0xfff3c4,y+2.2);}
+  c.mg('lamp').add(new THREE.CircleGeometry(0.42,16),x,y+5.2,-7.13,0,Math.PI,0,1,0xfff6d0);lmBox(c,x,-7.6,3,0.9,1.4,0xd32f2f,y+0.4);lmBox(c,x,-6.6,2.2,0.5,0.1,0xc9a54a,y+3.3);return lmFinish(c);}
+LMB[28]=c=>{lmGround(c,0xb3aea4);lmBox(c,42,-10,11,1.2,30,0xa8a39a);lmOcc(c,36,48,-26,6);const sl=lmSL();sl.scale.setScalar(1.45);sl.position.set(42,1.2,-10);c.g.add(sl);lmSign(c,'SL 広場','#ffffff','#37474f',35.4,1.1,-10,7,1.4);
+  for(const [x,z] of [[33,-40],[33,20],[52,-40],[52,20]])lmTree(c,x,z,1.1);
+  for(const z of [-70,0,65])lmTower(c,108,z,30,28,110+Math.random()*30,1);lmBoxR(c,'v',80,12,-10,3,1.4,200,0xcfd3d6);for(let z=-100;z<=80;z+=22)lmBox(c,80,z,1.6,11.3,1.6,0xbfc4c8);
+  const yt=lmTrainGroup(3,9,2.6,3,0xffffff,0x1e88e5,0x90caf9);c.g.add(yt);c.anim.push(t=>{const k=(Math.sin(t*0.11+1)+1)/2;yt.position.set(80,14.2,-88+k*156);});};
+// 29 有楽町：磚拱橋下居酒屋（紅燈籠）＋國際論壇玻璃大廳
+LMB[29]=c=>{lmGround(c,0xb0aba2);for(let z=-104;z<=84;z+=8){lmBox(c,28,z,3.4,6.6,7.6,0x9c4a32);lmBox(c,26.2,z,0.2,4.2,5,0x2b1d16);for(const dz of [-1.5,1.5])lmCyl(c,25.7,3.2,z+dz,0.36,0.36,0.9,0xe53935,10,'lamp');}
+  const s=new THREE.Shape();s.moveTo(0,-62);s.quadraticCurveTo(34,0,0,62);s.quadraticCurveTo(-34,0,0,-62);const fg=new THREE.ExtrudeGeometry(s,{depth:38,bevelEnabled:false,curveSegments:24});fg.rotateX(-Math.PI/2);c.mg('glass').add(fg,88,0,-10,0,0,0,1,0xbfd8e6);lmOcc(c,70,106,-72,52);
+  for(let z=-54;z<=54;z+=6)lmBox(c,88,z-10,Math.max(2,34*Math.sqrt(Math.max(0,1-(z/62)**2))*0.98),0.4,0.4,0xffffff,38);lmTower(c,112,-88,24,22,50,3);lmTower(c,112,74,24,22,44,0);};
+
+// 地標以外嘅空位自動補城市大廈同樹（近路軌矮啲，後面高啲），似真實市區
+function lmFill(c,dense=0.85){const big=c.occ.filter(o=>(o[1]-o[0])*(o[3]-o[2])>=60),blk=c.occ.map(o=>[o[0]-5,o[1]+5,o[2]-5,o[3]+5]).concat(big.map(o=>[0,o[0],o[2]-6,o[3]+6])),n0=c.occ.length;   // 大地標前面（近路軌嗰邊）留空，由車度望得到
+  for(const o of big){const x=(o[0]+o[1])/2,z=(o[2]+o[3])/2,r=Math.min(9,(o[1]-o[0])/2,(o[3]-o[2])/2)+2,n=Math.ceil(Math.hypot(x-10,z+LMA)/r);for(let i=0;i<=n;i++){const t=i/n,px=10+(x-10)*t,pz=-LMA+(z+LMA)*t;blk.push([px-r,px+r,pz-r,pz+r]);}}   // 停車位望過去每個地標嘅視線都唔放大廈
+  const hit=(x0,x1,z0,z1)=>blk.some(o=>x0<o[1]&&x1>o[0]&&z0<o[3]&&z1>o[2])||c.occ.slice(n0).some(o=>x0<o[1]+3&&x1>o[0]-3&&z0<o[3]+3&&z1>o[2]-3);
+  for(let x=32;x<122;x+=sr(19,25)){for(let z=-104;z<86;z+=sr(20,27)){if(srand()>dense)continue;const w=sr(13,20),d=sr(12,18),cx=x+d/2,cz=z+w/2;if(cx+d/2>124||cz+w/2>88)continue;if(hit(cx-d/2,cx+d/2,cz-w/2,cz+w/2))continue;
+    const far=Math.max(0,(cx-30)/95);lmTower(c,cx,cz,w,d,sr(8,16)+far*sr(8,34),Math.floor(srand()*6));}}}
+// 建立／放置：換段時把三個站嘅地標搬去對應站位
+function lmPlace(g,st){const s=st.stop-LMA,P=posAt(s),F=dirAt(s);g.position.set(P.x,0,P.z);g.rotation.y=angOf(F);}
+function refreshLandmarkSets(){for(const k in LMK.built)LMK.built[k].visible=false;
+  for(const st of ST){let g=LMK.built[st.y];if(!g&&LMB[st.y]){const c=lmNew();LMB[st.y](c);if(!LMNOFILL.includes(st.y))lmFill(c);g=lmFinish(c);g.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=true;}});LMK.built[st.y]=g;scene.add(g);}if(g){lmPlace(g,st);g.visible=true;}}
+  const shin=[0,1,2,3,11,12,13,14].includes(SEC);for(const o of LMK.shv)o.visible=shin;SK.enabled=shin;if(!shin)SK.active=false;}
+function updLandmarks(t){for(const k in LMK.built){const g=LMK.built[k];if(g.visible&&g.userData.anim)for(const f of g.userData.anim)f(t);}}
 
 
 /* ======================= 車站：貼圖 ======================= */
@@ -1427,10 +1634,11 @@ function buildCar(o){const g=new THREE.Group(),mg={},leaves=[];for(const k of ['
   let glows=[],front=null;if(o.kind!=='mid'){const f=buildNose(o,o.kind==='lead');if(o.kind==='tail')f.g.rotation.y=Math.PI;g.add(f.g);glows=f.glows;front=f.g;}
   return {g,leaves,glows,front};}
 TM.sideLed=new THREE.MeshBasicMaterial({map:ledTex('山手線　'+dirJa(0)),color:HDR(0xffffff,1.5)});
+function refreshParallelLine(){if(!TB||!TB.stripe)return;const west=SEC>=4&&SEC<=10;TB.stripe.color.set(west?0x00ac9a:0x00a7e1);const old=TB.led.map;TB.led.map=ledTex(west?'埼京線　大宮':(SEC>=11?'京浜東北線　大宮':'京浜東北線　大船'));TB.led.needsUpdate=true;if(old)old.dispose();}
 function refreshTrainLED(){const d=dirJa(ST[0].y);for(const [m,t] of [[TA&&TA.led,'山手線　'+d+' 方面'],[TM.sideLed,'山手線　'+d]]){if(!m)continue;const old=m.map;m.map=ledTex(t);m.needsUpdate=true;if(old)old.dispose();}}
 function buildTrain(style,n){const T0={cars:[],leaves:[],glows:[],front:null};
   const [dm,dr]=doorFilm(style),door=new THREE.MeshPhysicalMaterial({map:dm,roughnessMap:dr,metalness:style==='e235'?.2:.8,roughness:1,clearcoat:.4,clearcoatRoughness:.2,transparent:style==='e235'});
-  const stripe=std({color:style==='e235'?0x74bd2e:0x00a7e1,roughness:.45,metalness:.15});
+  const stripe=std({color:style==='e235'?0x74bd2e:0x00a7e1,roughness:.45,metalness:.15});T0.stripe=stripe;
   const face=new THREE.MeshPhysicalMaterial({map:faceTex(style),metalness:.2,roughness:.14,clearcoat:1,clearcoatRoughness:.05});
   const led=new THREE.MeshBasicMaterial({map:ledTex(style==='e235'?'山手線　'+dirJa(ST[0].y)+' 方面':'京浜東北線　大宮'),color:HDR(0xffffff,1.6)});T0.led=led;
   for(let i=0;i<n;i++){const kind=i===0?'lead':i===n-1?'tail':'mid';const c=buildCar({kind,pant:i===1||i===n-2,style,door,stripe,led,face,anim:style==='e235',interior:style==='e235',seed:i});scene.add(c.g);T0.cars.push(c.g);T0.leaves.push(...c.leaves);T0.glows.push(...c.glows);if(i===0)T0.front=c.front;}
@@ -1443,7 +1651,7 @@ function placeTrain(T0,head,lat,rev,y=RT,pitch=20,off=HEAD,span=7){T0.cars.forEa
 
 
 /* ======================= 新幹線 E5「隼」＋專用高架橋 ======================= */
-const SD=11.0,SH_RT=SD+0.55,SHL=[14.2,18.2];
+const SD=4.6,SH_RT=SD+0.55,SHL=[14.2,18.2],SO=SD-11;   // ⚠ 新幹線高架要低過山手線（7m），唔係會擋晒右邊嘅地標
 const SHM={slab:std({map:texConcrete,color:0xb4b3ae,roughness:.9})};
 const E5H=[[1.25,0.95,true],[1.42,1.1],[1.58,1.35],[1.66,1.7],[1.68,2.1],[1.665,2.6],[1.62,3.0],[1.52,3.3],[1.35,3.52],[1.1,3.67],[0.75,3.76],[0.35,3.8],[0,3.81]];
 const E5O=outlineFromHalf(E5H),E5ARC=outlineArcs(E5O),E5TOT=E5ARC[E5O.length];
@@ -1476,27 +1684,27 @@ function placeE5(T0,head,lat){const n=T0.cars.length;T0.cars.forEach((c,i)=>{con
   posAt(sc+9,_ta);dirAt(sc+9,_tfa);_ta.x+=-_tfa.z*lat;_ta.z+=_tfa.x*lat;posAt(sc-9,_tb);dirAt(sc-9,_tfb);_tb.x+=-_tfb.z*lat;_tb.z+=_tfb.x*lat;
   c.position.set((_ta.x+_tb.x)/2,SH_RT,(_ta.z+_tb.z)/2);c.rotation.y=Math.atan2(-(_ta.x-_tb.x),-(_ta.z-_tb.z))+(c.userData.flip?Math.PI:0);});}
 function buildShinViaduct(){
-  const prof=[[11.6,9.8],[11.6,12.0],[11.6,12.0],[11.85,12.0],[11.85,12.0],[11.85,11.0],[11.85,11.0],[20.55,11.0],[20.55,11.0],[20.55,12.0],[20.55,12.0],[20.8,12.0],[20.8,12.0],[20.8,9.8],[20.8,9.8],[11.6,9.8]];
+  const prof=[[11.6,9.8],[11.6,12.0],[11.6,12.0],[11.85,12.0],[11.85,12.0],[11.85,11.0],[11.85,11.0],[20.55,11.0],[20.55,11.0],[20.55,12.0],[20.55,12.0],[20.8,12.0],[20.8,12.0],[20.8,9.8],[20.8,9.8],[11.6,9.8]].map(([x,y])=>[x,y+SO]);
   mesh(sweep(prof,0,L,3,0,4,4),MT.deck,true,true);
-  for(const tl of SHL){mesh(sweep([[-1.25,11.0],[-1.25,11.22],[1.25,11.22],[1.25,11.0]],0,L,3,tl,2.5,2.5),SHM.slab,false,true);
+  for(const tl of SHL){mesh(sweep([[-1.25,SD],[-1.25,SD+0.22],[1.25,SD+0.22],[1.25,SD]],0,L,3,tl,2.5,2.5),SHM.slab,false,true);
     for(const sd of [-0.75,0.75]){mesh(sweep(RAILP.map(([x,y])=>[x,y-RT+SH_RT]),0,L,2,tl+sd,1,4),MT.rail);mesh(sweep([[-0.034,SH_RT+0.002],[0.034,SH_RT+0.002]],0,L,2,tl+sd,1,4),MT.railTop,false,false);}}
   const ps=[];for(let q=8;q<L-6;q+=22){if(Math.abs(q-RIVER_S)<26||Math.abs(q-ROAD_S)<9)continue;ps.push(q);}
-  const pg=new Merger();pg.add(new THREE.BoxGeometry(2.4,9.8,2.4),16.2,4.9,0);pg.add(new THREE.BoxGeometry(9.8,1.0,2.6),16.2,9.3,0);
+  const pg=new Merger();pg.add(new THREE.BoxGeometry(2.4,9.8+SO,2.4),16.2,(9.8+SO)/2,0);pg.add(new THREE.BoxGeometry(9.8,1.0,2.6),16.2,9.3+SO,0);
   const im=new THREE.InstancedMesh(mergeGeometries(pg.list,false),MT.deck,ps.length),P=new THREE.Vector3(),F=new THREE.Vector3();
   ps.forEach((q,i)=>{posAt(q,P);dirAt(q,F);DUMMY.position.copy(P);DUMMY.rotation.set(0,angOf(F),0);DUMMY.scale.set(1,1,1);DUMMY.updateMatrix();im.setMatrixAt(i,DUMMY.matrix);});im.castShadow=im.receiveShadow=true;scene.add(im);
-  const cm=new Merger();for(const x of [11.72,20.68]){cm.add(new THREE.BoxGeometry(0.3,7.6,0.035),x,15.8,0.13);cm.add(new THREE.BoxGeometry(0.3,7.6,0.035),x,15.8,-0.13);cm.add(new THREE.BoxGeometry(0.035,7.6,0.26),x,15.8,0);}
-  cm.add(new THREE.BoxGeometry(9.3,0.14,0.14),16.2,19.4,0);cm.add(new THREE.BoxGeometry(9.3,0.14,0.14),16.2,18.8,0);for(let i=0;i<9;i++){const x0=11.75+i*1.0;cyl(cm,new THREE.Vector3(x0,i%2?19.4:18.8,0),new THREE.Vector3(x0+1,i%2?18.8:19.4,0),0.028,5);}
-  for(const tl of SHL)cyl(cm,new THREE.Vector3(tl,18.75,0),new THREE.Vector3(tl,17.7,0),0.035,6);
+  const cm=new Merger();for(const x of [11.72,20.68]){cm.add(new THREE.BoxGeometry(0.3,7.6,0.035),x,15.8+SO,0.13);cm.add(new THREE.BoxGeometry(0.3,7.6,0.035),x,15.8+SO,-0.13);cm.add(new THREE.BoxGeometry(0.035,7.6,0.26),x,15.8+SO,0);}
+  cm.add(new THREE.BoxGeometry(9.3,0.14,0.14),16.2,19.4+SO,0);cm.add(new THREE.BoxGeometry(9.3,0.14,0.14),16.2,18.8+SO,0);for(let i=0;i<9;i++){const x0=11.75+i*1.0;cyl(cm,new THREE.Vector3(x0,(i%2?19.4:18.8)+SO,0),new THREE.Vector3(x0+1,(i%2?18.8:19.4)+SO,0),0.028,5);}
+  for(const tl of SHL)cyl(cm,new THREE.Vector3(tl,18.75+SO,0),new THREE.Vector3(tl,17.7+SO,0),0.035,6);
   const pp=[];for(let s=POLE0+10;s<L;s+=POLEP)if(Math.abs(s-RIVER_S)>26)pp.push(s);
   const ci=new THREE.InstancedMesh(mergeGeometries(cm.list,false),MT.pole,pp.length);pp.forEach((s,i)=>{posAt(s,P);dirAt(s,F);DUMMY.position.copy(P);DUMMY.rotation.set(0,angOf(F),0);DUMMY.updateMatrix();ci.setMatrixAt(i,DUMMY.matrix);});ci.castShadow=true;scene.add(ci);
-  const pts=[],A=new THREE.Vector3(),B=new THREE.Vector3(),st=2.5,my=u=>17.7-0.4*4*u*(1-u),su=s=>((((s-POLE0-10)/POLEP)%1)+1)%1;
+  const pts=[],A=new THREE.Vector3(),B=new THREE.Vector3(),st=2.5,my=u=>17.7+SO-0.4*4*u*(1-u),su=s=>((((s-POLE0-10)/POLEP)%1)+1)%1;
   for(const tl of SHL)for(let s=0;s<L-st;s+=st){frame(s,tl,SH_RT+5.0,A);frame(s+st,tl,SH_RT+5.0,B);pts.push(A.x,A.y,A.z,B.x,B.y,B.z);frame(s,tl,my(su(s)),A);frame(s+st,tl,my(su(s+st)),B);pts.push(A.x,A.y,A.z,B.x,B.y,B.z);
     if(Math.round(s/st)%2===0){frame(s,tl,my(su(s)),A);frame(s,tl,SH_RT+5.0,B);pts.push(A.x,A.y,A.z,B.x,B.y,B.z);}}
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));const ln=new THREE.LineSegments(g,MT.wire);ln.frustumCulled=false;scene.add(ln);}
 let TE=null;const SK={active:false,s:0,v:44,woosh:false,timer:12};
 function spawnE5(){SK.active=true;SK.s=Math.max(30,G.s-240);SK.v=44;SK.woosh=false;}
 function updE5(dt){if(!TE)return;
-  if(!SK.active){for(const c of TE.cars)c.visible=false;if(G.state==='title'||G.state==='drive'){SK.timer-=dt;if(SK.timer<=0){SK.timer=G.state==='title'?26:999;spawnE5();}}return;}
+  if(!SK.active){for(const c of TE.cars)c.visible=false;if(SK.enabled!==false&&(G.state==='title'||G.state==='drive')){SK.timer-=dt;if(SK.timer<=0){SK.timer=G.state==='title'?26:999;spawnE5();}}return;}
   SK.s+=SK.v*dt;if(SK.s-13.5-150>L){SK.active=false;return;}placeE5(TE,SK.s,SHL[0]);
   if(!SK.woosh&&SK.s>G.s){SK.woosh=true;if(G.cam==='cab'||G.cam==='title')whoosh();}}
 
@@ -1750,7 +1958,7 @@ function voiceFor(lang){const Lg=lang.toLowerCase(),pre=Lg.split('-')[0];if(VCAC
 let lastCancel=0,SPG=0;
 function say(text,lang='zh-HK'){return new Promise(res=>{if(String(lang).toLowerCase().startsWith('zh')){setTimeout(res,0);return;}if(!TTS||G.muted||!text){setTimeout(res,G.muted?400:0);return;}
   const u=new SpeechSynthesisUtterance(text);u.lang=lang;const v=voiceFor(lang);if(v)u.voice=v;u.volume=1;
-  u.rate=lang.startsWith('ja')?0.95:lang.startsWith('en')?0.88:0.92;u.pitch=1.0;
+  u.rate=lang.startsWith('ja')?0.92:lang.startsWith('en')?0.9:0.92;u.pitch=1.0;
   let done=false,to=0;const fin=()=>{if(!done){done=true;clearTimeout(to);res();}};u.onend=fin;u.onerror=fin;
   const go=()=>{if(done)return;try{if(TTS.paused)TTS.resume();}catch(e){}TTS.speak(u);to=setTimeout(fin,2500+text.length*(lang.startsWith('en')?95:280));};
   // Safari：cancel() 之後即刻 speak() 會食咗句嘢 → 等 0.22 秒；冇 cancel 過就即刻講（喺撳掣嗰下講，iOS 先會解鎖語音）
@@ -1772,17 +1980,22 @@ function clickSfx(){if(!AC)return;const t=AC.currentTime+0.005,s=AC.createBuffer
 let guideT=0;
 function guide(text,speak=false){const el=$('#guide');el.querySelector('.gtext').innerHTML=text;el.classList.remove('hidden');el.style.animation='none';void el.offsetWidth;el.style.animation='';clearTimeout(guideT);guideT=setTimeout(()=>el.classList.add('hidden'),9000);if(speak)return say(text,'zh-HK');return Promise.resolve();}
 function hideGuide(){$('#guide').classList.add('hidden');}
-// ---- 車站／車廂廣播：先日文、後英文（JR 東日本自動廣播風格） ----
-const lineKana=y=>`やまのて線、内回り、${dirKana(y)}方面行き`,lineEn=y=>`the Yamanote Line train bound for ${dirEn(y)}`;
-function annWelcome(st){return sayAll([[`${st.kana}、${st.kana}。ご乗車、ありがとうございます。`,'ja-JP'],[`Welcome to ${st.en}. Thank you for riding the Yamanote Line.`,'en-US']]);}
+// ---- 車站／車廂廣播：照 JR 東日本自動廣播嘅講法，先日文、後英文 ----
+// 日文站名用漢字（平假名 TTS 唔知重音會讀到平平哋）；英文站名用拼讀，令美式英語聲讀出近日文嘅音（顯示仍用正式羅馬字）
+const EN_SAY=['Tokyo','Kahnda','Akihabara','Okachimachi','Oo-eh-no','Oo-goo-ee-soo-dah-nee','Nippori','Nishi Nippori','Tabata','Koh-mah-goh-meh','Sugamo','Ohtsuka','Ee-keh-boo-koo-roh','Meh-jee-roh','Tah-kah-dah-noh-bah-bah',
+  'Sheen Oh-koo-boh','Shinjuku','Yoh-yoh-ghee','Harajuku','Shibuya','Eh-bee-soo','Meh-goo-roh','Goh-tahn-dah','Oh-sah-kee','Shinagawa','Tah-kah-nah-wah Gateway','Tah-mah-chee','Hah-mah-mah-tsoo-choh','Sheem-bah-shee','Yoo-rah-koo-choh'];
+const enS=st=>EN_SAY[st.y]||st.en,enNum=st=>{const n=st.y+1;return `J Y ${n<10?'zero '+n:n}`;};   // JY05 讀「J Y zero five」，同 JR 英文廣播一樣
+const dirJaS=y=>{const [a,b]=dirOf(y);return `${a.ja}、${b.ja}`;},dirEnS=y=>{const [a,b]=dirOf(y);return `${EN_SAY[a.y]} and ${EN_SAY[b.y]}`;};
+function annWelcome(st){return sayAll([[`${st.ja}、${st.ja}。1番線は、山手線、内回り、${dirJaS(st.y)}方面ゆきです。`,'ja-JP'],[`This is ${enS(st)}. The train on track 1 is the Yamanote Line, bound for ${dirEnS(st.y)}.`,'en-US']]);}
 async function annDepart(st){announceChime();const g=SPG;await sleep(1400);if(g!==SPG)return;
-  await sayAll([[`${lineKana(st.y)}、まもなく、発車いたします。`,'ja-JP'],[`This is ${lineEn(st.y)}. The train will soon depart.`,'en-US']]);}
+  await sayAll([[`1番線から、山手線、内回り、${dirJaS(st.y)}方面ゆきが、まもなく、発車いたします。`,'ja-JP'],[`The Yamanote Line train bound for ${dirEnS(st.y)} will soon depart from track 1.`,'en-US']]);}
 async function annOnboard(st,from){announceChime();const g=SPG;await sleep(1400);if(g!==SPG)return;
-  await sayAll([[`この電車は、${lineKana(from.y)}です。次は、${st.kana}です。`,'ja-JP'],[`This is ${lineEn(from.y)}. The next station is ${st.en}.`,'en-US']]);}
+  await sayAll([[`今日も、JR東日本をご利用いただきまして、ありがとうございます。この電車は、山手線、内回り、${dirJaS(from.y)}方面ゆきです。次は、${st.ja}、${st.ja}。お出口は、左側です。`,'ja-JP'],
+    [`This is the Yamanote Line train bound for ${dirEnS(from.y)}. The next station is ${enS(st)}, ${enNum(st)}. The doors on the left side will open.`,'en-US']]);}
 async function annApproach(st){announceChime();const g=SPG;await sleep(1400);if(g!==SPG)return;
-  await sayAll([[`まもなく、${st.kana}、${st.kana}。お出口は、左側です。`,'ja-JP'],[`We will soon make a brief stop at ${st.en}. The doors on the left side will open.`,'en-US']]);}
-function annArrive(st){return sayAll([[`${st.kana}、${st.kana}。ご乗車、ありがとうございました。`,'ja-JP'],[`${st.en}. ${st.en}. Thank you for riding.`,'en-US']]);}
-function annClose(){return sayAll([['ドアが閉まります。ご注意ください。','ja-JP'],['The doors are closing. Please be careful.','en-US']]);}
+  await sayAll([[`まもなく、${st.ja}、${st.ja}。お出口は、左側です。`,'ja-JP'],[`We will soon make a brief stop at ${enS(st)}, ${enNum(st)}. The doors on the left side will open.`,'en-US']]);}
+function annArrive(st){return sayAll([[`${st.ja}、${st.ja}。ご乗車、ありがとうございました。`,'ja-JP'],[`This is ${enS(st)}. Thank you for riding.`,'en-US']]);}
+function annClose(){return sayAll([['1番線、ドアが閉まります。ご注意ください。','ja-JP'],['The doors are closing. Please be careful.','en-US']]);}
 function annFinish(){return sayAll([['ご乗車、ありがとうございました。','ja-JP'],['Thank you for riding the Yamanote Line. See you again!','en-US']]);}
 
 
@@ -2354,7 +2567,7 @@ const PROG={sec:0,stamps:[]};
 function loadProg(){try{const o=JSON.parse(localStorage.getItem('kg_yamanote')||'{}');if(Number.isInteger(o.sec))PROG.sec=((o.sec%SECN)+SECN)%SECN;if(Array.isArray(o.stamps))PROG.stamps=[...new Set(o.stamps.filter(n=>Number.isInteger(n)&&n>=0&&n<YN))];}catch(e){}}
 function saveProg(){try{localStorage.setItem('kg_yamanote',JSON.stringify(PROG));}catch(e){}}
 const secLabel=k=>`${ylObj(k*2).ja} → ${ylObj(k*2+2).ja}`;
-function applySection(k){applySectionData(k);refreshStationSigns();refreshTrainLED();refreshCabPaper();refreshLandmarks();}
+function applySection(k){applySectionData(k);refreshStationSigns();refreshTrainLED();refreshParallelLine();refreshCabPaper();refreshLandmarks();refreshLandmarkSets();}
 function updTitleCard(){const t=$('#rjyTxt');if(t)t.textContent=secLabel(PROG.sec);const c=$('#stampCount');if(c)c.textContent=`${PROG.stamps.length}/${YN}`;}
 function openMap(){const svg=$('#ymsvg'),cx=320,cy=232,rx=232,ry=168,cur=[0,1,2].map(i=>(PROG.sec*2+i)%YN);let h=`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="#80C241" stroke-width="12"/>`;
   for(let y=0;y<YN;y++){const a=-y/YN*Math.PI*2,c=Math.cos(a),sn=Math.sin(a),X=cx+c*rx,Y=cy+sn*ry,done=PROG.stamps.includes(y),isCur=cur.includes(y),nm=YAMA_ST[y][0],fs=nm.length>4?10:isCur?15:13;
@@ -2432,7 +2645,7 @@ function updOnc(dt){if(!onc.active){for(const c of TB.cars)c.visible=false;retur
 const _h=new THREE.Vector3(),_f=new THREE.Vector3(),_cl=new THREE.Vector3(),_eye=new THREE.Vector3(),_ql=new THREE.Quaternion(),_qe=new THREE.Euler(),_sf=new THREE.Vector3(),_sp=new THREE.Vector3();
 let lookDrag=null;
 function fovFor(mode){const a=camera.aspect,h=mode==='cab'?70:mode==='door'?58:62,v=2*Math.atan(Math.tan(h*Math.PI/360)/a)*180/Math.PI;return clamp(v,mode==='cab'?62:48,mode==='cab'?88:80);}
-function updCam(dt){const t=G.time,fv=fovFor(G.cam);if(Math.abs(camera.fov-fv)>0.01){camera.fov=fv;camera.updateProjectionMatrix();}
+function updCam(dt){if(G.cam==='free')return;const t=G.time,fv=fovFor(G.cam);if(Math.abs(camera.fov-fv)>0.01){camera.fov=fv;camera.updateProjectionMatrix();}
   if(G.cam==='cab'){const car=TA.cars[0],vf=G.v/VMAX;_eye.copy(EYE);_eye.x+=Math.sin(t*1.3)*0.008*vf;_eye.y+=Math.sin(t*2.7)*0.006*vf+(G.bump||0);
     car.updateMatrixWorld();camera.position.copy(_eye.applyMatrix4(car.matrixWorld));
     if(!lookDrag){G.yaw*=Math.exp(-dt*1.2);G.pitch*=Math.exp(-dt*1.2);}
@@ -2451,7 +2664,7 @@ function frameLoop(now){requestAnimationFrame(frameLoop);const dt=Math.min(0.05,
   if(G.state==='drive')updDrive(dt);
   const dd=G.doorT-G.doors;G.doors+=Math.sign(dd)*Math.min(Math.abs(dd),dt/1.6);
   placeTrain(TA,G.s,0,false);for(const m of TA.leaves)m.scale.x=Math.max(0.03,1-G.doors*0.97);TM.doorLamp.color.setHex(G.doors>0.02?0xff3030:0x3a1010);
-  updPSD(dt);updOnc(dt);updE5(dt);updBoats(dt);updPeople(dt);updCars(dt);texWaterN.offset.x+=dt*0.004;texWaterN.offset.y+=dt*0.012;
+  updPSD(dt);updLandmarks(G.time);updOnc(dt);updE5(dt);updBoats(dt);updPeople(dt);updCars(dt);texWaterN.offset.x+=dt*0.004;texWaterN.offset.y+=dt*0.012;
   if(G.v>2&&Math.floor(G.prevS/25)!==Math.floor(G.s/25)){jointClacks(G.v);G.bumpE=0.008+0.012*G.v/VMAX;}G.prevS=G.s;G.bump=(G.bumpE||0)*Math.sin(G.time*38);G.bumpE=(G.bumpE||0)*Math.exp(-dt*9);
   updCam(dt);updSun();updCab(dt);
   setTrainSound(G.v,G.a);updSqueal(G.v,G.state==='drive'&&(G.notch<0||G.tasc));
@@ -2486,7 +2699,7 @@ $$('.lv button').forEach(b=>b.onclick=()=>{TL=+b.dataset.l;$$('.lv button').forE
 
 /* ======================= 開機 ======================= */
 function boot(){try{
-    buildTrack();buildShinViaduct();buildStreets();buildCity();planStreetTrees();buildScenery();buildScenery2();buildTrees();buildHouses();buildStations();buildPeople();
+    buildTrack();{const n0=scene.children.length;buildShinViaduct();LMK.shv=scene.children.slice(n0);}buildStreets();buildCity();planStreetTrees();buildScenery();buildScenery2();buildTrees();buildHouses();buildStations();buildPeople();
     TA=buildTrain('e235',5);TB=buildTrain('e233',5);for(const c of TB.cars)c.visible=false;TE=buildE5(6);for(const c of TE.cars)c.visible=false;buildCab(TA.cars[0]);buildNotchBar();
     loadProg();applySection(PROG.sec);updTitleCard();
     G.s=ST[0].stop;G.prevS=G.s;resetPeople();placeTrain(TA,G.s,0,false);G.state='title';updCam(0);updSun();renderer.compile(scene,camera);
@@ -2494,7 +2707,7 @@ function boot(){try{
   }catch(e){console.error(e);$('#loading').innerHTML=`<div>載入失敗，請重新整理</div><div style="font-size:14px;max-width:80vw;color:#a33">${e&&e.message}</div>`;}}
 function iconSheet(keys){const d=document.createElement('div');d.id='sheet';d.style.cssText='position:fixed;inset:0;z-index:99;background:#e9eef3;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:4px;padding:8px';
   for(const k of keys||Object.keys(IB)){const c=document.createElement('div');c.style.cssText='text-align:center;font:11px sans-serif;color:#333';c.innerHTML=`<img src="${icon(k)}" style="width:92px;height:92px;filter:drop-shadow(0 4px 5px rgba(0,0,0,.2))"><div>${k}</div>`;d.appendChild(c);}document.body.appendChild(d);return Object.keys(IB).length;}
-window.__kg={qtest:(k,l=2)=>{$('#title').classList.add('hidden');showCard(true);renderQ(makeQ(k,l),()=>{});return Object.keys(QT);},iconSheet,icon,get IB(){return IB;},get TE(){return TE;},SK,G,ST,CAM,startRoute,goTitle,setCam,setMascon,stepNotch,onc,CAB,PP,renderer,camera,scene,composer,get QS(){return QS;},onAnnDepart,onCloseDoor,onOpenDoor,onAnnApproach};
+window.__kg={applySection,get LMK(){return LMK;},qtest:(k,l=2)=>{$('#title').classList.add('hidden');showCard(true);renderQ(makeQ(k,l),()=>{});return Object.keys(QT);},iconSheet,icon,get IB(){return IB;},get TE(){return TE;},SK,G,ST,CAM,startRoute,goTitle,setCam,setMascon,stepNotch,onc,CAB,PP,renderer,camera,scene,composer,get QS(){return QS;},onAnnDepart,onCloseDoor,onOpenDoor,onAnnApproach};
 setTimeout(boot,60);
 
 </script>
