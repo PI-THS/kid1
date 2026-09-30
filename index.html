@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="小小車長">
 <meta name="theme-color" content="#80C241">
-<title>小小車長・日本鐵道之旅</title>
+<title>小小車長・日本香港鐵道之旅</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
@@ -288,8 +288,8 @@ button{font-family:inherit;color:inherit;touch-action:manipulation;cursor:pointe
 .k.p{background:#1f6fd6}.k.b{background:#e0661a}.k.g{background:#5a9e2f}
 
 /* ---- 題目 ---- */
-#qprog{flex:none;display:flex;gap:6px;margin-right:4px}
-#qprog i{width:14px;height:14px;border-radius:50%;background:#dfe5ec;display:block}
+#qprog{flex:none;display:flex;gap:4px;margin-right:4px}
+#qprog i{width:11px;height:11px;border-radius:50%;background:#dfe5ec;display:block}
 #qprog i.done{background:#43b649}#qprog i.cur{background:#ffd23f;box-shadow:0 0 0 3px rgba(255,210,63,.35)}
 #qcat{display:inline-flex;align-items:center;gap:6px}#qcat .ic{font-size:1.1em}
 #qsay{display:flex;align-items:center;justify-content:center;color:#6b5200;font-size:32px}
@@ -350,7 +350,7 @@ button{font-family:inherit;color:inherit;touch-action:manipulation;cursor:pointe
   #notchBar{grid-area:notch}}
 /* ---- 山手線一周路線圖 ---- */
 .trow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
-#btnMap b{font-family:"Baloo 2",sans-serif;color:#2e7d32;margin-left:4px}
+#btnMap b,#btnMapE b{font-family:"Baloo 2",sans-serif;color:#2e7d32;margin-left:4px}#btnMapE b{color:#1f6f9c}
 #ymap{position:fixed;inset:0;z-index:18;background:rgba(8,20,35,.55);display:flex;align-items:center;justify-content:center;padding:14px}
 .ymcard{background:#fff;border-radius:28px;padding:16px 18px 18px;width:min(760px,100%);max-height:100%;overflow:auto;box-shadow:var(--shadow)}
 .ymhead{display:flex;justify-content:space-between;align-items:center;gap:10px}.ymhead h2{margin:0;font-size:clamp(20px,5vw,28px);display:flex;align-items:center;gap:8px}.ymhead h2 .ic{color:var(--jy)}
@@ -397,21 +397,21 @@ button{font-family:inherit;color:inherit;touch-action:manipulation;cursor:pointe
 <div id="loading"><div class="ld-train"><svg class="ic"><use href="#i-train"/></svg></div><div>列車準備緊，請稍等…</div></div>
 
 <div id="title" class="hidden">
-  <div class="logo"><div class="l1">小小車長</div><div class="l2">日本鐵道之旅</div><div class="l3">你做車長！廣播、關門、開車、停站！</div></div>
+  <div class="logo"><div class="l1">小小車長</div><div class="l2">日本・香港鐵道之旅</div><div class="l3">你做車長！廣播、關門、開車、停站！</div></div>
   <div class="routes">
     <button class="route go" id="rJY" style="--c:#80C241"><div class="rc">JY</div><div class="rn">山手線</div><div class="re">Yamanote Line</div><div class="rs"><span id="rjyTxt">東京 → 秋葉原</span><span class="rgo"><svg class="ic"><use href="#i-play"/></svg>出發</span></div></button>
+    <button class="route go" id="rEAL" style="--c:#5EB6E4"><div class="rc">EAL</div><div class="rn">東鐵綫</div><div class="re">East Rail Line</div><div class="rs"><span id="realTxt">金鐘 → 紅磡</span><span class="rgo"><svg class="ic"><use href="#i-play"/></svg>出發</span></div></button>
     <div class="route locked" style="--c:#F15A22"><span class="lock"><svg class="ic"><use href="#i-lock"/></svg></span><div class="rc">JC</div><div class="rn">中央線</div><div class="re">Chūō Line</div><div class="rs">即將開放</div></div>
-    <div class="route locked" style="--c:#00B2E5"><span class="lock"><svg class="ic"><use href="#i-lock"/></svg></span><div class="rc">JK</div><div class="rn">京浜東北線</div><div class="re">Keihin-Tōhoku Line</div><div class="rs">即將開放</div></div>
     <div class="route locked" style="--c:#0072BC"><span class="lock"><svg class="ic"><use href="#i-lock"/></svg></span><div class="rc" style="font-size:17px">新幹線</div><div class="rn">東海道新幹線</div><div class="re">Tōkaidō Shinkansen</div><div class="rs">即將開放</div></div>
   </div>
-  <div class="trow"><button class="small" id="btnMap"><svg class="ic"><use href="#i-loop"/></svg>山手線路線圖 <b id="stampCount">0/30</b></button><button class="small" id="btnTest"><svg class="ic"><use href="#i-list"/></svg>題目試玩（家長用）</button></div>
+  <div class="trow"><button class="small" id="btnMap"><svg class="ic"><use href="#i-loop"/></svg>山手線路線圖 <b id="jyStamps">0/30</b></button><button class="small" id="btnMapE"><svg class="ic"><use href="#i-list"/></svg>東鐵綫路線圖 <b id="ealStamps">0/15</b></button><button class="small" id="btnTest"><svg class="ic"><use href="#i-list"/></svg>題目試玩（家長用）</button></div>
 </div>
 
 <div id="hud" class="hidden">
   <div class="hrow">
     <button class="gbtn" id="btnHome" aria-label="返主頁"><svg class="ic"><use href="#i-home"/></svg></button>
     <div id="nextBox" class="glass">
-      <div class="nb-code"><span>JY</span><b id="nbCode">01</b></div>
+      <div class="nb-code"><span id="nbLine">JY</span><b id="nbCode">01</b></div>
       <div class="nb-txt"><small id="nbLbl">ただいま</small><b id="nbName">東京</b><span id="nbEn">Tokyo</span></div>
       <div id="nbDist" class="hidden"><svg class="nb-ring" viewBox="0 0 40 40"><circle class="bg" cx="20" cy="20" r="16"/><circle class="fg" id="nbRing" cx="20" cy="20" r="16" pathLength="100"/></svg><div class="nb-m"><b id="distN">0</b><small>m</small></div></div>
     </div>
@@ -469,7 +469,7 @@ button{font-family:inherit;color:inherit;touch-action:manipulation;cursor:pointe
 </div></div>
 
 <div id="ymap" class="hidden"><div class="ymcard">
-  <div class="ymhead"><h2><svg class="ic"><use href="#i-loop"/></svg>山手線一周旅程</h2><button class="small" id="ymClose"><svg class="ic"><use href="#i-close"/></svg>關閉</button></div>
+  <div class="ymhead"><h2><svg class="ic"><use href="#i-loop"/></svg><span id="ymTitle">山手線一周旅程</span></h2><button class="small" id="ymClose"><svg class="ic"><use href="#i-close"/></svg>關閉</button></div>
   <svg id="ymsvg" viewBox="0 0 640 468"></svg>
   <p class="ymtip">揀一段出發（每段 3 個站）</p>
   <div class="ymsecs" id="ymsecs"></div>
@@ -627,12 +627,25 @@ const YAMA_ST=[['東京','とうきょう','Tokyo'],['神田','かんだ','Kanda
   ['池袋','いけぶくろ','Ikebukuro'],['目白','めじろ','Mejiro'],['高田馬場','たかだのばば','Takadanobaba'],['新大久保','しんおおくぼ','Shin-Okubo'],['新宿','しんじゅく','Shinjuku'],['代々木','よよぎ','Yoyogi'],
   ['原宿','はらじゅく','Harajuku'],['渋谷','しぶや','Shibuya'],['恵比寿','えびす','Ebisu'],['目黒','めぐろ','Meguro'],['五反田','ごたんだ','Gotanda'],['大崎','おおさき','Osaki'],
   ['品川','しながわ','Shinagawa'],['高輪ゲートウェイ','たかなわゲートウェイ','Takanawa Gateway'],['田町','たまち','Tamachi'],['浜松町','はままつちょう','Hamamatsucho'],['新橋','しんばし','Shimbashi'],['有楽町','ゆうらくちょう','Yurakucho']];
-const YN=YAMA_ST.length,SECN=YN/2,MAJ=[0,4,12,16,19,24];let SEC=0;
-const ylObj=y=>{const [ja,kana,en]=YAMA_ST[((y%YN)+YN)%YN];return {ja,kana,en,y:((y%YN)+YN)%YN,code:'JY'+String(((y%YN)+YN)%YN+1).padStart(2,'0')};};
-// 行車方向：前面最近兩個大站（上野・池袋方面 等）
-function dirOf(y){const d=MAJ.map(m=>[((m-y+YN)%YN)||YN,m]).sort((a,b)=>a[0]-b[0]);return [ylObj(d[0][1]),ylObj(d[1][1])];}
-const dirJa=y=>{const [a,b]=dirOf(y);return a.ja+'・'+b.ja;},dirKana=y=>{const [a,b]=dirOf(y);return a.kana+'、'+b.kana;},dirEn=y=>{const [a,b]=dirOf(y);return a.en+' and '+b.en;};
-function applySectionData(k){SEC=((k%SECN)+SECN)%SECN;for(let i=0;i<ST.length;i++){const o=ylObj(SEC*2+i);Object.assign(ST[i],o);ST[i].prev=ylObj(o.y-1);ST[i].next=ylObj(o.y+1);}}
+// 港鐵東鐵綫 15 個站（金鐘→羅湖；連馬場站，啱啱好 7 段、每段 3 個站）：[繁體, 簡體（普通話廣播用）, 英文, 站碼, 轉乘綫]
+const EAL_ST=[['金鐘','金钟','Admiralty','ADM',['荃灣綫、港島綫及南港島綫','荃湾线、港岛线及南港岛线','the Tsuen Wan Line, Island Line and South Island Line']],['會展','会展','Exhibition Centre','EXC'],
+  ['紅磡','红磡','Hung Hom','HUH',['屯馬綫','屯马线','the Tuen Ma Line']],['旺角東','旺角东','Mong Kok East','MKK'],['九龍塘','九龙塘','Kowloon Tong','KOT',['觀塘綫','观塘线','the Kwun Tong Line']],
+  ['大圍','大围','Tai Wai','TAW',['屯馬綫','屯马线','the Tuen Ma Line']],['沙田','沙田','Sha Tin','SHT'],['火炭','火炭','Fo Tan','FOT'],['馬場','马场','Racecourse','RAC'],['大學','大学','University','UNI'],
+  ['大埔墟','大埔墟','Tai Po Market','TAP'],['太和','太和','Tai Wo','TWO'],['粉嶺','粉岭','Fanling','FAN'],['上水','上水','Sheung Shui','SHS'],['羅湖','罗湖','Lo Wu','LOW']];
+// 路線：山手線（環狀、15 段）／東鐵綫（直線、7 段）；換綫用 setLineData()，畫面用 switchLine()
+const LINES={jy:{id:'jy',name:'山手線',en:'Yamanote Line',color:'#80C241',code:'JY',loop:true,st:YAMA_ST,store:'kg_yamanote',
+    tx:{next:'次は',now:'ただいま',auto:'TASC',ats:'ATS',door:'戸閉',lcdHead:'山手線 内回り　普通',doorOpen:'ドア開',doorShut:'戸閉 完了',ac:'空調 24℃',paper:['山手線 内回り','運転時刻表　1101G'],model:'E235',stamp:'JR 山手線',plate:'クハE235-1'}},
+  eal:{id:'eal',name:'東鐵綫',en:'East Rail Line',color:'#5EB6E4',code:'EAL',loop:false,st:EAL_ST,store:'kg_eastrail',
+    tx:{next:'下一站',now:'本站',auto:'ATO',ats:'ATP',door:'車門',lcdHead:'東鐵綫　往羅湖',doorOpen:'車門開',doorShut:'車門已關',ac:'冷氣 24℃',paper:['東鐵綫　往羅湖','行車時間表　E101'],model:'R-Train',stamp:'港鐵 東鐵綫',plate:'E001 R-Train'}}};
+let LINE=LINES.jy,YN=YAMA_ST.length,SECN=YN/2,SEC=0;const MAJ=[0,4,12,16,19,24];
+function setLineData(id){LINE=LINES[id]||LINES.jy;YN=LINE.st.length;SECN=LINE.loop?YN/2:(YN-1)/2;}
+const ylObj=y=>{if(!LINE.loop&&(y<0||y>=YN))return null;const i=((y%YN)+YN)%YN,r=LINE.st[i];
+  if(LINE.id==='jy'){const [ja,kana,en]=r;return {ja,kana,en,y:i,code:'JY'+String(i+1).padStart(2,'0'),zh:ja,ic:null};}
+  const [ja,zh,en,code,ic]=r;return {ja,kana:'',en,y:i,code,zh,ic:ic||null};};
+// 行車方向：山手線＝前面最近兩個大站（上野・池袋方面 等）；東鐵綫＝往羅湖
+function dirOf(y){if(LINE.id!=='jy'){const t=ylObj(YN-1);return [t,t];}const d=MAJ.map(m=>[((m-y+YN)%YN)||YN,m]).sort((a,b)=>a[0]-b[0]);return [ylObj(d[0][1]),ylObj(d[1][1])];}
+const dirJa=y=>{const [a,b]=dirOf(y);return a===b?a.ja:a.ja+'・'+b.ja;},dirKana=y=>{const [a,b]=dirOf(y);return a.kana+'、'+b.kana;},dirEn=y=>{const [a,b]=dirOf(y);return a===b?a.en:a.en+' and '+b.en;};
+function applySectionData(k){SEC=LINE.loop?((k%SECN)+SECN)%SECN:clamp(k,0,SECN-1);for(let i=0;i<ST.length;i++){const o=ylObj(SEC*2+i);Object.assign(ST[i],o);ST[i].prev=ylObj(o.y-1);ST[i].next=ylObj(o.y+1);}}
 applySectionData(0);
 const PB=125, PF=12;                       // 月台範圍：stop-PB ～ stop+PF
 const inStation=(s,m=0)=>ST.some(q=>s>q.stop-PB-m&&s<q.stop+PF+m);
@@ -750,8 +763,9 @@ function facadeTex(kind){const [c,x]=cv(512,512),[e,y]=cv(512,512),[r,q]=cv(512,
     for(let i=0;i<8;i++){x.fillStyle='#f5f3ef';x.fillRect(i*64+54,0,10,512);x.fillStyle='rgba(0,0,0,.12)';x.fillRect(i*64+64,0,4,512);y.fillStyle='#000';y.fillRect(i*64+54,0,14,512);q.fillStyle='rgb(0,200,0)';q.fillRect(i*64+54,0,14,512);hq.fillStyle='#fff';hq.fillRect(i*64+54,0,10,512);}}
   else{x.fillStyle='#3b3d42';x.fillRect(0,0,512,512);speck(x,512,512,1500,['#45474d','#34363a'],0.5,1.5);for(let j=0;j<4;j++)for(let i=0;i<4;i++)win(i*128+14,j*128+10,100,108,['#8fa0b0','#2e3b46'],0.26,'#8a6e4b');}
   return {map:T(c,1),em:T(e,1),rm:T(r,1,false),nm:normalFromHeight(hh,2.2)};}
-function shopTex(){const [c,x]=cv(1024,180),[e,y]=cv(1024,180);y.fillStyle='#000';y.fillRect(0,0,1024,180);x.fillStyle='#6d6a66';x.fillRect(0,0,1024,180);
-  const names=shuffle(['ラーメン','カフェ','薬局','コンビニ','本屋','居酒屋','花屋','ベーカリー','寿司','そば','焼鳥','喫茶店','メガネ','電器']);
+const SHOPN_JP=['ラーメン','カフェ','薬局','コンビニ','本屋','居酒屋','花屋','ベーカリー','寿司','そば','焼鳥','喫茶店','メガネ','電器'],SHOPN_HK=['茶餐廳','藥房','便利店','麵包店','燒臘','涼茶','眼鏡','電器','找換店','士多','車仔麵','糖水','金舖','書局','海味','粥麵'];
+function shopTex(N=SHOPN_JP){const [c,x]=cv(1024,180),[e,y]=cv(1024,180);y.fillStyle='#000';y.fillRect(0,0,1024,180);x.fillStyle='#6d6a66';x.fillRect(0,0,1024,180);
+  const names=shuffle(N.slice());
   for(let k=0;k<4;k++){const X=k*256,col=pick(['#c62828','#1565c0','#2e7d32','#f9a825','#6a1b9a','#ef6c00','#00838f','#4e342e']);
     for(const cx of [x,y]){cx.fillStyle=col;cx.fillRect(X+8,6,240,40);cx.fillStyle='#fff';cx.font=`900 28px ${JPF}`;cx.textAlign='center';cx.textBaseline='middle';cx.fillText(names[k],X+128,27,220);}
     const g=x.createLinearGradient(0,56,0,176);g.addColorStop(0,'#ffe2b8');g.addColorStop(1,'#b98e62');x.fillStyle=g;x.fillRect(X+14,56,228,120);y.fillStyle='rgba(255,205,145,.6)';y.fillRect(X+14,56,228,120);
@@ -923,13 +937,13 @@ function buildFar(){const n=520,g=new THREE.BoxGeometry(1,1,1);g.translate(0,0.5
   while(k<n&&guard++<9000){const a=srand()*6.2832,r=sr(260,1500);const x=150+Math.cos(a)*r,z=-800+Math.sin(a)*r*1.3;if(trackDist(x,z)<150)continue;DUMMY.position.set(x,0,z);DUMMY.rotation.set(0,srand()*3,0);DUMMY.scale.set(sr(16,44),sr(20,90)*(r>700?1.5:1),sr(16,44));DUMMY.updateMatrix();im.setMatrixAt(k++,DUMMY.matrix);}
   im.count=k;scene.add(im);
   // 晴空塔
-  const tg=new THREE.Group();tg.position.set(P4.x+820,0,P4.z-2450);scene.add(tg);const tm=new THREE.MeshLambertMaterial({color:0xdfe6ee,fog:false}),dm=new THREE.MeshLambertMaterial({color:0x6f7f90,fog:false}),lm=new THREE.MeshBasicMaterial({color:HDR(0xff5a4a,3),fog:false});
+  const tg=new THREE.Group();tg.position.set(P4.x+820,0,P4.z-2450);scene.add(tg);FAR_JP.push(tg);const tm=new THREE.MeshLambertMaterial({color:0xdfe6ee,fog:false}),dm=new THREE.MeshLambertMaterial({color:0x6f7f90,fog:false}),lm=new THREE.MeshBasicMaterial({color:HDR(0xff5a4a,3),fog:false});
   const add=(geo,y,mat)=>{const o=new THREE.Mesh(geo,mat);o.position.y=y;tg.add(o);};
   add(new THREE.CylinderGeometry(9,34,340,12),170,tm);add(new THREE.CylinderGeometry(21,20,18,24),350,dm);add(new THREE.CylinderGeometry(8,9,90,12),405,tm);add(new THREE.CylinderGeometry(14,13,10,24),452,dm);add(new THREE.CylinderGeometry(3,7,170,10),542,tm);add(new THREE.CylinderGeometry(1,1.5,20,6),637,tm);add(new THREE.SphereGeometry(2.4,8,6),648,lm);
   // 富士山
   {const fg=new THREE.CylinderGeometry(160,2400,1400,96,20,true);const p=fg.attributes.position,c=new Float32Array(p.count*3),v=new THREE.Vector3(),snow=new THREE.Color('#fff4ec'),rock=new THREE.Color('#6d6f93'),haze=new THREE.Color('#d7c6c8'),tmp=new THREE.Color();
     for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i);const hN=(v.y+700)/1400,an=Math.atan2(v.z,v.x),nz=Math.sin(an*9)*0.5+Math.sin(an*23+1.3)*0.3+Math.sin(an*41)*0.2,k=1+nz*0.02*(1-hN);p.setXYZ(i,v.x*k,v.y,v.z*k);tmp.copy(hN>0.64+nz*0.07?snow:rock).lerp(haze,0.3+(1-hN)*0.3);c[i*3]=tmp.r;c[i*3+1]=tmp.g;c[i*3+2]=tmp.b;}
-    fg.setAttribute('color',new THREE.BufferAttribute(c,3));const m=new THREE.Mesh(fg,new THREE.MeshBasicMaterial({vertexColors:true,fog:false}));m.position.set(-4800,620,2300);scene.add(m);}
+    fg.setAttribute('color',new THREE.BufferAttribute(c,3));const m=new THREE.Mesh(fg,new THREE.MeshBasicMaterial({vertexColors:true,fog:false}));m.position.set(-4800,620,2300);scene.add(m);FAR_JP.push(m);}
   const cm=new THREE.SpriteMaterial({map:texCloud,transparent:true,depthWrite:false,fog:false,opacity:.92,color:0xffe0cc});
   for(let i=0;i<0;i++){const s=new THREE.Sprite(cm);const a=srand()*6.2832,r=sr(2600,5000);s.position.set(150+Math.cos(a)*r,sr(600,1300),-800+Math.sin(a)*r);s.scale.set(sr(1200,2100),sr(420,700),1);scene.add(s);}}
 
@@ -937,6 +951,9 @@ function buildFar(){const n=520,g=new THREE.BoxGeometry(1,1,1);g.translate(0,0.5
 const CARS=[];let carIM=null,busIM=null;
 function carGeo(){const m=new Merger(true);m.add(new THREE.BoxGeometry(4.3,0.72,1.74),0,0.58,0,0,0,0,1,0xffffff);m.add(new THREE.BoxGeometry(2.3,0.6,1.58),-0.15,1.22,0,0,0,0,1,0x1b2229);m.add(new THREE.BoxGeometry(2.0,0.08,1.5),-0.2,1.55,0,0,0,0,1,0xffffff);
   for(const wx of [-1.35,1.35])for(const wz of [-0.82,0.82])m.add(new THREE.CylinderGeometry(0.33,0.33,0.24,12),wx,0.33,wz,Math.PI/2,0,0,1,0x151515);return mergeGeometries(m.list,false);}
+// 香港雙層巴士
+function busGeoHK(){const m=new Merger(true);m.add(new THREE.BoxGeometry(11.2,3.9,2.5),0,2.45,0,0,0,0,1,0xffffff);for(const y of [2.0,3.6])m.add(new THREE.BoxGeometry(11.0,0.8,2.52),0,y,0,0,0,0,1,0x1d262d);m.add(new THREE.BoxGeometry(11.2,0.16,2.4),0,4.45,0,0,0,0,1,0xeeeeee);
+  for(const wx of [-3.6,3.6])for(const wz of [-1.05,1.05])m.add(new THREE.CylinderGeometry(0.5,0.5,0.3,12),wx,0.5,wz,Math.PI/2,0,0,1,0x151515);return mergeGeometries(m.list,false);}
 function busGeo(){const m=new Merger(true);m.add(new THREE.BoxGeometry(10.5,2.2,2.5),0,1.55,0,0,0,0,1,0xffffff);m.add(new THREE.BoxGeometry(10.3,0.85,2.52),0,2.05,0,0,0,0,1,0x1d262d);m.add(new THREE.BoxGeometry(10.5,0.2,2.4),0,2.75,0,0,0,0,1,0xeeeeee);
   for(const wx of [-3.4,3.4])for(const wz of [-1.05,1.05])m.add(new THREE.CylinderGeometry(0.5,0.5,0.3,12),wx,0.5,wz,Math.PI/2,0,0,1,0x151515);return mergeGeometries(m.list,false);}
 function buildCars(){carIM=new THREE.InstancedMesh(carGeo(),std({vertexColors:true,roughness:.35,metalness:.4}),80);busIM=new THREE.InstancedMesh(busGeo(),std({vertexColors:true,roughness:.45,metalness:.2}),4);
@@ -955,7 +972,11 @@ function updCars(dt){if(!carIM)return;const RP=posAt(ROAD_S),RF=dirAt(ROAD_S);
   carIM.instanceMatrix.needsUpdate=true;busIM.instanceMatrix.needsUpdate=true;}
 // 起點站大樓：唔係東京嘅段就用一般車站大樓（大字寫站名）
 const LM={tokyo:[],akiba:[],gen:[],sign:null};
-function stationBldgTex(st){const [c,x]=cv(1024,256);x.fillStyle='#f7f8f9';x.fillRect(0,0,1024,256);x.fillStyle='#80C241';x.fillRect(0,206,1024,50);
+function stationBldgTexHK(st){const [c,x]=cv(1024,256);x.fillStyle='#f7f8f9';x.fillRect(0,0,1024,256);x.fillStyle=LINE.color;x.fillRect(0,206,1024,50);
+  x.fillStyle=LINE.color;rr(x,24,40,150,150,18);x.fill();x.fillStyle='#fff';x.textAlign='center';x.textBaseline='middle';x.font=`900 50px ${JPF}`;x.fillText('東鐵',99,94);x.font='bold 40px Helvetica,Arial,sans-serif';x.fillText('EAL',99,148);
+  x.fillStyle='#222';x.textAlign='left';x.font=`900 120px ${JPF}`;x.fillText(st.ja+'站',210,112,640);x.fillStyle='#fff';x.font='bold 36px Helvetica,Arial,sans-serif';x.fillText(st.en+' Station',210,231);
+  x.fillStyle='#d7262e';x.font='900 italic 64px Helvetica,Arial,sans-serif';x.textAlign='right';x.fillText('MTR',1000,112);x.font=`900 34px ${JPF}`;x.fillText('港鐵',1000,160);return T(c);}
+function stationBldgTex(st){if(LINE.id==='eal')return stationBldgTexHK(st);const [c,x]=cv(1024,256);x.fillStyle='#f7f8f9';x.fillRect(0,0,1024,256);x.fillStyle='#80C241';x.fillRect(0,206,1024,50);
   x.strokeStyle='#80C241';x.lineWidth=12;rr(x,24,40,150,150,18);x.stroke();x.fillStyle='#222';x.textAlign='center';x.textBaseline='middle';x.font='bold 46px Helvetica,Arial,sans-serif';x.fillText('JY',99,88);x.font='bold 64px Helvetica,Arial,sans-serif';x.fillText(st.code.slice(2),99,150);
   x.textAlign='left';x.font=`900 120px ${JPF}`;x.fillText(st.ja+'駅',210,112,780);x.fillStyle='#fff';x.font='bold 36px Helvetica,Arial,sans-serif';x.fillText(st.en+' Station',210,231);x.fillStyle='#e53935';x.font='900 44px Helvetica,Arial,sans-serif';x.textAlign='right';x.fillText('JR',1000,231);return T(c);}
 function buildStationBldg(){const st=ST[0],sB=st.stop-55,P=posAt(sB),F=dirAt(sB),ang=angOf(F),rx=-F.z,rz=F.x;
@@ -967,6 +988,21 @@ function buildStationBldg(){const st=ST[0],sB=st.stop-55,P=posAt(sB),F=dirAt(sB)
   for(const z of [-40,0,40]){const p=new THREE.Mesh(new THREE.BoxGeometry(0.2,16,2.2),white);p.position.set(11.1,8,z);g.add(p);}
   LM.sign=new THREE.MeshBasicMaterial({map:stationBldgTex(st),color:HDR(0xffffff,1.15)});const sg=new THREE.Mesh(new THREE.PlaneGeometry(26,6.5),LM.sign);sg.position.set(11.3,12.4,0);sg.rotation.y=Math.PI/2;g.add(sg);
   const sg2=sg.clone();sg2.position.set(0,12.4,-56.2);sg2.rotation.y=Math.PI;sg2.scale.setScalar(0.8);g.add(sg2);}
+// 換綫：遠景（晴空塔、富士山、東京鐵塔 ↔ 香港山景）、舖頭招牌、巴士
+const FAR_JP=[];let FAR_HK=null,BUSG=null;
+function hkMountain(x,z,R,H,sx,seed,mat){const g=new THREE.CylinderGeometry(R*0.05,R,H,44,10,true),p=g.attributes.position,c=new Float32Array(p.count*3),v=new THREE.Vector3(),C1=new THREE.Color('#355f33'),C2=new THREE.Color('#6d9460'),C3=new THREE.Color('#948f80'),t=new THREE.Color();
+  for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i);const hN=(v.y+H/2)/H,an=Math.atan2(v.z,v.x),n=Math.sin(an*5+seed)*0.13+Math.sin(an*11+seed*2.3)*0.07+Math.sin(an*23+seed*3.1)*0.04,k=1+n*(0.35+hN);
+    p.setXYZ(i,v.x*k*sx,v.y+Math.sin(an*3+seed)*H*0.06*hN,v.z*k);t.copy(C1).lerp(C2,Math.min(1,hN*0.9));if(hN>0.62&&Math.sin(an*7+seed*1.7)>0.35)t.lerp(C3,0.65);c[i*3]=t.r;c[i*3+1]=t.g;c[i*3+2]=t.b;}
+  g.setAttribute('color',new THREE.BufferAttribute(c,3));g.computeVertexNormals();const m=new THREE.Mesh(g,mat);m.position.set(x,H/2-3,z);return m;}
+function buildHKFar(){const G0=new THREE.Group(),mat=new THREE.MeshLambertMaterial({vertexColors:true});G0.visible=false;scene.add(G0);FAR_HK=G0;
+  for(const [x,z,R,H,sx,sd] of [[-320,-2350,360,400,1.9,1],[650,-2700,520,500,1.2,2],[1250,-1500,430,380,1.3,3],[-1050,-1450,470,370,1.1,4],[-1250,-450,390,300,1,5],[1250,-250,360,280,1.2,6],
+    [950,600,320,230,1,7],[-760,760,320,250,1.1,8],[250,1350,430,340,1.6,9],[-500,-3250,640,540,1.3,10],[1600,-2900,620,470,1.2,11],[-1600,-2300,560,430,1.1,12]])G0.add(hkMountain(x,z,R,H,sx,sd,mat));
+  // 獅子山：山脊左邊有塊似獅子頭嘅大石
+  const rock=new THREE.MeshLambertMaterial({color:0x8b8272}),hd=new THREE.Mesh(new THREE.SphereGeometry(70,20,14),rock);hd.scale.set(1.25,0.85,0.9);hd.position.set(-800,392,-2330);G0.add(hd);
+  const mn=new THREE.Mesh(new THREE.SphereGeometry(60,16,12),rock);mn.scale.set(1.1,0.7,0.9);mn.position.set(-705,370,-2345);G0.add(mn);}
+function restyleScenery(){const hk=LINE.id==='eal';if(hk&&!FAR_HK)buildHKFar();if(FAR_HK)FAR_HK.visible=hk;for(const o of FAR_JP)o.visible=!hk;
+  SHOPM.forEach(m=>{const t=shopTex(hk?SHOPN_HK:SHOPN_JP),o=[m.map,m.emissiveMap];m.map=t.map;m.emissiveMap=t.em;m.needsUpdate=true;for(const q of o)if(q)q.dispose();});
+  if(busIM){if(!BUSG)BUSG={jp:busIM.geometry,hk:busGeoHK()};busIM.geometry=hk?BUSG.hk:BUSG.jp;const col=new THREE.Color();for(let i=0;i<busIM.count;i++){col.set(hk?(i%2?'#ffd100':'#c8102e'):(i%2?'#e8f5e9':'#ffffff'));busIM.setColorAt(i,col);}if(busIM.instanceColor)busIM.instanceColor.needsUpdate=true;}}
 function refreshLandmarks(){const tk=ST[0].ja==='東京',ak=ST[2].ja==='秋葉原';for(const o of LM.tokyo)o.visible=tk;for(const o of LM.akiba)o.visible=ak;for(const o of LM.gen)o.visible=!tk;
   if(LM.sign){const old=LM.sign.map;LM.sign.map=stationBldgTex(ST[0]);LM.sign.needsUpdate=true;if(old)old.dispose();}}
 function buildScenery(){buildRiver();buildRoadBridge();let n=scene.children.length;buildTokyoStation();LM.tokyo=scene.children.slice(n);n=scene.children.length;buildAkibaSigns();LM.akiba=scene.children.slice(n);
@@ -1006,7 +1042,7 @@ function buildHills(){for(const [R0,h0,col] of [[5200,230,0x8fa7bd],[6300,340,0x
   for(let i=0;i<n;i++){const a=i*2;idx.push(a,a+2,a+1,a+1,a+2,a+3);}
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setIndex(idx);scene.add(new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:col,fog:false,side:THREE.DoubleSide})));}}
 // 東京鐵塔
-function buildTokyoTower(){const g=new THREE.Group();g.position.set(-540,0,-1380);scene.add(g);const red=new THREE.MeshLambertMaterial({color:0xe8452c,fog:false}),wht=new THREE.MeshLambertMaterial({color:0xf2efe8,fog:false}),m1=new Merger(),m2=new Merger(),V3=(x,y,z)=>new THREE.Vector3(x,y,z);
+function buildTokyoTower(){const g=new THREE.Group();g.position.set(-540,0,-1380);scene.add(g);FAR_JP.push(g);const red=new THREE.MeshLambertMaterial({color:0xe8452c,fog:false}),wht=new THREE.MeshLambertMaterial({color:0xf2efe8,fog:false}),m1=new Merger(),m2=new Merger(),V3=(x,y,z)=>new THREE.Vector3(x,y,z);
   const H=320,w=y=>45*Math.pow(Math.max(0,1-y/H),1.6)+4;
   for(let k=0;k<4;k++){const sx=k&1?1:-1,sz=k&2?1:-1;for(let s=0;s<16;s++){const y0=s*H/16,y1=(s+1)*H/16;cyl(Math.floor(s/2)%2?m2:m1,V3(sx*w(y0),y0,sz*w(y0)),V3(sx*w(y1),y1,sz*w(y1)),Math.max(0.7,2.4*(1-y0/H)),6);}}
   for(let y=12;y<H;y+=20){const hw=w(y),mm=Math.floor(y/40)%2?m2:m1;for(const [a,b] of [[[-1,-1],[1,-1]],[[1,-1],[1,1]],[[1,1],[-1,1]],[[-1,1],[-1,-1]]]){cyl(mm,V3(a[0]*hw,y,a[1]*hw),V3(b[0]*hw,y,b[1]*hw),0.55,4);cyl(mm,V3(a[0]*hw,y,a[1]*hw),V3(b[0]*w(y+20),y+20,b[1]*w(y+20)),0.35,4);}}
@@ -1226,10 +1262,203 @@ function lmFill(c,dense=0.85){const big=c.occ.filter(o=>(o[1]-o[0])*(o[3]-o[2])>
     const far=Math.max(0,(cx-30)/95);lmTower(c,cx,cz,w,d,sr(8,16)+far*sr(8,34),Math.floor(srand()*6));}}}
 // 建立／放置：換段時把三個站嘅地標搬去對應站位
 function lmPlace(g,st){const s=st.stop-LMA,P=posAt(s),F=dirAt(s);g.position.set(P.x,0,P.z);g.rotation.y=angOf(F);}
-function refreshLandmarkSets(){for(const k in LMK.built)LMK.built[k].visible=false;
-  for(const st of ST){let g=LMK.built[st.y];if(!g&&LMB[st.y]){const c=lmNew();LMB[st.y](c);if(!LMNOFILL.includes(st.y))lmFill(c);g=lmFinish(c);g.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=true;}});LMK.built[st.y]=g;scene.add(g);}if(g){lmPlace(g,st);g.visible=true;}}
-  const shin=[0,1,2,3,11,12,13,14].includes(SEC);for(const o of LMK.shv)o.visible=shin;SK.enabled=shin;if(!shin)SK.active=false;}
+function refreshLandmarkSets(){for(const k in LMK.built)LMK.built[k].visible=false;const hk=LINE.id==='eal',B=hk?LMB_EAL:LMB,NF=hk?LMNOFILL_EAL:LMNOFILL;
+  for(const st of ST){const key=LINE.id+':'+st.y;let g=LMK.built[key];if(!g&&B[st.y]){const c=lmNew();B[st.y](c);if(!NF.includes(st.y))lmFill(c);g=lmFinish(c);g.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=true;}});LMK.built[key]=g;scene.add(g);}if(g){lmPlace(g,st);g.visible=true;}}
+  const shin=!hk&&[0,1,2,3,11,12,13,14].includes(SEC);for(const o of LMK.shv)o.visible=shin;SK.enabled=shin;if(!shin)SK.active=false;}   // 新幹線高架只係山手線有
 function updLandmarks(t){for(const k in LMK.built){const g=LMK.built[k];if(g.visible&&g.userData.anim)for(const f of g.userData.anim)f(t);}}
+
+
+/* ======================= 沿途景物：港鐵東鐵綫 15 個站 ======================= */
+// 同山手線一樣：路軌右邊預留地（x 25…125、z −110…90），本地 z＝60 係停車位；主角放 z ≤ 60−1.5x，停站時先會喺右前方望到
+const LMB_EAL={},LMNOFILL_EAL=[8,9,12,13];   // 馬場、大學、粉嶺、上水唔補大廈
+const HKM={gold:std({color:0xe8b53a,metalness:.88,roughness:.22}),white:std({color:0xf1f3f4,roughness:.45}),dark:std({color:0x26313a,roughness:.5}),
+  red:std({color:0xc62828,roughness:.5}),boc:null};
+const hkTex=(w,h,fn,rep)=>{const [cc,x]=cv(w,h);fn(x,w,h);return T(cc,rep?1:undefined);};
+// 雙層巴士（沿 z 方向）
+function hkBus(c,x,z,col){lmBox(c,x,z,2.5,4.1,11,col,0.3);for(const y of [1.9,3.4])lmBox(c,x,z,2.54,0.75,10.6,0x1d262d,y);lmBox(c,x,z,2.4,0.14,11,0xeeeeee,4.4);
+  for(const dz of [-3.6,3.6])for(const dx of [-1.1,1.1])lmCyl(c,x+dx,0.05,z+dz,0.5,0.5,0.3,0x151515,10);}
+// 單車仔（會郁）
+function hkBike(shirt){const c=lmNew();for(const dz of [-0.55,0.55])c.mg('v').add(new THREE.TorusGeometry(0.34,0.05,6,16),0,0.36,dz,0,Math.PI/2,0,1,0x222222);
+  lmBar(c,[0,0.36,-0.55],[0,0.9,0.1],0.04,0xd32f2f);lmBar(c,[0,0.36,0.55],[0,0.9,0.1],0.04,0xd32f2f);lmBar(c,[0,0.9,0.1],[0,1.0,-0.45],0.04,0xd32f2f);
+  lmBox(c,0,0.05,0.32,0.62,0.3,shirt,1.05);lmSph(c,0,1.86,-0.12,0.16,0xf1c9a5);lmSph(c,0,1.92,-0.1,0.19,0x1565c0,[1,0.7,1.1]);return lmFinish(c);}
+// 中式屋頂（四面斜）
+function hkHip(c,x,y,z,wx,wz,h,col){const g=new THREE.CylinderGeometry(0.01,1,h,4,1);g.rotateY(Math.PI/4);g.scale(wx*0.72,1,wz*0.72);c.mg('v').add(g,x,y+h/2,z,0,0,0,1,col);lmOcc(c,x-wx/2,x+wx/2,z-wz/2,z+wz/2);}
+// 塔（可以擺喺山頂）
+function hkPagoda(c,x,z,y0,s,wall,roof){let y=y0;for(let i=0;i<9;i++){const w=(7.6-i*0.62)*s;lmBox(c,x,z,w,2.6*s,w,wall,y);y+=2.6*s;lmBox(c,x,z,w+2.4*s,0.5*s,w+2.4*s,roof,y);y+=0.5*s;}lmCyl(c,x,y,z,0.2*s,0.35*s,4*s,0xd4af37,8);}
+
+// 0 金鐘：中銀大廈、力寶中心（熊仔樹）、遠東金融中心（金色）、政府總部「門常開」、雙層巴士
+function hkBOC(c,x,z){if(!HKM.boc){HKM.boc=hkTex(128,128,(g,w,h)=>{const gr=g.createLinearGradient(0,0,w,h);gr.addColorStop(0,'#7896ae');gr.addColorStop(1,'#3f5d76');g.fillStyle=gr;g.fillRect(0,0,w,h);
+    g.strokeStyle='#f4f6f8';g.lineWidth=7;g.strokeRect(3,3,w-6,h-6);g.beginPath();g.moveTo(0,0);g.lineTo(w,h);g.moveTo(w,0);g.lineTo(0,h);g.stroke();},true);}
+  const mat=h=>{const t=HKM.boc.clone();t.needsUpdate=true;t.repeat.set(1,h/22);return std({map:t,metalness:.55,roughness:.18});};
+  const Q=[[-1,-1,64],[-1,1,86],[1,1,108],[1,-1,132]];Q.forEach(([sx,sz,h],i)=>{const cx=x+sx*5.5,cz=z+sz*5.5,m=new THREE.Mesh(new THREE.BoxGeometry(11,h,11),mat(h));m.position.set(cx,h/2,cz);c.g.add(m);
+    const sh=new THREE.Shape();sh.moveTo(-5.5,0);sh.lineTo(5.5,0);sh.lineTo(-5.5,13);sh.closePath();const wg=new THREE.ExtrudeGeometry(sh,{depth:11,bevelEnabled:false});wg.translate(0,0,-5.5);
+    const w=new THREE.Mesh(wg,mat(13));w.position.set(cx,h,cz);w.rotation.y=[0,Math.PI/2,Math.PI,-Math.PI/2][i];c.g.add(w);});
+  for(const dx of [-3,3])lmCyl(c,x+5.5+dx,145,z-5.5,0.25,0.5,26,0xf4f4f4,6);lmOcc(c,x-11,x+11,z-11,z+11);}
+function hkLippo(c,x,z,h){c.mg('glass').add(new THREE.CylinderGeometry(7.2,7.2,h,8),x,h/2,z,0,Math.PI/8,0,1,0x2c4760);
+  for(let y=6;y<h-4;y+=8)for(let k=0;k<4;k++){const a=k*Math.PI/2+Math.PI/4;c.mg('glass').add(new THREE.BoxGeometry(3.2,3.6,3.2),x+Math.cos(a)*6.6,y,z+Math.sin(a)*6.6,0,-a,0,1,0x40617e);}
+  lmOcc(c,x-9,x+9,z-9,z+9);}
+function hkTamar(c,x,z){for(const dx of [-12,12])lmBoxR(c,'glass',x+dx,31,z,8,62,30,0xcdd8df);lmBoxR(c,'glass',x,65,z,32,8,30,0xcdd8df);
+  for(const dx of [-12,12])for(let y=6;y<62;y+=6)lmBoxR(c,'v',x+dx,y,z,8.2,0.4,30.2,0xf4f6f7);lmBox(c,x,z+22,34,0.2,14,0x7fb05a,0.13);}
+LMB_EAL[0]=c=>{lmGround(c,0xa7a49e);hkBOC(c,74,-92);for(const [x,z,h] of [[46,-30,74],[58,-56,88]])hkLippo(c,x,z,h);
+  lmBoxR(c,'glass',40,36,-96,18,72,20,0xd8a93b);for(let y=4;y<72;y+=4)lmBoxR(c,'v',40,y,-96,18.2,0.3,20.2,0xb8872a);
+  hkTamar(c,100,-18);for(const [z,col] of [[16,0xc8102e],[32,0xffd100],[48,0xc8102e]])hkBus(c,38,z,col);
+  for(const [x,z] of [[30,-60],[30,-8],[62,0],[84,40]])lmTree(c,x,z,1.2);};
+
+// 1 會展：維港、會展（翼形屋頂）、金紫荊、摩天輪（會轉）、中環廣場、天星小輪（會行）
+function hkWings(c,x,z){lmBoxR(c,'glass',x,6,z,30,12,56,0x9ec3d8);
+  [[13,40,64,5,4],[16.5,33,54,4,3.2],[19.5,25,42,3,2.6]].forEach(([y,w,d,ax,az])=>{const g=new THREE.PlaneGeometry(w,d,14,14);g.rotateX(-Math.PI/2);disp(g,v=>{v.y=ax*Math.pow(v.x/(w/2),2)+az*Math.pow(v.z/(d/2),2);});c.mg('v').add(g,x,y,z,0,0,0,1,0xeef1f3);});
+  lmOcc(c,x-20,x+20,z-32,z+32);}
+function hkBauhinia(c,x,z){lmCyl(c,x,0,z,3.4,3.8,1.2,0x9e9a92,24);lmCyl(c,x,1.2,z,2.2,2.6,4.2,0x7a2a2a,24);const g=new THREE.Group();g.position.set(x,9.4,z);g.rotation.set(-0.35,0,0);c.g.add(g);
+  for(let i=0;i<5;i++){const a=i/5*Math.PI*2,p=new THREE.Mesh(new THREE.SphereGeometry(1,18,12),HKM.gold);p.scale.set(1.25,2.7,0.38);p.position.set(Math.cos(a)*2.4,Math.sin(a)*2.4,0);p.rotation.z=a-Math.PI/2+0.25;g.add(p);}
+  const ct=new THREE.Mesh(new THREE.SphereGeometry(0.9,14,10),HKM.gold);g.add(ct);lmOcc(c,x-5,x+5,z-5,z+5);}
+function hkWheel(c,x,z,R,yc){const W=new THREE.Group();W.position.set(x,yc,z);c.g.add(W);const wm=HKM.white,rim=new THREE.Mesh(new THREE.TorusGeometry(R,0.45,6,64),wm);W.add(rim);W.add(new THREE.Mesh(new THREE.TorusGeometry(R*0.93,0.25,6,64),wm));
+  for(let i=0;i<16;i++){const a=i/16*Math.PI*2,s=new THREE.Mesh(new THREE.CylinderGeometry(0.12,0.12,R,5),wm);s.position.set(Math.cos(a)*R/2,Math.sin(a)*R/2,0);s.rotation.z=a-Math.PI/2;W.add(s);}
+  const hub=new THREE.Mesh(new THREE.CylinderGeometry(1.2,1.2,2.4,16),wm);hub.rotation.x=Math.PI/2;W.add(hub);const gs=[],GC=[0xffffff,0xe3f2fd,0xfff3e0];
+  for(let i=0;i<24;i++){const a=i/24*Math.PI*2,gd=new THREE.Group();gd.position.set(Math.cos(a)*R,Math.sin(a)*R,0);const b=new THREE.Mesh(new THREE.BoxGeometry(1.9,2.1,1.9),std({color:GC[i%3],roughness:.4}));b.position.y=-1.3;gd.add(b);
+    const wn=new THREE.Mesh(new THREE.BoxGeometry(1.95,0.8,1.95),HKM.dark);wn.position.y=-1.1;gd.add(wn);W.add(gd);gs.push(gd);}
+  for(const sx of [-1,1])for(const sz of [-1,1])lmBar(c,[x+sx*9,0,z+sz*5],[x,yc,z+sz*1.4],0.5,0xe9ecee);
+  c.anim.push(t=>{W.rotation.z=t*0.06;for(const gd of gs)gd.rotation.z=-W.rotation.z;});lmOcc(c,x-R-2,x+R+2,z-6,z+6);}
+function hkFerry(){const c=lmNew();lmBox(c,0,0,5.4,1.6,17,0x2e7d32,0);lmBox(c,0,0,5.6,0.3,17.4,0xffffff,1.6);lmBox(c,0,0,4.6,2.2,13,0xf4f1e6,1.9);for(const y of [2.6])lmBox(c,0,0,4.7,0.7,12.6,0x1d2a36,y);
+  lmBox(c,0,0,5.0,0.25,14,0x2e7d32,4.1);lmBox(c,0,0,3,1.4,4,0xf4f1e6,4.35);lmBox(c,0,0,3.1,0.3,4.1,0x2e7d32,5.75);return lmFinish(c);}
+LMB_EAL[1]=c=>{lmGround(c,0xa9a6a0);lmWater(c,94,125,-110,90);hkWings(c,104,-24);lmBox(c,40,-36,22,0.1,26,0xd9d2c6,0.15);hkBauhinia(c,40,-36);
+  hkWheel(c,58,-78,21,25);c.mg('glass').add(new THREE.CylinderGeometry(12,12,104,3),80,52,-98,0,Math.PI/6,0,1,0xc9a45a);c.mg('glass').add(new THREE.ConeGeometry(12,15,3),80,111.5,-98,0,Math.PI/6,0,1,0xd8b76c);
+  lmCyl(c,80,119,-98,0.3,0.6,20,0xeeeeee,6);for(const [y,col] of [[96,0xff5252],[99,0xffeb3b],[102,0x40c4ff]])c.mg('lamp').add(new THREE.CylinderGeometry(12.3,12.3,0.8,3),80,y,-98,0,Math.PI/6,0,1,col);lmOcc(c,68,92,-110,-86);
+  const f=hkFerry();c.g.add(f);c.anim.push(t=>{const k=(Math.sin(t*0.05)+1)/2;f.position.set(112,0.25+Math.sin(t*1.2)*0.08,-96+k*170);f.rotation.y=Math.cos(t*0.05)>0?Math.PI:0;});
+  for(const [x,z] of [[30,-70],[30,0],[52,-10],[60,30]])lmTree(c,x,z,1.15);};
+
+// 2 紅磡：紅館（倒轉金字塔）、尖沙咀鐘樓、理大紅磚
+function hkColiseum(c,x,z){lmBox(c,x,z,13,7,13,0x9aa0a6,0);c.mg('v').add(new THREE.CylinderGeometry(24,11,20,4,1),x,17,z,0,Math.PI/4,0,1,0xd3d8dc);
+  c.mg('glass').add(new THREE.CylinderGeometry(24.25,22.4,4,4,1,true),x,23,z,0,Math.PI/4,0,1,0x31475a);lmBox(c,x,z,34,0.6,34,0xbfc5ca,27);lmOcc(c,x-18,x+18,z-18,z+18);
+  lmSign(c,'香港體育館','#ffffff','#c62828',x-6.6,4.2,z,6,1.4);}
+function hkClock(c,x,z){lmBox(c,x,z,7,30,7,0xa4533a);for(let y=5;y<30;y+=6)lmBox(c,x,z,7.2,0.7,7.2,0xeae3d4,y);lmBox(c,x,z,8,2,8,0xeae3d4,30);lmBox(c,x,z,5.2,5,5.2,0xa4533a,32);
+  lmSph(c,x,37.5,z,2.8,0x5f7f6a,[1,0.8,1]);lmCyl(c,x,39.5,z,0.1,0.25,6,0x333333,6);
+  for(const [dx,dz,ry] of [[-3.62,0,-Math.PI/2],[0,3.62,0]]){const m=new THREE.Mesh(new THREE.CircleGeometry(2.2,28),new THREE.MeshBasicMaterial({map:watchTex(),color:HDR(0xffffff,1.1)}));m.position.set(x+dx,26,z+dz);m.rotation.y=ry;c.g.add(m);}}
+LMB_EAL[2]=c=>{lmGround(c,0xa6a39c);hkColiseum(c,52,-50);hkClock(c,38,22);
+  for(const [x,z,w,h,d] of [[100,-86,30,24,40],[104,-34,26,20,34]]){lmBox(c,x,z,w,h,d,0x9c4a32);for(let y=3;y<h;y+=4)lmBox(c,x,z,w+0.2,1.2,d+0.2,0x3a2d28,y);}
+  for(const [x,z] of [[32,-86],[32,-20],[64,-10]])lmTree(c,x,z,1.2);};
+
+// 3 旺角東：霓虹招牌、金魚街、花墟、朗豪坊
+function goldfishTex(){return hkTex(512,256,(x,w,h)=>{x.fillStyle='#16545f';x.fillRect(0,0,w,h);x.fillStyle='#c62828';x.fillRect(0,0,w,44);x.fillStyle='#fff';x.font=`900 34px ${JPF}`;x.textAlign='center';x.textBaseline='middle';x.fillText('金魚  水族',w/2,23);
+  for(let r=0;r<4;r++)for(let k=0;k<9;k++){const bx=16+k*55,by=54+r*50;x.fillStyle='rgba(200,235,255,.55)';x.beginPath();x.ellipse(bx+22,by+24,19,22,0,0,6.2832);x.fill();x.fillStyle='rgba(255,255,255,.8)';x.fillRect(bx+18,by,8,6);
+    const n=1+((r*9+k)%3);for(let f=0;f<n;f++){x.fillStyle=['#ff7a1a','#ff3d2e','#ffffff','#ffb300'][(r+k+f)%4];x.beginPath();x.ellipse(bx+14+f*8,by+22+f*6,5,3,0.3,0,6.2832);x.fill();}}});}
+LMB_EAL[3]=c=>{lmGround(c,0x9a9894);const S=[['金舖','#fff4a8','#b71c1c'],['玩具','#ffffff','#1565c0'],['波鞋','#ffffff','#2e7d32'],['雀鳥','#ffffff','#6a1b9a'],['花墟','#ffffff','#d81b60'],['茶餐廳','#ffeb3b','#e65100'],['金魚','#ffffff','#00838f'],['女人街','#ffffff','#ad1457']];
+  const B=[[43,-100,20,22,34],[43,-72,22,22,48],[45,-44,24,24,58],[43,-14,22,22,40],[45,16,24,24,52],[92,-58,30,30,62],[96,6,34,30,70]];
+  B.forEach(([x,z,w,d,h],i)=>{lmTower(c,x,z,w,d,h,[2,3,5][i%3]);if(x<60){const a=S[i%S.length],b=S[(i+3)%S.length];lmSign(c,a[0],a[1],a[2],x-d/2-0.4,h*0.55,z-w*0.25,3.4,Math.min(h-10,17),true);lmSign(c,b[0],b[1],b[2],x-d/2-0.4,6.8,z+w*0.1,Math.min(w-4,14),3.4);}});
+  lmTexPlane(c,goldfishTex(),43-11-0.45,3.6,-72,14,7,-Math.PI/2,1.15);
+  const FC=[0xe91e63,0xffeb3b,0xff7043,0xab47bc,0xffffff,0xf06292];for(let z=-54;z<=-34;z+=1.6)for(const dx of [0,1.4]){lmCyl(c,29.4+dx,0,z,0.45,0.35,0.7,0x455a64,8);lmSph(c,29.4+dx,1.1,z,0.55,FC[Math.floor(Math.random()*FC.length)],[1,0.8,1]);}
+  lmTower(c,98,-96,26,26,138,1);lmTexPlane(c,screenTex('MONG KOK'),98,70,-96+13.4,20,11,0,1.35);};
+
+// 4 九龍塘：又一城（玻璃拱頂）、觀塘綫列車入隧道（會行）、花園洋房
+LMB_EAL[4]=c=>{lmGround(c,0xa3a098);lmBox(c,72,-56,36,20,64,0xe6e2da);for(let y=4;y<20;y+=5)lmBox(c,72,-56,36.2,1.4,64.2,0x6f8797,y);
+  c.mg('glass').add(new THREE.CylinderGeometry(9,9,58,16,1,true,0,Math.PI),72,20,-56,Math.PI/2,0,Math.PI/2,1,0xbfd8e6);lmSign(c,'又一城','#ffffff','#1565c0',72-18-0.4,14,-56,11,3);
+  lmBox(c,34,-12,4.6,0.3,104,0x6c665f,0.1);for(const dx of [-0.75,0.75])lmBoxR(c,'v',34+dx,0.45,-12,0.12,0.2,104,0x777777);
+  lmBox(c,34,-87,10,7,46,0x9e9a92);lmBox(c,34,-63.8,6,5.4,0.4,0x0b0d10);lmSign(c,'觀塘綫','#ffffff','#00a040',34,8.4,-63.7,7,1.6,false,0);   // 隧道口：列車會駛入隧道
+  const tr=lmTrainGroup(2,19,3.1,3.7,0xe3e6e9,0x00a040,0x1d2a36);c.g.add(tr);c.anim.push(t=>{const k=(Math.sin(t*0.09)+1)/2;tr.position.set(34,0.6,-88+k*108);});
+  for(const [x,z] of [[100,-96],[112,-70],[100,-44],[112,-18],[100,10],[112,36],[100,62]]){lmBox(c,x,z,9,6,11,0xf5f1ea);lmRoof(c,x,6,z,10,12,3,0xb5462f);lmTree(c,x+6,z+7,0.9);}};
+
+// 5 大圍：車公廟（大風車會轉）、風車檔、城門河單車徑（單車會行）
+function hkWindmill(c,x,y,z,R,n,cols,spd){const g=new THREE.Group();g.position.set(x,y,z);c.g.add(g);
+  for(let i=0;i<n;i++){const a=i/n*Math.PI*2,b=new THREE.Mesh(new THREE.PlaneGeometry(R*0.42,R),new THREE.MeshStandardMaterial({color:cols[i%cols.length],side:THREE.DoubleSide,roughness:.5}));b.position.set(Math.cos(a)*R*0.5,Math.sin(a)*R*0.5,0);b.rotation.z=a-Math.PI/2+0.35;g.add(b);}
+  const hub=new THREE.Mesh(new THREE.SphereGeometry(R*0.12,12,8),HKM.gold);g.add(hub);c.anim.push(t=>{g.rotation.z=t*spd;});return g;}
+LMB_EAL[5]=c=>{lmGround(c,0xaaa59b);lmHall(c,66,-64,1.25,0xc62828,0xf6e7c1,0x2e6b35);
+  for(const dz of [-6,6])lmBox(c,44,-64+dz,1.1,9,1.1,0xc62828);lmBoxR(c,'v',44,9.4,-64,2.4,0.9,15,0x2e6b35);lmBoxR(c,'v',44,8.3,-64,1.4,0.6,13,0xc62828);lmSign(c,'車公廟','#ffe082','#b71c1c',43.2,7.2,-64,6,1.8);
+  lmCyl(c,38,0,-30,0.3,0.4,10,0x8d6e63,8);hkWindmill(c,38,10,-29.4,6,8,[0xe53935,0xfdd835,0x1e88e5,0x43a047],0.8);
+  for(let i=0;i<6;i++){const z=-8+i*2.6;lmCyl(c,31,0,z,0.05,0.05,3.2,0x6d4c41,4);hkWindmill(c,31,3.3,z+0.2,1.1,6,[0xe53935,0xfdd835,0xff7043,0x8e24aa],1.3+i*0.2);}lmBox(c,32.5,-1.5,3,1,16,0xc62828,0);
+  lmWater(c,100,125,-110,90);lmBox(c,92,-10,5,0.12,200,0xb35b43,0.13);for(const [x,z] of [[84,-80],[84,-30],[84,20],[84,60]])lmTree(c,x,z,1.2);
+  const bikes=[hkBike(0xffc107),hkBike(0x42a5f5)];bikes.forEach((b,i)=>{c.g.add(b);c.anim.push(t=>{const k=((t*0.02+i*0.5)%1),z=-104+k*190;b.position.set(91+i*2,0.2+Math.abs(Math.sin(t*6+i))*0.04,i?z:86-k*190);b.rotation.y=i?Math.PI:0;});});};
+
+// 6 沙田：城門河龍舟（會扒）、萬佛寺塔（山上）、新城市廣場
+function hkDragon(col){const c=lmNew();lmBox(c,0,0,1.5,0.7,15,col,0);lmBox(c,0,0,1.6,0.18,15.2,0xfdd835,0.62);lmSph(c,0,1.4,-8.2,0.8,0x2e7d32,[0.8,1,1.2]);lmCyl(c,0,0.6,-7.9,0.25,0.45,0.9,col,8);
+  lmSph(c,0,1.9,-8.9,0.22,0xfdd835);lmCyl(c,0,0.6,6.8,0.1,0.4,1.4,col,8);lmCyl(c,0,0.7,-5.6,0.45,0.45,0.6,0xb71c1c,12);
+  for(let i=0;i<10;i++){const z=-4.5+i*1.05;for(const sx of [-0.4,0.4]){lmSph(c,sx,1.15,z,0.24,0xfdd835);lmSph(c,sx,1.5,z,0.14,0xf1c9a5);}}return lmFinish(c);}
+LMB_EAL[6]=c=>{lmGround(c,0xa5a29a);lmWater(c,36,66,-110,90);for(const x of [35,67])lmBoxR(c,'v',x,0.8,-10,1.2,1.6,200,0x9e9a92);
+  const bs=[hkDragon(0xd32f2f),hkDragon(0x1565c0)];bs.forEach((b,i)=>{c.g.add(b);c.anim.push(t=>{const k=((t*0.018+i*0.13)%1);b.position.set(45+i*11,0.35+Math.sin(t*3+i)*0.05,70-k*180);});});
+  lmSph(c,96,0,-96,24,0x5f8f4f,[1,0.45,1]);hkPagoda(c,96,-96,10,1.0,0xc62828,0xfdd835);for(const [x,z] of [[82,-80],[108,-82],[86,-106],[110,-104]])lmTree(c,x,z,1.1,0x3a7d33);
+  lmBox(c,100,34,34,24,50,0xe8e4dc);lmSign(c,'新城市廣場','#ffffff','#1565c0',100-17-0.4,18,34,16,3);for(const [x,z] of [[76,-40],[78,10]])lmTree(c,x,z,1.2);};
+
+// 7 火炭：東鐵綫車廠（泊住 R-train）、工廈壁畫
+function muralTex(i){return hkTex(256,512,(x,w,h)=>{x.fillStyle='#b9bec3';x.fillRect(0,0,w,h);const P=[['#ff7043','#ffd54f','#4fc3f7','#81c784'],['#ba68c8','#4db6ac','#ffb74d','#e57373']][i%2];
+  for(let k=0;k<7;k++){x.fillStyle=P[k%4];x.beginPath();x.arc(40+Math.random()*176,40+Math.random()*420,30+Math.random()*50,0,6.2832);x.fill();}x.fillStyle='rgba(40,40,40,.5)';for(let j=0;j<h;j+=32)x.fillRect(0,j,w,3);});}
+LMB_EAL[7]=c=>{lmGround(c,0x8f877c);for(const x of [34,46,58,70])for(const dx of [-0.75,0.75])lmBoxR(c,'v',x+dx,0.2,-10,0.14,0.2,200,0x777777);
+  for(const [x,z] of [[34,-60],[46,-20],[58,-78],[70,6]]){const tr=lmTrainGroup(3,19,3.1,3.7,0xdfe4e8,0xd7262e,0x1d2a36);tr.position.set(x,0.6,z);c.g.add(tr);lmOcc(c,x-2,x+2,z-31,z+31);}
+  lmBox(c,94,-50,22,14,70,0xd0d3d6);lmRoof(c,94,14,-50,24,72,5,0x5f6b73);lmBox(c,94,-14.8,14,10,0.6,0x1d2226,0);lmSign(c,'東鐵綫車廠','#ffffff','#5eb6e4',94-11-0.4,11,-50,14,2.6);
+  [[114,-86,56],[116,-20,64],[114,44,58]].forEach(([x,z,h],i)=>{lmBox(c,x,z,20,h,22,0xb9bec3);lmTexPlane(c,muralTex(i),x-10.3,h*0.45,z,20,h*0.8,-Math.PI/2,1.1);});};
+
+// 8 馬場：跑馬地草地、白欄、賽馬（會跑）、看台、大電視
+function hkHorse(coat,silk){const g=new THREE.Group(),cm=std({color:coat,roughness:.6}),sm=std({color:silk,roughness:.5}),skin=std({color:0xf1c9a5,roughness:.6});
+  const body=new THREE.Mesh(new THREE.SphereGeometry(1,16,12),cm);body.scale.set(0.55,0.6,1.25);body.position.y=1.75;g.add(body);
+  const neck=new THREE.Mesh(new THREE.CylinderGeometry(0.24,0.36,1.3,10),cm);neck.position.set(0,2.35,-1.05);neck.rotation.x=-0.75;g.add(neck);
+  const head=new THREE.Mesh(new THREE.BoxGeometry(0.32,0.34,0.8),cm);head.position.set(0,2.75,-1.55);head.rotation.x=0.5;g.add(head);
+  const tail=new THREE.Mesh(new THREE.CylinderGeometry(0.06,0.14,0.9,6),std({color:0x2b1d14}));tail.position.set(0,1.75,1.35);tail.rotation.x=0.8;g.add(tail);
+  const legs=[];for(const [lx,lz] of [[-0.28,-0.85],[0.28,-0.85],[-0.28,0.85],[0.28,0.85]]){const p=new THREE.Group();p.position.set(lx,1.35,lz);const l=new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.1,1.35,6),cm);l.position.y=-0.67;p.add(l);g.add(p);legs.push(p);}
+  const jb=new THREE.Mesh(new THREE.BoxGeometry(0.46,0.5,0.4),sm);jb.position.set(0,2.55,-0.3);jb.rotation.x=-0.5;g.add(jb);const jh=new THREE.Mesh(new THREE.SphereGeometry(0.17,10,8),skin);jh.position.set(0,2.95,-0.55);g.add(jh);
+  const cap=new THREE.Mesh(new THREE.SphereGeometry(0.19,10,8,0,Math.PI*2,0,Math.PI/2),sm);cap.position.set(0,3.0,-0.55);g.add(cap);g.userData.legs=legs;g.scale.setScalar(1.35);return g;}
+function raceTex(){return hkTex(512,192,(x,w,h)=>{const gr=x.createLinearGradient(0,0,0,h);gr.addColorStop(0,'#7fc8f8');gr.addColorStop(.55,'#bfe6ff');gr.addColorStop(.56,'#3f8f3c');gr.addColorStop(1,'#2f6f2c');x.fillStyle=gr;x.fillRect(0,0,w,h);
+  x.fillStyle='#fff';x.fillRect(0,112,w,5);for(let i=0;i<3;i++){const cx=120+i*130,cy=128;x.fillStyle='#5d3a1f';x.beginPath();x.ellipse(cx,cy,34,16,0,0,6.2832);x.fill();x.fillRect(cx-40,cy-24,14,26);x.fillRect(cx-28,cy+10,6,26);x.fillRect(cx+18,cy+10,6,26);
+    x.fillStyle=['#e53935','#1e88e5','#fdd835'][i];x.fillRect(cx-8,cy-38,18,20);x.fillStyle='#fff';x.font='900 30px Helvetica,Arial,sans-serif';x.textAlign='center';x.fillText(i+1,cx,48);}});}
+LMB_EAL[8]=c=>{lmGround(c,0x76a354);const cx=90,cz=-22,R1=[33,64],R0=[23,54];
+  const sh=new THREE.Shape();sh.absellipse(0,0,R1[0],R1[1],0,Math.PI*2,false);const hole=new THREE.Path();hole.absellipse(0,0,R0[0],R0[1],0,Math.PI*2,true);sh.holes.push(hole);
+  const tg=new THREE.ShapeGeometry(sh,64);tg.rotateX(-Math.PI/2);c.mg('v').add(tg,cx,0.2,cz,0,0,0,1,0x4e9a3b);lmOcc(c,cx-R1[0],cx+R1[0],cz-R1[1],cz+R1[1]);
+  for(const [rx,rz] of [R1,R0]){let p=null;for(let i=0;i<=72;i++){const a=i/72*Math.PI*2,q=[cx+Math.cos(a)*rx,1.1,cz+Math.sin(a)*rz];if(p)lmBar(c,p,q,0.12,0xffffff,5);if(i%3===0)lmBar(c,[q[0],0,q[2]],q,0.08,0xffffff,4);p=q;}}
+  lmWater(c,82,98,-40,-4);for(const [x,z] of [[80,-70],[98,-62],[84,10],[100,18],[90,30]])lmTree(c,x,z,1.1);
+  lmBox(c,86,-100,74,4,16,0xe9ecee);for(let i=0;i<6;i++){const hh=2.2+(5-i)*2.6;lmBox(c,86,-100+i*1.8-4,74,hh,2.2,0xd7dadd,4);lmBox(c,86,-100+i*1.8-4,73,0.5,2.3,[0xe53935,0x1e88e5,0xfdd835,0x43a047,0xff7043,0x8e24aa][i],4+hh);}   // 看台前低後高，面向草地
+  lmBoxR(c,'v',86,24,-98,76,0.8,20,0xf4f6f7,0.18,0,0);lmSign(c,'沙田馬場','#ffffff','#1b5e20',86,27,-92.2,20,3,false,0);lmBox(c,86,-104,34,14,2,0x222222,26);lmTexPlane(c,raceTex(),86,33,-102.9,32,12,0,1.3);
+  const H=[[0x6d4c33,0xe53935],[0x3e2723,0x1e88e5],[0x8d6e63,0xfdd835],[0x4e342e,0x43a047],[0xa1887f,0xff7043]].map(([a,b])=>hkHorse(a,b)),rx=(R1[0]+R0[0])/2,rz=(R1[1]+R0[1])/2;
+  H.forEach((h,i)=>{c.g.add(h);c.anim.push(t=>{const a=t*0.16+i*0.09+(i%2)*0.02,x=cx+Math.cos(a)*(rx-2+i*0.9),z=cz+Math.sin(a)*(rz-2+i*0.9);h.position.set(x,Math.abs(Math.sin(t*9+i))*0.18,z);
+    h.rotation.y=Math.atan2(Math.sin(a)*rx,-Math.cos(a)*rz);h.userData.legs.forEach((l,j)=>l.rotation.x=Math.sin(t*9+i+j*1.6)*0.7);});});};
+
+// 9 大學：吐露港（帆船會行）、科學園金蛋、中大合一亭、校園山坡
+function hkSail(){const c=lmNew();lmBox(c,0,0,2.2,0.9,7,0xffffff,0);lmCyl(c,0,0.9,0.5,0.1,0.1,8,0x9e9e9e,6);const s=new THREE.Shape();s.moveTo(0,0);s.lineTo(0,7.4);s.lineTo(3.4,0);s.closePath();c.mg('v').add(new THREE.ShapeGeometry(s),0.02,1.1,1.0,0,-Math.PI/2,0,1,0xfafafa);
+  c.mg('v').add(new THREE.ShapeGeometry(s),-0.02,1.1,1.0,0,Math.PI/2,0,1,0xfafafa);return lmFinish(c);}
+LMB_EAL[9]=c=>{lmGround(c,0x84b060);lmWater(c,80,125,-110,90);lmBox(c,48,-62,30,0.12,34,0xd9d4c8,0.15);lmSph(c,48,12,-62,1,0xe3b341,[10,13,10],'glass');
+  for(const [x,z,w,d] of [[40,-96,18,20],[64,-94,16,18]]){lmBoxR(c,'glass',x,5,z,w,10,d,0x9fc3d6);lmBox(c,x,z,w+0.4,0.6,d+0.4,0xeeeeee,10);}
+  lmWater(c,28,46,-24,-2);for(const [dx,dz] of [[-2.4,-2.4],[2.4,-2.4],[-2.4,2.4],[2.4,2.4]])lmCyl(c,38+dx,0,-12+dz,0.25,0.25,4.2,0xc62828,8);const rf=new THREE.ConeGeometry(4.8,2.6,4);c.mg('v').add(rf,38,5.5,-12,0,Math.PI/4,0,1,0x37474f);lmOcc(c,34,42,-16,-8);
+  lmSph(c,58,0,58,22,0x6f9a52,[1,0.5,1]);for(const [x,z,h] of [[52,52,10],[64,62,14],[58,70,8]])lmBox(c,x,z,8,h,8,0xf4f4f0,8);lmBox(c,60,50,3,18,3,0xe9e4d8,9);
+  const ss=[hkSail(),hkSail(),hkSail()];ss.forEach((b,i)=>{c.g.add(b);c.anim.push(t=>{const k=((t*0.01+i*0.33)%1);b.position.set(92+i*10,0.3,-104+k*190);b.rotation.z=Math.sin(t*0.8+i)*0.05;});});
+  for(const [x,z] of [[30,-50],[30,20],[70,-30],[72,20]])lmTree(c,x,z,1.2);};
+
+// 10 大埔墟：香港鐵路博物館（舊車站＋舊火車）、林村許願樹、海濱公園瞭望塔
+function hkOldTrain(c,x,z){lmBox(c,x,z,3.2,3.2,13,0x7b1f24,0.8);lmBox(c,x,z,3.24,0.5,13,0xe9dcb5,2.4);lmBox(c,x,z-4,3.3,1.6,4,0x7b1f24,4);lmBoxR(c,'v',x,4.6,z-4,3.34,0.8,3.6,0x1d2a36);
+  for(const dz of [-4.5,4.5])for(const dx of [-1.2,1.2])lmCyl(c,x+dx,0,z+dz,0.5,0.5,0.25,0x222222,10);
+  for(const k of [1,2]){const zc=z+k*16;lmBox(c,x,zc,3,3.2,15,0x2f5d3a,0.8);lmBox(c,x,zc,3.04,0.5,15,0xe9dcb5,2.2);lmBoxR(c,'v',x,3.1,zc,3.06,0.8,13,0x1d2a36);lmBox(c,x,zc,2.6,0.4,15,0x5d4037,4);}}
+LMB_EAL[10]=c=>{lmGround(c,0xaaa69c);lmBox(c,54,-44,14,1,30,0x9e9a92);lmBox(c,54,-44,12,6,26,0xf2eee4,1);hkHip(c,54,7,-44,17,32,5,0x3d7a4a);for(let k=-2;k<=2;k++)lmCyl(c,46.2,1,-44+k*6,0.35,0.35,6,0xc62828,8);
+  lmSign(c,'大埔墟','#ffffff','#1b5e20',45.4,5.4,-44,8,1.8);for(const dx of [-0.75,0.75])lmBoxR(c,'v',34+dx,0.2,-60,0.12,0.2,90,0x777777);hkOldTrain(c,34,-98);
+  lmCyl(c,72,0,-86,1.3,1.8,7,0x6d4c33,10);for(const [dx,dy,dz,r] of [[0,10,0,7.5],[4.5,8.5,2,5.5],[-4.8,8.6,-1.6,5.8],[1.5,12.5,-1,5]])lmSph(c,72+dx,dy,-86+dz,r,0x2f6f34);
+  const WC=[0xe53935,0xff7043,0xfdd835,0xff4081];for(let i=0;i<70;i++){const a=Math.random()*Math.PI*2,r=4+Math.random()*4.5;lmBox(c,72+Math.cos(a)*r,-86+Math.sin(a)*r,0.45,0.6,0.1,WC[i%4],4.5+Math.random()*4);}
+  lmCyl(c,104,0,-100,2.4,3.2,30,0xf1f1ee,12);lmCyl(c,104,30,-100,6,6,2.4,0xd84315,16);lmCyl(c,104,32.4,-100,4.5,1,4,0xf1f1ee,12);for(const [x,z] of [[88,-60],[100,-70],[90,-20]])lmTree(c,x,z,1.2);};
+
+// 11 太和：林村河單車徑（單車會行）、文武廟、十字形公屋
+LMB_EAL[11]=c=>{lmGround(c,0xa3a098);lmWater(c,30,46,-110,90);lmBox(c,51,-10,5,0.12,200,0xb35b43,0.13);lmHall(c,70,-62,0.9,0xc62828,0xf3e3c3,0x4a6b52);lmSign(c,'文武廟','#ffe082','#b71c1c',70-7.2,6.2,-62,5,1.5);
+  for(const [x,z,h,k] of [[100,-96,74,2],[106,-40,80,4],[100,26,70,0]]){lmTower(c,x,z,26,10,h,k);lmTower(c,x,z,10,26,h,k);lmBox(c,x,z,10.4,2,26.4,[0xffb74d,0x81d4fa,0xf48fb1][k%3],h-6);lmBox(c,x,z,26.4,2,10.4,[0xffb74d,0x81d4fa,0xf48fb1][k%3],h-6);}
+  const bikes=[hkBike(0xe53935),hkBike(0x7cb342),hkBike(0x29b6f6)];bikes.forEach((b,i)=>{c.g.add(b);c.anim.push(t=>{const k=((t*0.022+i*0.31)%1);b.position.set(50+(i%2)*2,0.2+Math.abs(Math.sin(t*6+i))*0.04,i%2?86-k*190:-104+k*190);b.rotation.y=i%2?0:Math.PI;});});
+  for(const [x,z] of [[80,-86],[82,-30],[80,10],[82,60]])lmTree(c,x,z,1.2);};
+
+// 12 粉嶺：粉嶺圍（圍村、角樓、門樓）、風水塘、高爾夫球場
+LMB_EAL[12]=c=>{lmGround(c,0x86ad62);lmWater(c,30,44,-88,-40);const W=0x8f8a80;lmBox(c,50,-64,1.4,6,46,W);lmBox(c,90,-64,1.4,6,46,W);lmBox(c,70,-86.3,41,6,1.4,W);lmBox(c,70,-41.7,41,6,1.4,W);
+  for(const [x,z] of [[50,-86],[90,-86],[50,-42],[90,-42]]){lmBox(c,x,z,5,9,5,0x9b958a);hkHip(c,x,9,z,6.4,6.4,2.4,0x4e4a44);}
+  lmBox(c,50,-64,4,8.5,9,0x9b958a);hkHip(c,50,8.5,-64,5.6,10.6,2.4,0x4e4a44);lmBox(c,47.9,-64,0.2,4.2,3,0x3b2a1f,0);lmSign(c,'粉嶺圍','#ffe082','#8d1f1f',47.8,6.4,-64,5,1.3);
+  for(let i=0;i<3;i++)for(let j=0;j<4;j++){const x=60+i*10,z=-78+j*10.5;lmBox(c,x,z,6,4.2,8,0xb9b3a7);lmRoof(c,x,4.2,z,7,8.6,2.2,0x5a5550);}
+  lmBox(c,112,-40,26,0.1,120,0x9ccc65,0.14);for(const [x,z] of [[108,-80],[116,-10],[110,40]]){lmCyl(c,x,0,z,0.08,0.08,4.5,0xffffff,5);lmBoxR(c,'v',x,4.1,z+0.7,0.05,0.8,1.3,0xe53935);lmCyl(c,x+2.5,0.12,z+2.5,2.2,2.2,0.08,0xe8d9a8,16);}
+  for(const [x,z] of [[36,-24],[40,20],[100,-100],[120,70],[96,64]])lmTree(c,x,z,1.3,0x3a7d33);};
+
+// 13 上水：菜田、魚塘白鷺、落馬洲支綫高架（R-train 會行）、上水廣場
+function hkEgret(c,x,z){lmSph(c,x,0.95,z,0.32,0xfafafa,[0.7,0.8,1.3]);lmBar(c,[x,1.05,z-0.3],[x,1.65,z-0.45],0.06,0xfafafa,5);lmSph(c,x,1.7,z-0.5,0.12,0xfafafa);lmBar(c,[x,1.7,z-0.55],[x,1.66,z-0.85],0.03,0xf9a825,4);
+  for(const dx of [-0.08,0.08])lmBar(c,[x+dx,0,z],[x+dx,0.75,z],0.025,0x333333,4);}
+LMB_EAL[13]=c=>{lmGround(c,0x8aa35e);const CROP=[0x5d8f3a,0x9ccc65,0x8d6e4f,0x7cb342,0xc5e1a5];for(let i=0;i<9;i++){const z=-40+i*11;lmBox(c,48,z,36,0.12,9,CROP[i%5],0.14);if(i%2===0)for(let x=33;x<64;x+=2.4)lmSph(c,x,0.6,z,0.55,0x4caf50,[1,0.7,1]);}
+  for(const [x0,x1,z0,z1] of [[76,96,-38,-8],[100,120,-38,-8],[76,96,0,28],[100,120,0,28]]){lmWater(c,x0,x1,z0,z1);lmBoxR(c,'v',(x0+x1)/2,0.4,z0-1,x1-x0+2,0.8,1.6,0x8d7b5f);}
+  for(const [x,z] of [[86,-42],[97,-20],[110,-3],[98,10],[88,30],[118,31]])hkEgret(c,x,z);
+  const A=new THREE.Vector3(30,0,-46),Bv=new THREE.Vector3(122,0,-106),len=A.distanceTo(Bv),ang=Math.atan2(Bv.x-A.x,Bv.z-A.z),mid=A.clone().add(Bv).multiplyScalar(0.5);
+  c.noOcc=true;lmBoxR(c,'v',mid.x,12,mid.z,3.6,1.4,len,0xcfd3d6,0,ang,0);c.noOcc=false;lmOccLine(c,[A.x,A.z],[Bv.x,Bv.z],5);for(let t=0.05;t<1;t+=0.11){const p=A.clone().lerp(Bv,t);lmBox(c,p.x,p.z,1.8,11.3,1.8,0xbfc4c8);}
+  const tr=lmTrainGroup(3,19,3.1,3.7,0xdfe4e8,0xd7262e,0x1d2a36);tr.rotation.y=ang;c.g.add(tr);c.anim.push(t=>{const k=(Math.sin(t*0.1)+1)/2;tr.position.copy(A.clone().lerp(Bv,0.28+k*0.5));tr.position.y=13.3;});
+  lmSign(c,'落馬洲支綫','#ffffff','#5eb6e4',30,14.8,-40,8,1.6,false,0);lmTower(c,104,60,26,26,56,3);lmSign(c,'上水','#ffffff','#5eb6e4',104-13-0.4,40,60,3,8,true);};
+
+// 14 羅湖：深圳河、羅湖橋、管制站、對岸深圳高樓
+LMB_EAL[14]=c=>{lmGround(c,0xa6a39c);lmWater(c,25,125,-76,-56);for(const z of [-77,-55])lmBoxR(c,'v',75,0.8,z,100,1.6,1.4,0x9e9a92);
+  lmBoxR(c,'glass',53,7,-66,9,4.4,34,0xbcd3e0);lmBoxR(c,'v',53,9.4,-66,10,0.5,35,0xe0e4e7);for(const z of [-80,-52])lmBox(c,53,z,3,5,3,0xbfc4c8);
+  lmBox(c,62,-30,44,16,36,0xf1f3f4);lmBox(c,62,-30,44.3,4,36.3,0x4f7fa6,7);lmSign(c,'羅湖管制站','#ffffff','#1565c0',39.6,13,-30,16,2.6);
+  lmTower(c,70,-96,18,18,146,1);for(const dx of [-5,5])lmCyl(c,70+dx,146,-96,0.3,0.9,30,0xdadfe3,6);lmTower(c,100,-98,20,20,168,5);lmSph(c,100,168,-98,10,0x9fb8c9,[1,0.5,1],'glass');
+  for(const [x,z,h,k] of [[40,-100,88,2],[118,-94,112,3],[86,-106,124,0],[54,-88,70,4]])lmTower(c,x,z,14,14,h,k);lmSign(c,'深圳','#ffffff','#c62828',54,62,-80.9,14,5,false,0);
+  for(const [x,z] of [[30,-20],[30,20],[90,10],[100,40]])lmTree(c,x,z,1.2);};
 
 
 /* ======================= 車站：貼圖 ======================= */
@@ -1237,7 +1466,14 @@ const texTile=(()=>{const [c,x]=cv(256,256);x.fillStyle='#8d8a84';x.fillRect(0,0
 const texTact2=(()=>{const [c,x]=cv(64,64);x.fillStyle='#e9b90f';x.fillRect(0,0,64,64);for(let i=0;i<4;i++)for(let j=0;j<4;j++){x.fillStyle='#c99a00';x.beginPath();x.arc(8+i*16,8+j*16,5,0,6.2832);x.fill();x.fillStyle='#ffe07a';x.beginPath();x.arc(7+i*16,7+j*16,2,0,6.2832);x.fill();}return T(c,1);})();
 const texDoorMark=(()=>{const [c,x]=cv(160,128);x.clearRect(0,0,160,128);x.strokeStyle='rgba(255,255,255,.9)';x.lineWidth=6;x.strokeRect(6,6,148,116);x.fillStyle='#35b04a';
   for(const ox of [48,112]){x.beginPath();x.moveTo(ox,20);x.lineTo(ox+22,56);x.lineTo(ox+9,56);x.lineTo(ox+9,108);x.lineTo(ox-9,108);x.lineTo(ox-9,56);x.lineTo(ox-22,56);x.closePath();x.fill();}return T(c);})();
-function signTex(st,flip){const [c,x]=cv(1024,320);const col=ROUTE.color;x.fillStyle='#fbfbf8';x.fillRect(0,0,1024,320);
+// 港鐵款站名牌：中文大字＋英文、左邊東鐵綫色塊、下面色帶寫前後站
+function signTexHK(st,flip){const [c,x]=cv(1024,320),col=LINE.color;x.fillStyle='#fbfbf8';x.fillRect(0,0,1024,320);
+  x.fillStyle=col;rr(x,40,56,150,150,20);x.fill();x.fillStyle='#fff';x.textAlign='center';x.textBaseline='middle';x.font=`900 44px ${JPF}`;x.fillText('東鐵',115,112);x.font='bold 34px Helvetica,Arial,sans-serif';x.fillText('EAL',115,164);
+  x.fillStyle='#111';x.font=`900 128px ${JPF}`;x.textBaseline='alphabetic';x.fillText(st.ja,600,168,720);x.fillStyle='#333';x.font='bold 44px Helvetica,Arial,sans-serif';x.fillText(st.en,600,228,720);
+  x.fillStyle=col;x.fillRect(0,252,1024,68);x.fillStyle='#fff';x.font=`bold 32px ${JPF}`;const A=flip?st.next:st.prev,B=flip?st.prev:st.next;
+  const tri=(X,dir)=>{x.beginPath();x.moveTo(X+dir*16,286);x.lineTo(X-dir*6,274);x.lineTo(X-dir*6,298);x.closePath();x.fill();};
+  if(A){tri(34,-1);x.textAlign='left';x.fillText(A.ja+'  '+A.en,54,298,440);}if(B){tri(990,1);x.textAlign='right';x.fillText(B.ja+'  '+B.en,970,298,440);}return T(c);}
+function signTex(st,flip){if(LINE.id==='eal')return signTexHK(st,flip);const [c,x]=cv(1024,320);const col=ROUTE.color;x.fillStyle='#fbfbf8';x.fillRect(0,0,1024,320);
   x.lineWidth=10;x.strokeStyle=col;rr(x,120,64,120,120,14);x.stroke();x.fillStyle='#222';x.textAlign='center';x.textBaseline='alphabetic';
   x.font='bold 42px Helvetica,Arial,sans-serif';x.fillText('JY',180,114);x.font='bold 58px Helvetica,Arial,sans-serif';x.fillText(st.code.slice(2),180,170);
   x.fillStyle='#333';x.font=`600 36px ${JPF}`;x.fillText(st.kana,560,56);x.fillStyle='#111';x.font=`bold 120px ${JPF}`;x.fillText(st.ja,560,176);
@@ -1245,8 +1481,12 @@ function signTex(st,flip){const [c,x]=cv(1024,320);const col=ROUTE.color;x.fillS
   x.fillStyle=col;x.fillRect(0,252,1024,68);x.fillStyle='#fff';x.font=`bold 32px ${JPF}`;const A=flip?st.next:st.prev,B=flip?st.prev:st.next;
   const tri=(X,dir)=>{x.beginPath();x.moveTo(X+dir*16,286);x.lineTo(X-dir*6,274);x.lineTo(X-dir*6,298);x.closePath();x.fill();};
   if(A){tri(34,-1);x.textAlign='left';x.fillText(A.ja+'  '+A.en,54,298);}if(B){tri(990,1);x.textAlign='right';x.fillText(B.ja+'  '+B.en,970,298);}return T(c);}
-const texPsdLeaf=(()=>{const [c,x]=cv(128,128);x.fillStyle='#f4f6f7';x.fillRect(0,0,128,128);x.fillStyle='#7dbf3f';x.fillRect(0,26,128,12);x.fillStyle='#d83a3a';x.beginPath();x.arc(64,78,16,0,6.2832);x.fill();x.fillStyle='#fff';x.font='bold 24px Helvetica,sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('!',64,79);return T(c);})();
-function ledBoardTex(dir){const [c,x]=cv(512,140);x.fillStyle='#060606';x.fillRect(0,0,512,140);x.textBaseline='middle';
+function psdLeafTex(col){const [c,x]=cv(128,128);x.fillStyle='#f4f6f7';x.fillRect(0,0,128,128);x.fillStyle=col;x.fillRect(0,26,128,12);x.fillStyle='#d83a3a';x.beginPath();x.arc(64,78,16,0,6.2832);x.fill();x.fillStyle='#fff';x.font='bold 24px Helvetica,sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('!',64,79);return T(c);}
+const texPsdLeaf=psdLeafTex('#7dbf3f');
+function ledBoardTex(dir){if(LINE.id==='eal'){const [c,x]=cv(512,140);x.fillStyle='#060606';x.fillRect(0,0,512,140);x.textBaseline='middle';
+    for(const [y,m] of [[36,'1'],[98,'6']]){x.fillStyle='#ffffff';x.font=`bold 36px ${JPF}`;x.textAlign='left';x.fillText(dir,18,y);x.font='bold 26px Helvetica,Arial,sans-serif';x.fillText('Lo Wu',108,y+2);x.fillStyle='#ffb13b';x.textAlign='right';x.font=`bold 34px ${JPF}`;x.fillText(m+' 分鐘',494,y);}
+    x.fillStyle='rgba(0,0,0,.45)';for(let i=0;i<512;i+=3)x.fillRect(i,0,1,140);for(let j=0;j<140;j+=3)x.fillRect(0,j,512,1);return T(c);}
+  const [c,x]=cv(512,140);x.fillStyle='#060606';x.fillRect(0,0,512,140);x.textBaseline='middle';
   x.fillStyle='#ffa53a';x.font=`bold 34px ${JPF}`;x.fillText('内回り',16,36);x.fillText(dir+' 方面',150,36,350);x.fillStyle='#63ff8a';x.fillText('17:35',16,92);x.fillStyle='#ffffff';x.fillText('山手線',150,92);x.fillStyle='#ffa53a';x.fillText('5両',330,92);
   x.fillStyle='rgba(0,0,0,.45)';for(let i=0;i<512;i+=3)x.fillRect(i,0,1,140);for(let j=0;j<140;j+=3)x.fillRect(0,j,512,1);return T(c);}
 const texLED=ledBoardTex(dirJa(0));
@@ -1254,7 +1494,7 @@ const texExit=(()=>{const [c,x]=cv(256,72);x.fillStyle='#f6c700';x.fillRect(0,0,
 const texClock=(()=>{const [c,x]=cv(256,256);x.fillStyle='#fff';x.beginPath();x.arc(128,128,124,0,6.2832);x.fill();x.strokeStyle='#222';x.lineWidth=8;x.stroke();x.fillStyle='#222';x.textAlign='center';x.textBaseline='middle';x.font='bold 30px Helvetica,sans-serif';
   for(let i=1;i<=12;i++){const a=i/12*6.2832;x.fillText(i,128+Math.sin(a)*92,128-Math.cos(a)*92);}
   const hand=(a,l,w)=>{x.lineWidth=w;x.lineCap='round';x.beginPath();x.moveTo(128,128);x.lineTo(128+Math.sin(a)*l,128-Math.cos(a)*l);x.stroke();};hand((5+35/60)/12*6.2832,56,9);hand(35/60*6.2832,86,6);x.strokeStyle='#d33';hand(0.3,90,2);return T(c);})();
-function posterTex(i){const [c,x]=cv(256,128);const P=[['#ff7eb3','#ffb86b','夏まつり'],['#4facfe','#00f2fe','TOKYO'],['#43e97b','#38f9d7','新発売'],['#fa709a','#fee140','SALE'],['#a18cd1','#fbc2eb','アニメ展']][i%5];
+function posterTex(i){const [c,x]=cv(256,128);const P=(LINE.id==='eal'?[['#ff7eb3','#ffb86b','海洋公園'],['#4facfe','#00f2fe','香港'],['#43e97b','#38f9d7','新品上市'],['#fa709a','#fee140','大減價'],['#a18cd1','#fbc2eb','動漫節']]:[['#ff7eb3','#ffb86b','夏まつり'],['#4facfe','#00f2fe','TOKYO'],['#43e97b','#38f9d7','新発売'],['#fa709a','#fee140','SALE'],['#a18cd1','#fbc2eb','アニメ展']])[i%5];
   const g=x.createLinearGradient(0,0,256,128);g.addColorStop(0,P[0]);g.addColorStop(1,P[1]);x.fillStyle=g;x.fillRect(0,0,256,128);x.fillStyle='rgba(255,255,255,.9)';x.beginPath();x.arc(200,64,40,0,6.2832);x.fill();
   x.fillStyle='#fff';x.font=`900 38px ${JPF}`;x.textBaseline='middle';x.fillText(P[2],18,64);return T(c);}
 const MS={
@@ -1322,7 +1562,7 @@ function buildStation(st){
   ['#2e7d32','#1565c0','#e0a800'].forEach((c,i)=>{const b=new THREE.Mesh(new THREE.BoxGeometry(0.45,0.9,0.45),std({color:c,roughness:.5}));b.position.set(-9.3,top+0.45,8+i*0.55);g.add(b);});
   // 外側玻璃圍欄＋廣告燈箱
   for(let z=-PL/2+1;z<PL/2;z+=2)rm.add(new THREE.BoxGeometry(0.06,1.2,0.06),-9.95,top+0.6,z);rm.add(new THREE.BoxGeometry(0.08,0.08,PL),-9.95,top+1.2,0);gm.add(new THREE.BoxGeometry(0.02,1.1,PL),-9.97,top+0.6,0);
-  for(const [z,i] of [[-30,0],[-22,1],[40,2],[48,3]]){const pm=new THREE.MeshBasicMaterial({map:posterTex(i+st.idx),color:HDR(0xffffff,1.25)});const p=new THREE.Mesh(new THREE.PlaneGeometry(2.6,1.3),pm);p.rotation.y=Math.PI/2;p.position.set(-9.75,top+1.75,z);g.add(p);sm.add(new THREE.BoxGeometry(0.14,1.45,2.75),-9.84,top+1.75,z);sm.add(new THREE.BoxGeometry(0.08,1.1,0.08),-9.84,top+0.55,z);}
+  st.posters=[];for(const [z,i] of [[-30,0],[-22,1],[40,2],[48,3]]){const pm=new THREE.MeshBasicMaterial({map:posterTex(i+st.idx),color:HDR(0xffffff,1.25)});st.posters.push([pm,i+st.idx]);const p=new THREE.Mesh(new THREE.PlaneGeometry(2.6,1.3),pm);p.rotation.y=Math.PI/2;p.position.set(-9.75,top+1.75,z);g.add(p);sm.add(new THREE.BoxGeometry(0.14,1.45,2.75),-9.84,top+1.75,z);sm.add(new THREE.BoxGeometry(0.08,1.1,0.08),-9.84,top+0.55,z);}
   // ホームドア（月台閘門）：固定板＋會開關嘅閘門
   {const X=-2.12,gz=doorsOf(st).map(s=>-(s-sMid)).sort((a,b)=>a-b),pm=new Merger(),tm2=new Merger();let zc=-PL/2+1;
     const panel=(za,zb)=>{if(zb-za<0.05)return;const l=zb-za,zm=(za+zb)/2;pm.add(new RoundedBoxGeometry(0.16,1.2,l,2,0.03),X,top+0.6,zm);tm2.add(new THREE.BoxGeometry(0.22,0.07,l),X,top+1.235,zm);};
@@ -1338,6 +1578,10 @@ function buildStations(){for(const st of ST)buildStation(st);}
 function refreshStationSigns(){for(const st of ST){if(!st.signMat)continue;st.signMat.forEach((m,f)=>{const old=m.map;m.map=m.emissiveMap=signTex(st,!!f);m.needsUpdate=true;if(old)old.dispose();});}
   const old=MS.led.map;MS.led.map=ledBoardTex(dirJa(ST[0].y));MS.led.needsUpdate=true;if(old&&old!==texLED)old.dispose();}
 
+// 換綫：廣告、月台閘門顏色（站名牌同發車標由 refreshStationSigns 處理）
+function restyleStations(){const col=new THREE.Color(LINE.id==='eal'?0x5eb6e4:0x7dbf3f);MS.psdTop.color.copy(col);MS.psdTop.emissive.copy(col).multiplyScalar(0.35);
+  const old=MS.psdLeaf.map;MS.psdLeaf.map=psdLeafTex(LINE.id==='eal'?'#5eb6e4':'#7dbf3f');MS.psdLeaf.needsUpdate=true;if(old&&old!==texPsdLeaf)old.dispose();
+  for(const st of ST)for(const [pm,i] of st.posters||[]){const o=pm.map;pm.map=posterTex(i);pm.needsUpdate=true;if(o)o.dispose();}}
 function setPSD(P){const o=P.open;P.gz.forEach((z,i)=>{for(const [k,sg] of [[0,-1],[1,1]]){DUMMY.position.set(P.X,P.top+0.6,z+sg*(0.5+0.95*o));DUMMY.rotation.set(0,0,0);DUMMY.scale.set(1,1,1);DUMMY.updateMatrix();P.im.setMatrixAt(i*2+k,DUMMY.matrix);}});P.im.instanceMatrix.needsUpdate=true;P.last=o;}
 function updPSD(dt){for(const st of ST){const P=st.psd;if(!P)continue;const tgt=Math.abs(G.s-st.stop)<0.6&&G.state!=='drive'?G.doors:0;P.open+=(tgt-P.open)*Math.min(1,dt*6);if(Math.abs(P.open-P.last)>0.002)setPSD(P);}}
 
@@ -1493,13 +1737,23 @@ const texBrushed=(()=>{const [c,x]=cv(256,256);x.fillStyle='rgb(0,84,0)';x.fillR
 const nrmPanel=(()=>{const [c,x]=cv(512,256);x.fillStyle='#8a8a8a';x.fillRect(0,0,512,256);x.fillStyle='#5a5a5a';for(let i=0;i<4;i++)x.fillRect(i*128,0,3,256);x.fillStyle='#9a9a9a';for(let i=0;i<4;i++)x.fillRect(i*128+3,0,2,256);return normalFromHeight(c,2.5);})();
 texBrushed.repeat.set(1,1);nrmPanel.repeat.set(1,1);
 function doorFilm(style){const [c,x]=cv(128,384),[r,y]=cv(128,384);
-  const g=x.createLinearGradient(0,0,0,384);if(style==='e235'){g.addColorStop(0,'#1d7a3e');g.addColorStop(.45,'#3aa345');g.addColorStop(1,'#9fd04a');}else{g.addColorStop(0,'#d9dde0');g.addColorStop(1,'#b3b9be');}
+  const g=x.createLinearGradient(0,0,0,384);if(style==='e235'){g.addColorStop(0,'#1d7a3e');g.addColorStop(.45,'#3aa345');g.addColorStop(1,'#9fd04a');}else{g.addColorStop(0,'#d9dde0');g.addColorStop(1,'#b3b9be');}   // rtrain（港鐵）同 e233 一樣係不銹鋼門
   x.fillStyle=g;x.fillRect(0,0,128,384);y.fillStyle=style==='e235'?'rgb(0,120,0)':'rgb(0,80,255)';y.fillRect(0,0,128,384);
   const wx=14,wy=30,ww=100,wh=150;x.fillStyle='#0c0f12';rr(x,wx-5,wy-5,ww+10,wh+10,16);x.fill();const gg=x.createLinearGradient(0,wy,0,wy+wh);gg.addColorStop(0,'#7d94a6');gg.addColorStop(.5,'#3a4f60');gg.addColorStop(1,'#1c2833');x.fillStyle=gg;rr(x,wx,wy,ww,wh,12);x.fill();if(style==='e235'){x.save();rr(x,wx,wy,ww,wh,12);x.clip();x.clearRect(wx,wy,ww,wh);x.fillStyle='rgba(30,48,60,.3)';x.fillRect(wx,wy,ww,wh);x.restore();}
   x.fillStyle='rgba(255,255,255,.16)';x.beginPath();x.moveTo(wx+8,wy+wh-10);x.lineTo(wx+55,wy+8);x.lineTo(wx+75,wy+8);x.lineTo(wx+28,wy+wh-10);x.fill();
   y.fillStyle='rgb(0,14,0)';rr(y,wx,wy,ww,wh,12);y.fill();x.fillStyle='rgba(0,0,0,.35)';x.fillRect(0,0,3,384);
   const t=T(c),rt=T(r,false,false);for(const q of [t,rt]){q.repeat.set(1/0.648,1/1.92);q.offset.set(0.5,0.5);}return [t,rt];}
-function faceTex(style){const [c,x]=cv(512,512);const Y=v=>512-(v-1.0)/2.7*512,X=u=>(u+1.7)/3.4*512;
+// 港鐵 R-train 車頭：銀白玻璃纖維車頭、黑色大擋風玻璃罩、四分一圓頭燈、底部紅帶
+function faceTexR(){const [c,x]=cv(512,512);const Y=v=>512-(v-1.0)/2.7*512,X=u=>(u+1.7)/3.4*512;
+  const bg=x.createLinearGradient(0,0,512,0);bg.addColorStop(0,'#c9ced3');bg.addColorStop(.5,'#f3f5f7');bg.addColorStop(1,'#c9ced3');x.fillStyle=bg;x.fillRect(0,0,512,512);
+  x.fillStyle='#0b0e12';rr(x,X(-1.32),Y(3.42),X(1.32)-X(-1.32),Y(1.86)-Y(3.42),34);x.fill();
+  const wg=x.createLinearGradient(0,Y(3.3),0,Y(2.0));wg.addColorStop(0,'#33475a');wg.addColorStop(.6,'#15202b');wg.addColorStop(1,'#0b1117');x.fillStyle=wg;rr(x,X(-1.16),Y(3.28),X(1.16)-X(-1.16),Y(2.08)-Y(3.28),24);x.fill();
+  x.fillStyle='rgba(255,255,255,.1)';x.beginPath();x.moveTo(X(-0.95),Y(2.12));x.lineTo(X(-0.3),Y(3.24));x.lineTo(X(0.02),Y(3.24));x.lineTo(X(-0.63),Y(2.12));x.fill();
+  x.fillStyle='#d7262e';x.fillRect(0,Y(1.34),512,Y(1.1)-Y(1.34));x.fillStyle='#1b1b1b';x.fillRect(0,Y(1.1),512,Y(1.0)-Y(1.1)+2);
+  for(const s of [-1,1]){const cx=X(s*1.02),cy=Y(1.62);x.fillStyle='#10151a';x.beginPath();x.moveTo(cx-s*46,cy-22);x.lineTo(cx+s*36,cy-22);x.quadraticCurveTo(cx+s*46,cy-22,cx+s*46,cy-8);x.lineTo(cx+s*46,cy+20);x.lineTo(cx-s*46,cy+20);x.closePath();x.fill();
+    x.fillStyle='#fffbe6';x.beginPath();x.arc(cx+s*14,cy,12,0,6.2832);x.fill();x.fillStyle='#ff5a4a';x.beginPath();x.arc(cx-s*22,cy,7,0,6.2832);x.fill();}
+  x.save();x.translate(256,Y(1.62));x.scale(-1,1);x.fillStyle='#d7262e';x.font='900 italic 40px Helvetica,Arial,sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('MTR',0,0);x.restore();return T(c);}   // 車頭 UV 係左右反轉，字要反轉先睇到正
+function faceTex(style){if(style==='rtrain')return faceTexR();const [c,x]=cv(512,512);const Y=v=>512-(v-1.0)/2.7*512,X=u=>(u+1.7)/3.4*512;
   x.fillStyle='#07090b';x.fillRect(0,0,512,512);
   const wg=x.createLinearGradient(0,Y(3.25),0,Y(2.15));wg.addColorStop(0,'#2a3a48');wg.addColorStop(.55,'#141d25');wg.addColorStop(1,'#0b1015');x.fillStyle=wg;rr(x,X(-1.18),Y(3.25),X(1.18)-X(-1.18),Y(2.15)-Y(3.25),26);x.fill();
   x.fillStyle='rgba(255,255,255,.08)';x.beginPath();x.moveTo(X(-1.0),Y(2.2));x.lineTo(X(-0.35),Y(3.2));x.lineTo(X(-0.05),Y(3.2));x.lineTo(X(-0.7),Y(2.2));x.fill();
@@ -1507,8 +1761,10 @@ function faceTex(style){const [c,x]=cv(512,512);const Y=v=>512-(v-1.0)/2.7*512,X
   x.beginPath();x.moveTo(0,Y(1.0));x.lineTo(0,Y(2.0));x.quadraticCurveTo(X(0),Y(1.55),512,Y(2.0));x.lineTo(512,Y(1.0));x.closePath();x.fill();
   x.fillStyle='#07090b';for(const s of [-1,1]){rr(x,X(s*0.98)-44,Y(1.62)-17,88,34,12);x.fill();}
   return T(c);}
-const texJR=(()=>{const [c,x]=cv(128,64);x.clearRect(0,0,128,64);x.fillStyle='#2e9e45';x.font='900 italic 52px Helvetica,Arial,sans-serif';x.textBaseline='middle';x.fillText('JR',18,34);return T(c);})();
-const texNum=(()=>{const [c,x]=cv(256,48);x.clearRect(0,0,256,48);x.fillStyle='#1c1c1c';x.font=`bold 30px ${JPF}`;x.textBaseline='middle';x.fillText('クハE235-1',8,26);return T(c);})();
+function decalTex(t,col){const [c,x]=cv(128,64);x.clearRect(0,0,128,64);x.fillStyle=col;x.font=`900 italic ${t.length>2?40:52}px Helvetica,Arial,sans-serif`;x.textBaseline='middle';x.fillText(t,t.length>2?10:18,34);return T(c);}
+const texJR=decalTex('JR','#2e9e45');
+function numTex(t){const [c,x]=cv(256,48);x.clearRect(0,0,256,48);x.fillStyle='#1c1c1c';x.font=`bold 30px ${JPF}`;x.textBaseline='middle';x.fillText(t,8,26);return T(c);}
+const texNum=numTex('クハE235-1');
 const texGrille=(()=>{const [c,x]=cv(256,64);x.fillStyle='#9ea4aa';x.fillRect(0,0,256,64);x.fillStyle='#6f757b';for(let i=0;i<256;i+=8)x.fillRect(i,6,4,52);return T(c,1);})();
 const texBellows=(()=>{const [c,x]=cv(64,64);for(let i=0;i<64;i++){const v=i%8<4?40:22;x.fillStyle=`rgb(${v},${v+2},${v+4})`;x.fillRect(0,i,64,1);}return T(c,1);})();
 
@@ -1618,7 +1874,8 @@ function buildCar(o){const g=new THREE.Group(),mg={},leaves=[];for(const k of ['
     for(const dz of DOORZ){if(!o.interior)mg.doorway.add(DOORWAYG,sd*1.472,2.1,dz,0,ry,0);mg.rubber.add(DOORFR,X,2.1,dz,0,ry,0);mg.lamp.add(new THREE.BoxGeometry(0.1,0.045,0.03),sd*1.49,3.17,dz);
       for(const dd of [1,-1]){const az=dz-dd*0.65,ls=-sd*dd,lg=LEAFG.clone();lg.translate(ls*0.324,0,0);
         if(o.anim&&sd<0){const m=new THREE.Mesh(lg,o.door);m.position.set(sd*1.476,2.1,az);m.rotation.y=ry;m.castShadow=m.receiveShadow=true;g.add(m);leaves.push(m);}else mg.door.add(lg,sd*1.476,2.1,az,0,ry,0);}}
-    if(o.style==='e233'){mg.stripe.add(new THREE.PlaneGeometry(CLEN-0.4,0.2),sd*1.5,1.9,0,0,ry,0);mg.stripe.add(new THREE.PlaneGeometry(CLEN-0.4,0.07),sd*1.5,3.16,0,0,ry,0);}
+    mg.stripe.add(new THREE.PlaneGeometry(CLEN-0.4,0.2),sd*1.5,1.9,0,0,ry,0);   // 腰帶：e233＝藍、港鐵＝紅、e235 收埋
+    if(o.style==='e233')mg.stripe.add(new THREE.PlaneGeometry(CLEN-0.4,0.07),sd*1.5,3.16,0,0,ry,0);
     else for(const dz of [-4.93,4.93])mg.led.add(new THREE.PlaneGeometry(0.66,0.16),sd*1.484,3.22,dz,0,ry,0);
     if(o.kind!=='mid'){const zc=o.kind==='lead'?-CH+0.72:CH-0.72;mg.rubber.add(ringGeo(0.62,1.86,0.04,0.02,0.01),X,2.08,zc,0,ry,0);mg.glass.add(winGlass(0.42,0).scale(1,0.66,1),sd*1.481,2.6,zc,0,ry,0);
       if(o.kind==='lead'){const d=new THREE.Mesh(new THREE.PlaneGeometry(0.5,0.25),TM.decalJR);d.position.set(sd*1.483,3.05,-7.95);d.rotation.y=ry;g.add(d);}}
@@ -1634,12 +1891,22 @@ function buildCar(o){const g=new THREE.Group(),mg={},leaves=[];for(const k of ['
   let glows=[],front=null;if(o.kind!=='mid'){const f=buildNose(o,o.kind==='lead');if(o.kind==='tail')f.g.rotation.y=Math.PI;g.add(f.g);glows=f.glows;front=f.g;}
   return {g,leaves,glows,front};}
 TM.sideLed=new THREE.MeshBasicMaterial({map:ledTex('山手線　'+dirJa(0)),color:HDR(0xffffff,1.5)});
-function refreshParallelLine(){if(!TB||!TB.stripe)return;const west=SEC>=4&&SEC<=10;TB.stripe.color.set(west?0x00ac9a:0x00a7e1);const old=TB.led.map;TB.led.map=ledTex(west?'埼京線　大宮':(SEC>=11?'京浜東北線　大宮':'京浜東北線　大船'));TB.led.needsUpdate=true;if(old)old.dispose();}
-function refreshTrainLED(){const d=dirJa(ST[0].y);for(const [m,t] of [[TA&&TA.led,'山手線　'+d+' 方面'],[TM.sideLed,'山手線　'+d]]){if(!m)continue;const old=m.map;m.map=ledTex(t);m.needsUpdate=true;if(old)old.dispose();}}
+function refreshParallelLine(){if(!TB||!TB.stripe)return;if(LINE.id==='eal'){const old=TB.led.map;TB.led.map=ledTex('金鐘　Admiralty','#ff5a3a');TB.led.needsUpdate=true;if(old)old.dispose();return;}const west=SEC>=4&&SEC<=10;TB.stripe.color.set(west?0x00ac9a:0x00a7e1);const old=TB.led.map;TB.led.map=ledTex(west?'埼京線　大宮':(SEC>=11?'京浜東北線　大宮':'京浜東北線　大船'));TB.led.needsUpdate=true;if(old)old.dispose();}
+function refreshTrainLED(){const hk=LINE.id==='eal',d=dirJa(ST[0].y);for(const [m,t] of [[TA&&TA.led,hk?'羅湖　Lo Wu':'山手線　'+d+' 方面'],[TM.sideLed,hk?'東鐵綫　往羅湖':'山手線　'+d]]){if(!m)continue;const old=m.map;m.map=hk?ledTex(t,'#ff5a3a'):ledTex(t);m.needsUpdate=true;if(old)old.dispose();}}
+// 車廂門頂 LCD：跟住下一站／本站轉字
+let carLcdKey='';
+function refreshCarLCD(st,drive){const k=LINE.id+st.ja+drive;if(k===carLcdKey)return;carLcdKey=k;const t=(drive?LINE.tx.next+' ':'')+st.ja+'　'+st.en,old=TMI.lcd.map;TMI.lcd.map=ledTex(t,'#9ff5c0');TMI.lcd.needsUpdate=true;if(old)old.dispose();}
+// 換綫：成架車換塗裝（港鐵 R-train＝銀車身、紅腰帶、白車頭黑擋風罩），唔使重砌幾何
+function reskinTrain(T0,style){if(!T0||T0.style===style)return;T0.style=style;const [dm,dr]=doorFilm(style),od=[T0.door.map,T0.door.roughnessMap,T0.face.map];
+  Object.assign(T0.door,{map:dm,roughnessMap:dr,metalness:style==='e235'?.2:.8,transparent:style==='e235'});T0.door.needsUpdate=true;T0.face.map=faceTex(style);T0.face.needsUpdate=true;for(const t of od)if(t)t.dispose();
+  T0.stripe.visible=style!=='e235';T0.stripe.color.set(style==='rtrain'?0xd7262e:style==='e233'?0x00a7e1:0x74bd2e);}
+function restyleTrains(){const hk=LINE.id==='eal';reskinTrain(TA,hk?'rtrain':'e235');reskinTrain(TB,hk?'rtrain':'e233');
+  for(const [m,t] of [[TM.decalJR,hk?decalTex('MTR','#d7262e'):texJR],[TM.decalNum,hk?numTex(LINE.tx.plate):texNum]]){const o=m.map;m.map=t;m.needsUpdate=true;if(o&&o!==texJR&&o!==texNum)o.dispose();}
+  TMI.seat.color.set(hk?0x8e9ba6:0x4e8f46);TMI.strap.color.set(hk?0xc9ced3:0x7dbf3f);carLcdKey='';}
 function buildTrain(style,n){const T0={cars:[],leaves:[],glows:[],front:null};
   const [dm,dr]=doorFilm(style),door=new THREE.MeshPhysicalMaterial({map:dm,roughnessMap:dr,metalness:style==='e235'?.2:.8,roughness:1,clearcoat:.4,clearcoatRoughness:.2,transparent:style==='e235'});
-  const stripe=std({color:style==='e235'?0x74bd2e:0x00a7e1,roughness:.45,metalness:.15});T0.stripe=stripe;
-  const face=new THREE.MeshPhysicalMaterial({map:faceTex(style),metalness:.2,roughness:.14,clearcoat:1,clearcoatRoughness:.05});
+  const stripe=std({color:style==='e235'?0x74bd2e:0x00a7e1,roughness:.45,metalness:.15});T0.stripe=stripe;stripe.visible=style!=='e235';T0.style=style;
+  const face=new THREE.MeshPhysicalMaterial({map:faceTex(style),metalness:.2,roughness:.14,clearcoat:1,clearcoatRoughness:.05});T0.face=face;T0.door=door;
   const led=new THREE.MeshBasicMaterial({map:ledTex(style==='e235'?'山手線　'+dirJa(ST[0].y)+' 方面':'京浜東北線　大宮'),color:HDR(0xffffff,1.6)});T0.led=led;
   for(let i=0;i<n;i++){const kind=i===0?'lead':i===n-1?'tail':'mid';const c=buildCar({kind,pant:i===1||i===n-2,style,door,stripe,led,face,anim:style==='e235',interior:style==='e235',seed:i});scene.add(c.g);T0.cars.push(c.g);T0.leaves.push(...c.leaves);T0.glows.push(...c.glows);if(i===0)T0.front=c.front;}
   return T0;}
@@ -1728,7 +1995,7 @@ function notchTex(){const [c,x]=cv(96,320);x.fillStyle='#1a1d20';x.fillRect(0,0,
   ['EB','B3','B2','B1','N','P1','P2','P3'].forEach((t,i)=>{x.fillStyle=t[0]==='P'?'#7fc4ff':t==='N'?'#fff':t==='EB'?'#ff5a5a':'#ffb35c';x.fillText(t,48,22+i*39);x.fillStyle='rgba(255,255,255,.25)';x.fillRect(12,41+i*39,72,1);});return T(c);}
 function plateTex(t){const [c,x]=cv(256,48);x.fillStyle='#f4f4f2';x.fillRect(0,0,256,48);x.fillStyle='#222';x.font=`bold 30px ${JPF}`;x.textAlign='center';x.textBaseline='middle';x.fillText(t,128,26);return T(c);}
 function diamondTex(){const [c,x]=cv(128,128);x.translate(64,64);x.rotate(Math.PI/4);x.fillStyle='#2e9d4f';x.fillRect(-40,-40,80,80);x.strokeStyle='#fff';x.lineWidth=5;x.strokeRect(-34,-34,68,68);x.rotate(-Math.PI/4);x.fillStyle='#fff';x.font='bold 46px Helvetica,Arial,sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('1',0,3);return T(c);}
-function paperTex(){const [c,x]=cv(256,340);x.fillStyle='#f7f3e6';x.fillRect(0,0,256,340);x.strokeStyle='#999';x.lineWidth=2;x.strokeRect(6,6,244,328);x.fillStyle='#222';x.font=`bold 24px ${JPF}`;x.fillText('山手線 内回り',18,38);x.font=`bold 16px ${JPF}`;x.fillStyle='#666';x.fillText('運転時刻表　1101G',18,64);
+function paperTex(){const [c,x]=cv(256,340);x.fillStyle='#f7f3e6';x.fillRect(0,0,256,340);x.strokeStyle='#999';x.lineWidth=2;x.strokeRect(6,6,244,328);x.fillStyle='#222';x.font=`bold 24px ${JPF}`;x.fillText(LINE.tx.paper[0],18,38);x.font=`bold 16px ${JPF}`;x.fillStyle='#666';x.fillText(LINE.tx.paper[1],18,64);
   ST.forEach((s,i)=>{const y=112+i*66;x.fillStyle='#222';x.font=`bold 30px ${JPF}`;x.fillText(s.ja,24,y);x.font='bold 28px Helvetica,sans-serif';x.fillText(`17:${30+i*3}`,150,y);x.strokeStyle='#ccc';x.beginPath();x.moveTo(16,y+22);x.lineTo(240,y+22);x.stroke();});return T(c);}
 function watchTex(){const [c,x]=cv(128,128);x.fillStyle='#fffdf5';x.beginPath();x.arc(64,64,60,0,6.2832);x.fill();x.strokeStyle='#b89a4a';x.lineWidth=6;x.stroke();x.strokeStyle='#222';x.lineCap='round';
   for(let i=0;i<12;i++){const a=i/12*6.2832;x.lineWidth=3;x.beginPath();x.moveTo(64+Math.sin(a)*48,64-Math.cos(a)*48);x.lineTo(64+Math.sin(a)*54,64-Math.cos(a)*54);x.stroke();}
@@ -1786,7 +2053,7 @@ function buildCab(car){const cab=new THREE.Group();car.add(cab);CAB.group=cab;
   mg.grey.add(new THREE.BoxGeometry(2.1,0.085,0.11),-0.28,WY1-0.02,WZ+0.16);
   CAB.film=add(new THREE.PlaneGeometry(2.0,0.30),CM.smoke,-0.28,WY1-0.19,WZ+0.13,RK);
   mg.black.add(new THREE.BoxGeometry(2.0,0.018,0.022),-0.28,WY1-0.345,WZ+0.12);
-  add(new THREE.PlaneGeometry(0.30,0.056),std({map:plateTex('クハE235-1'),roughness:.6}),-0.95,WY1-0.02,WZ+0.217);
+  add(new THREE.PlaneGeometry(0.30,0.056),(CAB.plateMat=std({map:plateTex('クハE235-1'),roughness:.6})),-0.95,WY1-0.02,WZ+0.217);
   // 窗頂中間吊住嘅灰色機箱（真車有）
   mg.grey.add(new THREE.BoxGeometry(0.13,0.34,0.10),0.30,WY1-0.13,WZ+0.30);mg.grey.add(new THREE.BoxGeometry(0.04,0.14,0.04),0.30,WY1+0.08,WZ+0.30);
   add(new THREE.PlaneGeometry(0.1,0.28),std({map:grilleTex(),roughness:.6}),0.30,WY1-0.13,WZ+0.352);
@@ -1879,28 +2146,29 @@ function drawSpeedLCD(s,kmh){const {x,w,h}=s;x.fillStyle='#04070b';x.fillRect(0,
   NOTCH_ORDER.forEach((n,i)=>{const on=G.notch===n,lit=n!==0&&Math.sign(n)===Math.sign(G.notch)&&Math.abs(n)<Math.abs(G.notch),y=18+i*34;x.fillStyle=on?NCOL(n):lit?(n>0?'#1d4f86':'#6b3b10'):'#121a24';rr(x,338,y,86,28,6);x.fill();
     x.fillStyle=on?(n===0?'#111':'#fff'):'#6f8296';x.font='bold 19px Helvetica,Arial,sans-serif';x.fillText(NTXT(n),381,y+15);});
   const tile=(tx,ty,label,on,col)=>{x.fillStyle=on?col:'#121a24';rr(x,tx,ty,176,40,7);x.fill();x.fillStyle=on?'#fff':'#6f8296';x.font=`bold 21px ${JPF}`;x.fillText(label,tx+88,ty+21);};
-  tile(446,18,'戸閉',G.doors<0.02,'#1f9d55');tile(446,66,'TASC',G.tasc,'#1f9d55');tile(446,114,'ATS-P',G.ats,'#c62828');
+  tile(446,18,LINE.tx.door,G.doors<0.02,'#1f9d55');tile(446,66,LINE.tx.auto,G.tasc,'#1f9d55');tile(446,114,LINE.id==='jy'?'ATS-P':LINE.tx.ats,G.ats,'#c62828');
   const bc=G.notch<0?(G.notch===-4?1:-G.notch/3.4):0;x.fillStyle='#8fb3c9';x.font='bold 17px Helvetica,Arial,sans-serif';x.textAlign='left';x.fillText('BC',448,184);x.fillText('MR',448,224);
   x.fillStyle='#121a24';x.fillRect(486,174,136,18);x.fillRect(486,214,136,18);x.fillStyle='#ffa33a';x.fillRect(486,174,136*bc,18);x.fillStyle='#46a8ff';x.fillRect(486,214,136*0.82,18);
-  x.textAlign='center';x.fillStyle='#4a5b6c';x.font='bold 16px Helvetica,Arial,sans-serif';x.fillText('E235',534,270);s.t.needsUpdate=true;}
+  x.textAlign='center';x.fillStyle='#4a5b6c';x.font='bold 16px Helvetica,Arial,sans-serif';x.fillText(LINE.tx.model,534,270);s.t.needsUpdate=true;}
 function drawInfoLCD(s,st,rem,drive){const {x,w}=s;x.fillStyle='#06101c';x.fillRect(0,0,w,s.h);const d=new Date(),p2=n=>String(n).padStart(2,'0');
-  lcdHead(x,w,'山手線 内回り　普通',`${p2(d.getHours())}:${p2(d.getMinutes())}:${p2(d.getSeconds())}`);x.textBaseline='middle';x.textAlign='left';
-  x.fillStyle='#8fd3ff';x.font=`bold 24px ${JPF}`;x.fillText(drive?'次は':'ただいま',18,78);
+  lcdHead(x,w,LINE.tx.lcdHead,`${p2(d.getHours())}:${p2(d.getMinutes())}:${p2(d.getSeconds())}`);x.textBaseline='middle';x.textAlign='left';
+  x.fillStyle='#8fd3ff';x.font=`bold 24px ${JPF}`;x.fillText(drive?LINE.tx.next:LINE.tx.now,18,78);
   x.fillStyle='#fff';x.font=`bold 64px ${JPF}`;x.fillText(st.ja,18,132);x.fillStyle='#9fb3c4';x.font='bold 24px Helvetica,Arial,sans-serif';x.fillText(st.en,22,176);
   if(drive){x.textAlign='right';x.fillStyle='#ffd24a';x.font='bold 60px Helvetica,Arial,sans-serif';x.fillText(rem,w-58,132);x.font='bold 26px Helvetica,Arial,sans-serif';x.fillText('m',w-24,142);x.textAlign='left';}
-  const L=44,R=w-44,Y=240;x.strokeStyle='#80C241';x.lineWidth=8;x.beginPath();x.moveTo(L,Y);x.lineTo(R,Y);x.stroke();
-  ST.forEach((q,i)=>{const px=L+i*((R-L)/(ST.length-1));x.fillStyle=i<=G.reached?'#80C241':'#06101c';x.beginPath();x.arc(px,Y,12,0,6.2832);x.fill();x.strokeStyle='#80C241';x.lineWidth=5;x.stroke();x.fillStyle='#cfe0ee';x.font=`bold 20px ${JPF}`;x.textAlign='center';x.fillText(q.ja,px,Y+32);});
+  const L=44,R=w-44,Y=240,LC=LINE.color;x.strokeStyle=LC;x.lineWidth=8;x.beginPath();x.moveTo(L,Y);x.lineTo(R,Y);x.stroke();
+  ST.forEach((q,i)=>{const px=L+i*((R-L)/(ST.length-1));x.fillStyle=i<=G.reached?LC:'#06101c';x.beginPath();x.arc(px,Y,12,0,6.2832);x.fill();x.strokeStyle=LC;x.lineWidth=5;x.stroke();x.fillStyle='#cfe0ee';x.font=`bold 20px ${JPF}`;x.textAlign='center';x.fillText(q.ja,px,Y+32);});
   const a=ST[Math.max(0,G.next-1)],b=ST[Math.min(G.next,ST.length-1)],f=b===a?0:clamp((G.s-a.stop)/(b.stop-a.stop),0,1),tx=L+((Math.max(0,G.next-1))+f)*((R-L)/(ST.length-1));
   x.fillStyle='#ff9a2e';x.beginPath();x.moveTo(tx-11,Y-30);x.lineTo(tx+11,Y-30);x.lineTo(tx,Y-15);x.fill();s.t.needsUpdate=true;}
-function drawCarsLCD(s){const {x,w}=s;x.fillStyle='#06101c';x.fillRect(0,0,w,s.h);lcdHead(x,w,'車両状態','5両');x.textBaseline='middle';
+function drawCarsLCD(s){const {x,w}=s;x.fillStyle='#06101c';x.fillRect(0,0,w,s.h);lcdHead(x,w,LINE.id==='jy'?'車両状態':'車卡狀態',LINE.id==='jy'?'5両':'5 卡');x.textBaseline='middle';
   const n=5,cw=102,gap=10,x0=(w-(n*cw+(n-1)*gap))/2,y0=86,ch=58,open=G.doors>0.02;
-  for(let i=0;i<n;i++){const X=x0+i*(cw+gap);x.fillStyle='#1b2a3a';rr(x,X,y0,cw,ch,i===0?16:6);x.fill();x.strokeStyle='#80C241';x.lineWidth=3;x.stroke();
+  for(let i=0;i<n;i++){const X=x0+i*(cw+gap);x.fillStyle='#1b2a3a';rr(x,X,y0,cw,ch,i===0?16:6);x.fill();x.strokeStyle=LINE.color;x.lineWidth=3;x.stroke();
     for(let k=0;k<4;k++){x.fillStyle=open?'#ff5a4d':'#2bd96b';x.fillRect(X+12+k*22,y0+ch-12,14,6);x.fillRect(X+12+k*22,y0+6,14,6);}
     x.fillStyle='#cfe0ee';x.font='bold 20px Helvetica,Arial,sans-serif';x.textAlign='center';x.fillText(i+1,X+cw/2,y0+ch/2+1);}
-  x.textAlign='left';x.font=`bold 24px ${JPF}`;x.fillStyle=open?'#ff8a80':'#7CFFB2';x.fillText(open?'ドア開':'戸閉 完了',x0,192);x.fillStyle='#9fb3c4';x.textAlign='right';x.fillText('空調 24℃',w-x0,192);s.t.needsUpdate=true;}
+  x.textAlign='left';x.font=`bold 24px ${JPF}`;x.fillStyle=open?'#ff8a80':'#7CFFB2';x.fillText(open?LINE.tx.doorOpen:LINE.tx.doorShut,x0,192);x.fillStyle='#9fb3c4';x.textAlign='right';x.fillText(LINE.tx.ac,w-x0,192);s.t.needsUpdate=true;}
 function drawLCD(){const drive=G.state==='drive'||G.state==='stopped'||G.state==='closing',nx=ST[Math.min(G.next,ST.length-1)],st=drive?nx:ST[G.reached||0],kmh=Math.round(G.v*3.6),rem=Math.max(0,Math.round(nx.stop-G.s)),sec=new Date().getSeconds();
   const k0=kmh+'|'+G.notch+'|'+G.tasc+'|'+G.ats+'|'+(G.doors<0.02),k1=st.ja+'|'+rem+'|'+G.next+'|'+G.reached+'|'+sec+'|'+drive,k2=String(G.doors>0.02);
   if(k0!==CAB.keys[0]){CAB.keys[0]=k0;drawSpeedLCD(CAB.scr[0],kmh);}if(k1!==CAB.keys[1]){CAB.keys[1]=k1;drawInfoLCD(CAB.scr[1],st,rem,drive);}if(k2!==CAB.keys[2]){CAB.keys[2]=k2;drawCarsLCD(CAB.scr[2]);}}
+function restyleCab(){if(!CAB.plateMat)return;const o=CAB.plateMat.map;CAB.plateMat.map=plateTex(LINE.tx.plate);CAB.plateMat.needsUpdate=true;if(o)o.dispose();CAB.keys=['','',''];}
 function refreshCabPaper(){if(!CAB.paper)return;const old=CAB.paper.map;CAB.paper.map=paperTex();CAB.paper.needsUpdate=true;if(old)old.dispose();CAB.keys=['','',''];}
 function updCab(dt){if(!CAB.group||!CAB.group.visible)return;const tgt=G.notch*0.12;CAB.ang+=(tgt-CAB.ang)*Math.min(1,dt*10);CAB.handle.rotation.x=CAB.ang;
   CAB.pilot.material=G.doors<0.02?CAB.lampOn.pilot:CAB.lampOff;CAB.atsLamp.material=G.ats?CAB.lampOn.ats:CAB.lampOff;CAB.tascLamp.material=G.tasc?CAB.lampOn.tasc:CAB.lampOff;
@@ -1960,6 +2228,10 @@ function stampSfx(){if(!AC)return;const t=AC.currentTime+0.01;const o=AC.createO
 function fanfare(){if(!AC)return;const t=AC.currentTime+0.05;[[72,0],[72,.18],[72,.36],[76,.54],[79,.9],[76,1.2],[79,1.38],[84,1.74]].forEach(([m,d])=>{bell(mf(m),t+d,1.2,0.15);bell(mf(m+4),t+d,1,0.06);});}
 function hornSfx(){if(!AC||G.muted)return;const t=AC.currentTime+0.02;const f=AC.createBiquadFilter();f.type='lowpass';f.frequency.value=1800;const g=AC.createGain();g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.11,t+0.06);g.gain.setValueAtTime(0.11,t+0.75);g.gain.exponentialRampToValueAtTime(0.0001,t+1.1);f.connect(g).connect(SFX);for(const fr of [349,440]){const o=AC.createOscillator();o.type='sawtooth';o.frequency.value=fr;o.connect(f);o.start(t);o.stop(t+1.15);}}
 function whoosh(){if(!AC)return;const t=AC.currentTime+0.01;const s=AC.createBufferSource();s.buffer=NOISE;s.loop=true;const f=AC.createBiquadFilter();f.type='bandpass';f.Q.value=0.8;f.frequency.setValueAtTime(300,t);f.frequency.exponentialRampToValueAtTime(1600,t+0.5);f.frequency.exponentialRampToValueAtTime(250,t+2.8);const g=AC.createGain();g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.35,t+0.4);g.gain.exponentialRampToValueAtTime(0.0001,t+3.2);s.connect(f).connect(g).connect(SFX);s.start(t);s.stop(t+3.3);}
+// 港鐵：關門「嘟嘟嘟」警告聲、廣播前嘅雙音提示、開門提示
+function mtrBeeps(){if(!AC)return;const t=AC.currentTime+0.02;for(let i=0;i<7;i++){const s=t+i*0.23,o=AC.createOscillator(),f=AC.createBiquadFilter(),g=AC.createGain();o.type='square';o.frequency.value=1245;f.type='lowpass';f.frequency.value=2600;
+  g.gain.setValueAtTime(0.0001,s);g.gain.exponentialRampToValueAtTime(0.06,s+0.008);g.gain.setValueAtTime(0.06,s+0.13);g.gain.exponentialRampToValueAtTime(0.0001,s+0.15);o.connect(f).connect(g).connect(SFX);o.start(s);o.stop(s+0.17);}}
+function mtrChime(){if(!AC)return;const t=AC.currentTime+0.02;bell(mf(81),t,1.2,0.16);bell(mf(76),t+0.36,1.6,0.16);}
 function crossingDing(vol){if(!AC||vol<0.01)return;const t=AC.currentTime+0.01;for(const [fr,a] of [[760,1],[1520,.35],[2290,.15]]){const o=AC.createOscillator();o.type='square';o.frequency.value=fr;const g=AC.createGain();g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol*a*0.25,t+0.004);g.gain.exponentialRampToValueAtTime(0.0001,t+0.32);o.connect(g).connect(SFX);o.start(t);o.stop(t+0.35);}}
 
 /* ======================= 語音（日文廣播／粵語讀題／英文） ======================= */
@@ -1967,21 +2239,26 @@ const TTS='speechSynthesis' in window?window.speechSynthesis:null;let VOICES=[];
 function loadVoices(){if(TTS){VOICES=TTS.getVoices();for(const k in VCACHE)delete VCACHE[k];}}loadVoices();if(TTS)TTS.onvoiceschanged=loadVoices;
 // 揀聲：排除 macOS／iOS 嘅搞笑聲同機械聲，優先自然女聲（日文 Kyoko／O-Ren，英文 Samantha／Ava）
 const BAD_V=/^(albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|good news|hysterical|jester|junior|organ|pipe organ|superstar|trinoids|whisper|wobble|zarvox|fred|ralph|kathy|eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley)\b/i;
-const PREF_V={ja:['kyoko','o-ren','otoya','hattori','google 日本語','nanami','ayumi','haruka','sayaka','keita','ichiro'],en:['samantha','ava','allison','susan','zoe','nicky','joelle','google us english','aria','jenny','zira','karen','moira','tessa','serena','daniel','google uk english female']};
-function voiceFor(lang){const Lg=lang.toLowerCase(),pre=Lg.split('-')[0];if(VCACHE[Lg]!==undefined&&VOICES.length)return VCACHE[Lg];const norm=v=>v.lang.toLowerCase().replace('_','-');
-  const c=VOICES.filter(v=>norm(v).startsWith(pre)&&!BAD_V.test(v.name));if(!c.length)return null;
-  const rank=v=>{const n=v.name.toLowerCase(),i=(PREF_V[pre]||[]).findIndex(p=>n.includes(p));return (/premium|enhanced|高音質|優化/.test(n)?-100:0)+(i<0?60:i)*2+(norm(v)===Lg?0:1);};
+const PREF_V={ja:['kyoko','o-ren','otoya','hattori','google 日本語','nanami','ayumi','haruka','sayaka','keita','ichiro'],en:['samantha','ava','allison','susan','zoe','nicky','joelle','google us english','aria','jenny','zira','karen','moira','tessa','serena','daniel','google uk english female'],
+  'en-gb':['serena','kate','stephanie','martha','sonia','libby','google uk english female','arthur','daniel'],'zh-hk':['sinji','sin-ji','善怡','hiugaai','hiumaan','google 粵語','粵語','cantonese'],'zh-cn':['tingting','ting-ting','婷婷','lili','li-mu','yu-shu','xiaoxiao','google 普通话','huihui']};
+// ⚠ 中文要分地區：粵語（zh-HK）同普通話（zh-CN）唔可以互相頂替；英國英文冇就用美國英文
+function voiceFor(lang){const Lg=lang.toLowerCase(),pre=Lg.split('-')[0];if(VCACHE[Lg]!==undefined&&VOICES.length)return VCACHE[Lg];const norm=v=>v.lang.toLowerCase().replace('_','-'),ok=v=>!BAD_V.test(v.name);
+  let c=VOICES.filter(v=>norm(v)===Lg&&ok(v));if(!c.length&&Lg==='zh-hk')c=VOICES.filter(v=>/^(yue|zh-hk)/.test(norm(v))&&ok(v));if(!c.length&&Lg==='zh-cn')c=VOICES.filter(v=>/^(zh-cn|cmn|zh-sg|zh-hans)/.test(norm(v))&&ok(v));
+  if(!c.length&&pre!=='zh')c=VOICES.filter(v=>norm(v).startsWith(pre)&&ok(v));if(!c.length)return null;const PL=PREF_V[Lg]||PREF_V[pre]||[];
+  const rank=v=>{const n=v.name.toLowerCase(),i=PL.findIndex(p=>n.includes(p));return (/premium|enhanced|高音質|優化|增強|高品質/.test(n)?-100:0)+(i<0?60:i)*2+(norm(v)===Lg?0:1);};
   const best=c.slice().sort((a,b)=>rank(a)-rank(b))[0];if(VOICES.length)VCACHE[Lg]=best;return best;}
 let lastCancel=0,SPG=0;
-function say(text,lang='zh-HK'){return new Promise(res=>{if(String(lang).toLowerCase().startsWith('zh')){setTimeout(res,0);return;}if(!TTS||G.muted||!text){setTimeout(res,G.muted?400:0);return;}
+// ann＝車站廣播（東鐵綫會用廣東話／普通話）；其他中文旁白一律唔讀（用戶唔要廣東話旁白）
+function say(text,lang='zh-HK',ann=false){return new Promise(res=>{if(!ann&&String(lang).toLowerCase().startsWith('zh')){setTimeout(res,0);return;}if(!TTS||G.muted||!text){setTimeout(res,G.muted?400:0);return;}
   const u=new SpeechSynthesisUtterance(text);u.lang=lang;const v=voiceFor(lang);if(v)u.voice=v;u.volume=1;
-  u.rate=lang.startsWith('ja')?0.92:lang.startsWith('en')?0.9:0.92;u.pitch=1.0;
+  u.rate=lang.startsWith('ja')?0.92:lang.startsWith('en')?0.95:0.95;u.pitch=1.0;
   let done=false,to=0;const fin=()=>{if(!done){done=true;clearTimeout(to);res();if(AC&&AC.state!=='running')setTimeout(()=>kickAudio(false),150);}};u.onend=fin;u.onerror=fin;
-  const go=()=>{if(done)return;try{if(TTS.paused)TTS.resume();}catch(e){}TTS.speak(u);to=setTimeout(fin,2500+text.length*(lang.startsWith('en')?95:280));};
+  const go=()=>{if(done)return;try{if(TTS.paused)TTS.resume();}catch(e){}TTS.speak(u);to=setTimeout(fin,2500+text.length*(lang.startsWith('en')?95:300));};
   // Safari：cancel() 之後即刻 speak() 會食咗句嘢 → 等 0.22 秒；冇 cancel 過就即刻講（喺撳掣嗰下講，iOS 先會解鎖語音）
   const w=lastCancel+220-performance.now();if(w>0)setTimeout(go,w);else go();});}
 // 一連串廣播（日文→英文），中途有 stopSpeech() 就唔再講落去
-async function sayAll(parts){const g=SPG;for(const [t,l] of parts){if(g!==SPG)return;await say(t,l);}}
+// ⚠ 一次只可以有一段廣播：新廣播開始就截停舊嗰段（唔係兩段會交叉排隊，日文英文次序亂晒）
+async function sayAll(parts){stopSpeech();const g=SPG;for(const [t,l] of parts){if(g!==SPG)return;await say(t,l,true);}}
 function stopSpeech(){SPG++;if(TTS&&(TTS.speaking||TTS.pending)){TTS.cancel();lastCancel=performance.now();}}
 function unlockSpeech(){if(!TTS||TTS.speaking||TTS.pending)return;const u=new SpeechSynthesisUtterance(' ');u.volume=0;TTS.speak(u);}
 
@@ -1997,23 +2274,37 @@ function clickSfx(){if(!AC)return;const t=AC.currentTime+0.005,s=AC.createBuffer
 let guideT=0;
 function guide(text,speak=false){const el=$('#guide');el.querySelector('.gtext').innerHTML=text;el.classList.remove('hidden');el.style.animation='none';void el.offsetWidth;el.style.animation='';clearTimeout(guideT);guideT=setTimeout(()=>el.classList.add('hidden'),9000);if(speak)return say(text,'zh-HK');return Promise.resolve();}
 function hideGuide(){$('#guide').classList.add('hidden');}
-// ---- 車站／車廂廣播：照 JR 東日本自動廣播嘅講法，先日文、後英文 ----
-// 日文站名用漢字（平假名 TTS 唔知重音會讀到平平哋）；英文站名用拼讀，令美式英語聲讀出近日文嘅音（顯示仍用正式羅馬字）
-const EN_SAY=['Tokyo','Kahnda','Akihabara','Okachimachi','Oo-eh-no','Oo-goo-ee-soo-dah-nee','Nippori','Nishi Nippori','Tabata','Koh-mah-goh-meh','Sugamo','Ohtsuka','Ee-keh-boo-koo-roh','Meh-jee-roh','Tah-kah-dah-noh-bah-bah',
-  'Sheen Oh-koo-boh','Shinjuku','Yoh-yoh-ghee','Harajuku','Shibuya','Eh-bee-soo','Meh-goo-roh','Goh-tahn-dah','Oh-sah-kee','Shinagawa','Tah-kah-nah-wah Gateway','Tah-mah-chee','Hah-mah-mah-tsoo-choh','Sheem-bah-shee','Yoo-rah-koo-choh'];
-const enS=st=>EN_SAY[st.y]||st.en,enNum=st=>{const n=st.y+1;return `J Y ${n<10?'zero '+n:n}`;};   // JY05 讀「J Y zero five」，同 JR 英文廣播一樣
-const dirJaS=y=>{const [a,b]=dirOf(y);return `${a.ja}、${b.ja}`;},dirEnS=y=>{const [a,b]=dirOf(y);return `${EN_SAY[a.y]} and ${EN_SAY[b.y]}`;};
-function annWelcome(st){return sayAll([[`${st.ja}、${st.ja}。1番線は、山手線、内回り、${dirJaS(st.y)}方面ゆきです。`,'ja-JP'],[`This is ${enS(st)}. The train on track 1 is the Yamanote Line, bound for ${dirEnS(st.y)}.`,'en-US']]);}
-async function annDepart(st){announceChime();const g=SPG;await sleep(1400);if(g!==SPG)return;
-  await sayAll([[`1番線から、山手線、内回り、${dirJaS(st.y)}方面ゆきが、まもなく、発車いたします。`,'ja-JP'],[`The Yamanote Line train bound for ${dirEnS(st.y)} will soon depart from track 1.`,'en-US']]);}
-async function annOnboard(st,from){announceChime();const g=SPG;await sleep(1400);if(g!==SPG)return;
-  await sayAll([[`今日も、JR東日本をご利用いただきまして、ありがとうございます。この電車は、山手線、内回り、${dirJaS(from.y)}方面ゆきです。次は、${st.ja}、${st.ja}。お出口は、左側です。`,'ja-JP'],
-    [`This is the Yamanote Line train bound for ${dirEnS(from.y)}. The next station is ${enS(st)}, ${enNum(st)}. The doors on the left side will open.`,'en-US']]);}
-async function annApproach(st){announceChime();const g=SPG;await sleep(1400);if(g!==SPG)return;
-  await sayAll([[`まもなく、${st.ja}、${st.ja}。お出口は、左側です。`,'ja-JP'],[`We will soon make a brief stop at ${enS(st)}, ${enNum(st)}. The doors on the left side will open.`,'en-US']]);}
-function annArrive(st){return sayAll([[`${st.ja}、${st.ja}。ご乗車、ありがとうございました。`,'ja-JP'],[`This is ${enS(st)}. Thank you for riding.`,'en-US']]);}
-function annClose(){return sayAll([['1番線、ドアが閉まります。ご注意ください。','ja-JP'],['The doors are closing. Please be careful.','en-US']]);}
-function annFinish(){return sayAll([['ご乗車、ありがとうございました。','ja-JP'],['Thank you for riding the Yamanote Line. See you again!','en-US']]);}
+// ---- 車站／車廂廣播 ----
+// 山手線：照 JR 東日本自動廣播，先日文後英文。英文站名用正式寫法（⚠ 唔好再用 Oo-eh-no 呢類加連字號嘅拼讀：美式聲會逐粒音咁讀，聽落好亂）
+// 東鐵綫：照港鐵，廣東話→普通話→英文
+const jyDirJa=y=>{const [a,b]=dirOf(y);return `${a.ja}、${b.ja}`;},jyDirEn=y=>{const [a,b]=dirOf(y);return `${a.en} and ${b.en}`;};
+const ANN_JY={
+  welcome:st=>[[`${st.ja}、${st.ja}。1番線は、山手線、内回り、${jyDirJa(st.y)}方面ゆきです。`,'ja-JP'],[`This is ${st.en}. The train on track one is the Yamanote Line, bound for ${jyDirEn(st.y)}.`,'en-US']],
+  depart:st=>[[`1番線から、山手線、内回り、${jyDirJa(st.y)}方面ゆきが、まもなく、発車いたします。`,'ja-JP'],[`The Yamanote Line train bound for ${jyDirEn(st.y)} will soon depart from track one.`,'en-US']],
+  onboard:(st,from)=>[[`今日も、JR東日本をご利用いただきまして、ありがとうございます。この電車は、山手線、内回り、${jyDirJa(from.y)}方面ゆきです。次は、${st.ja}、${st.ja}。お出口は、左側です。`,'ja-JP'],
+    [`This is the Yamanote Line train bound for ${jyDirEn(from.y)}. The next station is ${st.en}. The doors on the left side will open.`,'en-US']],
+  approach:st=>[[`まもなく、${st.ja}、${st.ja}。お出口は、左側です。`,'ja-JP'],[`We will soon make a brief stop at ${st.en}. The doors on the left side will open.`,'en-US']],
+  arrive:st=>[[`${st.ja}、${st.ja}。ご乗車、ありがとうございました。`,'ja-JP'],[`This is ${st.en}. Thank you for riding.`,'en-US']],
+  close:()=>[['1番線、ドアが閉まります。ご注意ください。','ja-JP'],['The doors are closing. Please be careful.','en-US']],
+  finish:()=>[['ご乗車、ありがとうございました。','ja-JP'],['Thank you for riding the Yamanote Line. See you again!','en-US']]};
+const ealIC=(st,k)=>st.ic?[`乘客可以轉乘${st.ic[0]}。`,`乘客可以转乘${st.ic[1]}。`,` Interchange station for ${st.ic[2]}.`][k]:'';
+const ealEnd=st=>!st.next;   // 羅湖＝終點站
+const ANN_EAL={
+  welcome:st=>[[`${st.ja}站。歡迎乘搭港鐵東鐵綫，往羅湖。`,'zh-HK'],[`${st.zh}站。欢迎乘搭港铁东铁线，往罗湖。`,'zh-CN'],[`This is ${st.en}. Welcome aboard the East Rail Line to Lo Wu.`,'en-GB']],
+  depart:()=>[['往羅湖嘅列車，即將開出。','zh-HK'],['往罗湖的列车，即将开出。','zh-CN'],['The train to Lo Wu is about to depart.','en-GB']],
+  onboard:st=>[[`下一站，${st.ja}。${ealEnd(st)?'此站為終點站。':ealIC(st,0)}`,'zh-HK'],[`下一站，${st.zh}。${ealEnd(st)?'此站为终点站。':ealIC(st,1)}`,'zh-CN'],[`Next station, ${st.en}.${ealEnd(st)?' This is the terminus.':ealIC(st,2)}`,'en-GB']],
+  approach:st=>[[`列車即將到達${st.ja}。請小心月台空隙。`,'zh-HK'],[`列车即将到达${st.zh}。请小心月台空隙。`,'zh-CN'],[`Arriving at ${st.en}. Please mind the gap.`,'en-GB']],
+  arrive:st=>[[ealEnd(st)?`${st.ja}，終點站到了。`:`${st.ja}站到了。`,'zh-HK'],[ealEnd(st)?`${st.zh}，终点站到了。`:`${st.zh}站到了。`,'zh-CN'],[ealEnd(st)?`${st.en}. This is the terminus.`:`This is ${st.en}.`,'en-GB']],
+  close:()=>[['請勿靠近車門。','zh-HK'],['请勿靠近车门。','zh-CN'],['Please stand back from the train doors.','en-GB']],
+  finish:()=>[['多謝乘搭港鐵，再見！','zh-HK'],['多谢乘搭港铁，再见！','zh-CN'],['Thank you for travelling with MTR. See you again!','en-GB']]};
+const annSet=()=>LINE.id==='eal'?ANN_EAL:ANN_JY,annChime=()=>(LINE.id==='eal'?mtrChime:announceChime)();
+function annWelcome(st){return sayAll(annSet().welcome(st));}
+async function annDepart(st){annChime();const g=SPG;await sleep(1400);if(g!==SPG)return;await sayAll(annSet().depart(st));}
+async function annOnboard(st,from){annChime();const g=SPG;await sleep(1400);if(g!==SPG)return;await sayAll(annSet().onboard(st,from));}
+async function annApproach(st){annChime();const g=SPG;await sleep(1400);if(g!==SPG)return;await sayAll(annSet().approach(st));}
+function annArrive(st){return sayAll(annSet().arrive(st));}
+function annClose(){return sayAll(annSet().close());}
+function annFinish(){return sayAll(annSet().finish());}
 
 
 /* ======================= 題目圖示：three.js 立體模型（全部取代 emoji） ======================= */
@@ -2432,7 +2723,8 @@ IB.pax_grandpa=()=>pax({body:0xb89f78,hair:0xd8d8d8,style:'bald',glasses:true});
 IB.pax_grandma=()=>pax({body:0x9c6ade,hair:0xdcdcdc,style:'bun'});
 
 /* ======================= 題庫 ======================= */
-const CATS={math:{n:'數學',c:'#2f7fe0',i:'math'},eng:{n:'英文',c:'#8b5cf6',i:'abc'},chi:{n:'中文',c:'#e0453a',i:'brush'},logic:{n:'解難',c:'#f08a24',i:'puzzle'},find:{n:'觀察',c:'#22a45d',i:'search'}};
+// 四科：中文、英文、數學、推理（每個站各 2 題）
+const CATS={chi:{n:'中文',c:'#e0453a',i:'brush'},eng:{n:'英文',c:'#8b5cf6',i:'abc'},math:{n:'數學',c:'#2f7fe0',i:'math'},logic:{n:'推理',c:'#f08a24',i:'puzzle'}};
 // 題目圖片全部係 three.js 立體圖示（icons.js / icons2.js），唔用 emoji
 const IT={apple:['蘋果','APPLE'],banana:['香蕉','BANANA'],grapes:['提子','GRAPES'],orange:['橙','ORANGE'],watermelon:['西瓜','WATERMELON'],strawberry:['士多啤梨','STRAWBERRY'],pear:['梨','PEAR'],peach:['桃','PEACH'],cherry:['車厘子','CHERRY'],lemon:['檸檬','LEMON'],pineapple:['菠蘿','PINEAPPLE'],kiwi:['奇異果','KIWI'],
   cat:['貓','CAT'],dog:['狗','DOG'],pig:['豬','PIG'],cow:['牛','COW'],fox:['狐狸','FOX'],bee:['蜜蜂','BEE'],duck:['鴨仔','DUCK'],bear:['熊','BEAR'],frog:['青蛙','FROG'],fish:['魚','FISH'],mouse:['老鼠','MOUSE'],tiger:['老虎','TIGER'],panda:['熊貓','PANDA'],rabbit:['兔子','RABBIT'],monkey:['馬騮','MONKEY'],lion:['獅子','LION'],elephant:['大象','ELEPHANT'],giraffe:['長頸鹿','GIRAFFE'],penguin:['企鵝','PENGUIN'],butterfly:['蝴蝶','BUTTERFLY'],turtle:['烏龜','TURTLE'],snail:['蝸牛','SNAIL'],chick:['小雞','CHICK'],whale:['鯨魚','WHALE'],
@@ -2529,7 +2821,7 @@ function genFind(l){const tk=l<=1?'apple':pick(FINDF),tn=Math.min(3,l),n=[12,16,
 const QT={add:['math','加法',genAdd],sub:['math','減法',genSub],count:['math','數數',genCount],more:['math','比多少',genMore],
   enWord:['eng','英文認字',genEnWord],enSpell:['eng','英文串字',genEnSpell],zhWord:['chi','中文認字',genZhWord],zhFill:['chi','中文填字',genZhFill],
   riddle:['logic','謎語',genRiddle],rebus:['logic','睇圖估估',genRebus],shadow:['logic','黑影估估',genShadow],zoom:['logic','放大鏡',genZoom],pattern:['logic','找規律',genPattern],odd:['logic','邊個唔同類',genOdd],
-  find:['find','搵水果',genFind],color:['find','認顏色',genColor],shape:['find','認形狀',genShape],size:['find','比大細',genSize]};
+  find:['logic','搵水果',genFind],color:['chi','顏色字',genColor],shape:['math','認形狀',genShape],size:['math','比大細',genSize]};
 function makeQ(type,l){const [cat,name,gen]=QT[type];const q=gen(l);q.type=type;q.cat=cat;q.name=name;return q;}
 const typesOf=cat=>Object.keys(QT).filter(k=>QT[k][0]===cat);
 
@@ -2552,13 +2844,14 @@ async function answer(el,ok){if(!QS||QS.locked)return;QS.locked=true;const {q,on
   if(ok){correctSfx();confetti();await sleep(300);for(const a of (q.after||[]))await say(a.t||a,a.lang||'zh-HK');await say(pick(PRAISE));}
   else{wrongSfx();await say(pick(WRONG));}
   await sleep(ok?1000:900);onDone(ok);}
-function askUntilCorrect(level,cat){return new Promise(res=>{const gen=G.gen;let last=null,wrongs=0;
-  const next=()=>{if(gen!==G.gen)return;let pool=(wrongs>=2?Object.keys(QT):typesOf(cat)).filter(k=>k!==last);if(!pool.length)pool=typesOf(cat);const type=pick(pool);last=type;showCard(false);
-    renderQ(makeQ(type,level),ok=>{if(gen!==G.gen)return;if(ok){hideCard();res();}else{wrongs++;setTimeout(next,200);}});};next();});}
+// 同一科一直出到答啱為止；答錯兩次就降一級，唔會轉去第二科（每站四科各 2 題要數得啱）；同一個站盡量唔重複題型
+function askUntilCorrect(level,cat,used=new Set()){return new Promise(res=>{const gen=G.gen;let last=null,wrongs=0;
+  const next=()=>{if(gen!==G.gen)return;const all=typesOf(cat);let pool=all.filter(k=>k!==last&&!used.has(k));if(!pool.length)pool=all.filter(k=>k!==last);if(!pool.length)pool=all;const type=pick(pool);last=type;used.add(type);showCard(false);
+    renderQ(makeQ(type,wrongs>=2?Math.max(1,level-1):level),ok=>{if(gen!==G.gen)return;if(ok){hideCard();res();}else{wrongs++;setTimeout(next,200);}});};next();});}
 function confetti(n=70){const fx=$('#fx'),cols=['#ff5d5d','#ffd23f','#3ec1d3','#7bd389','#b388ff','#ff9f1c','#ff7eb6'];for(let i=0;i<n;i++){const p=document.createElement('i');p.className='cf';p.style.left=Math.random()*100+'%';p.style.background=pick(cols);p.style.setProperty('--dx',(Math.random()-.5)*30+'vw');p.style.setProperty('--r',(Math.random()*900-450)+'deg');p.style.animationDuration=(1.6+Math.random()*1.4)+'s';p.style.animationDelay=Math.random()*.35+'s';if(Math.random()<.4){p.style.borderRadius='50%';p.style.width=p.style.height='12px';}fx.appendChild(p);setTimeout(()=>p.remove(),3600);}}
-function stampHTML(st,cls){return `<div class="stamp ${cls}"><div class="s1">JR 山手線</div><div class="s2">${st.ja}</div><div class="s3">${IC('train')}</div><div class="s4">${st.en.toUpperCase()}</div></div>`;}
+function stampHTML(st,cls){return `<div class="stamp ${cls}"><div class="s1">${LINE.tx.stamp}</div><div class="s2">${st.ja}</div><div class="s3">${IC('train')}</div><div class="s4">${st.en.toUpperCase()}</div></div>`;}
 async function stampFx(st){const el=$('#stampFx');el.innerHTML=stampHTML(st,'big');el.classList.remove('hidden');stampSfx();await sleep(1800);el.classList.add('hidden');}
-function showBanner(st){const b=$('#banner');b.innerHTML=`<div class="bn-top"><div class="bn-num">JY<b>${st.code.slice(2)}</b></div><div class="bn-name"><div class="bn-kana">${st.kana}</div><div class="bn-ja">${st.ja}</div><div class="bn-en">${st.en}</div></div></div><div class="bn-band"><span>${st.prev?IC('left')+st.prev.ja:''}</span><span>${st.next?st.next.ja+IC('right'):''}</span></div>`;
+function showBanner(st){const b=$('#banner');b.innerHTML=`<div class="bn-top"><div class="bn-num">${LINE.code}<b>${LINE.id==='jy'?st.code.slice(2):st.code}</b></div><div class="bn-name">${st.kana?`<div class="bn-kana">${st.kana}</div>`:''}<div class="bn-ja">${st.ja}</div><div class="bn-en">${st.en}</div></div></div><div class="bn-band"><span>${st.prev?IC('left')+st.prev.ja:''}</span><span>${st.next?st.next.ja+IC('right'):''}</span></div>`;
   b.classList.remove('hidden');b.style.animation='none';void b.offsetWidth;b.style.animation='';clearTimeout(b._t);b._t=setTimeout(()=>b.classList.add('hidden'),4200);}
 function toast(t,ms=2600){const el=$('#toast');el.textContent=t;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),ms);}
 function popStar(){const s=$('#stars');s.classList.remove('pop');void s.offsetWidth;s.classList.add('pop');}
@@ -2579,24 +2872,41 @@ function setCam(mode,anchor){if(G.cam===mode&&(anchor===undefined||CAM.anchor===
   if(CAB.group)CAB.group.visible=mode==='cab';if(TA&&TA.front)TA.front.visible=mode!=='cab';G.yaw=G.pitch=0;}
 function showActions(which,hot){const a=$('#actions');a.classList.toggle('hidden',!which);if(!which)return;$('#aAnn').disabled=!which.includes('ann');$('#aDoor').disabled=!which.includes('door');$('#aAnn').classList.toggle('hot',hot==='ann');$('#aDoor').classList.toggle('hot',hot==='door');}
 const KB=(c,i,t)=>`<span class="k ${c}">${IC(i)}${t}</span>`;
-/* ---- 山手線一周：分段進度（每段 3 個站，印章記住喺呢部機） ---- */
+/* ---- 分段進度（山手線 15 段一周／東鐵綫 7 段全程；每段 3 個站，印章記住喺呢部機，每條綫分開儲） ---- */
 const PROG={sec:0,stamps:[]};
-function loadProg(){try{const o=JSON.parse(localStorage.getItem('kg_yamanote')||'{}');if(Number.isInteger(o.sec))PROG.sec=((o.sec%SECN)+SECN)%SECN;if(Array.isArray(o.stamps))PROG.stamps=[...new Set(o.stamps.filter(n=>Number.isInteger(n)&&n>=0&&n<YN))];}catch(e){}}
-function saveProg(){try{localStorage.setItem('kg_yamanote',JSON.stringify(PROG));}catch(e){}}
-const secLabel=k=>`${ylObj(k*2).ja} → ${ylObj(k*2+2).ja}`;
-function applySection(k){applySectionData(k);refreshStationSigns();refreshTrainLED();refreshParallelLine();refreshCabPaper();refreshLandmarks();refreshLandmarkSets();}
-function updTitleCard(){const t=$('#rjyTxt');if(t)t.textContent=secLabel(PROG.sec);const c=$('#stampCount');if(c)c.textContent=`${PROG.stamps.length}/${YN}`;}
-function openMap(){const svg=$('#ymsvg'),cx=320,cy=232,rx=232,ry=168,cur=[0,1,2].map(i=>(PROG.sec*2+i)%YN);let h=`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="#80C241" stroke-width="12"/>`;
-  for(let y=0;y<YN;y++){const a=-y/YN*Math.PI*2,c=Math.cos(a),sn=Math.sin(a),X=cx+c*rx,Y=cy+sn*ry,done=PROG.stamps.includes(y),isCur=cur.includes(y),nm=YAMA_ST[y][0],fs=nm.length>4?10:isCur?15:13;
-    const anc=c>0.3?'start':c<-0.3?'end':'middle',lx=cx+c*(rx+16),ly=cy+sn*(ry+15)+(sn>0.3?fs:sn<-0.3?-3:4);
-    h+=`<circle cx="${X.toFixed(1)}" cy="${Y.toFixed(1)}" r="${isCur?11:8}" fill="${done?'#e53935':'#fff'}" stroke="${isCur?'#ff9800':'#2e7d32'}" stroke-width="${isCur?5:3}"/><text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anc}" font-size="${fs}" font-weight="${isCur?900:700}" fill="${isCur?'#e65100':'#26323c'}">${nm}</text>`;}
-  h+=`<text x="${cx}" y="${cy-6}" text-anchor="middle" font-size="32" font-weight="900" fill="#2e7d32">山手線</text><text x="${cx}" y="${cy+28}" text-anchor="middle" font-size="18" font-weight="800" fill="#556">印章 ${PROG.stamps.length} / ${YN}</text>`;svg.innerHTML=h;
-  const box=$('#ymsecs');box.innerHTML='';for(let k=0;k<SECN;k++){const b=document.createElement('button'),ok=[1,2].every(i=>PROG.stamps.includes((k*2+i)%YN));b.className='ysec'+(k===PROG.sec?' cur':'')+(ok?' ok':'');b.innerHTML=(ok?IC('star'):'')+secLabel(k);
-    b.onclick=()=>{$('#ymap').classList.add('hidden');startRoute(k);};box.appendChild(b);}
+function progOf(id){const Ld=LINES[id],N=Ld.st.length,SN=Ld.loop?N/2:(N-1)/2,o={sec:0,stamps:[]};
+  try{const j=JSON.parse(localStorage.getItem(Ld.store)||'{}');if(Number.isInteger(j.sec))o.sec=((j.sec%SN)+SN)%SN;if(Array.isArray(j.stamps))o.stamps=[...new Set(j.stamps.filter(n=>Number.isInteger(n)&&n>=0&&n<N))];}catch(e){}return o;}
+function loadProg(){Object.assign(PROG,progOf(LINE.id));}
+function saveProg(){try{localStorage.setItem(LINE.store,JSON.stringify(PROG));}catch(e){}}
+const secLabelOf=(id,k)=>{const S=LINES[id].st,N=S.length;return `${S[(k*2)%N][0]} → ${S[(k*2+2)%N][0]}`;},secLabel=k=>secLabelOf(LINE.id,k);
+function applySectionVisuals(){refreshStationSigns();refreshTrainLED();refreshParallelLine();refreshCabPaper();refreshLandmarks();refreshLandmarkSets();}
+function applySection(k){applySectionData(k);applySectionVisuals();}
+// 換綫：站牌／閘門、列車塗裝、駕駛室、遠景同街景、HUD 顏色同燈號
+function switchLineVisuals(){document.documentElement.style.setProperty('--jy',LINE.color);restyleStations();restyleTrains();restyleCab();restyleScenery();
+  $('#tascLamp').textContent=LINE.tx.auto;$('#atsLamp').textContent=LINE.tx.ats;$('#doorLamp').textContent=LINE.tx.door;}
+function updTitleCard(){for(const id of ['jy','eal']){const p=progOf(id),t=$('#r'+id+'Txt');if(t)t.textContent=secLabelOf(id,p.sec);const c=$('#'+id+'Stamps');if(c)c.textContent=`${p.stamps.length}/${LINES[id].st.length}`;}}
+function openMap(id=LINE.id){const P=progOf(id),Ld=LINES[id],S=Ld.st,N=S.length,SN=Ld.loop?N/2:(N-1)/2,col=Ld.color,svg=$('#ymsvg'),cur=[0,1,2].map(i=>(P.sec*2+i)%N);let h='';
+  $('#ymTitle').textContent=Ld.loop?`${Ld.name}一周旅程`:`${Ld.name}全程旅程`;
+  if(Ld.loop){const cx=320,cy=232,rx=232,ry=168;h=`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="${col}" stroke-width="12"/>`;
+    for(let y=0;y<N;y++){const a=-y/N*Math.PI*2,c=Math.cos(a),sn=Math.sin(a),X=cx+c*rx,Y=cy+sn*ry,done=P.stamps.includes(y),isCur=cur.includes(y),nm=S[y][0],fs=nm.length>4?10:isCur?15:13;
+      const anc=c>0.3?'start':c<-0.3?'end':'middle',lx=cx+c*(rx+16),ly=cy+sn*(ry+15)+(sn>0.3?fs:sn<-0.3?-3:4);
+      h+=`<circle cx="${X.toFixed(1)}" cy="${Y.toFixed(1)}" r="${isCur?11:8}" fill="${done?'#e53935':'#fff'}" stroke="${isCur?'#ff9800':'#2e7d32'}" stroke-width="${isCur?5:3}"/><text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anc}" font-size="${fs}" font-weight="${isCur?900:700}" fill="${isCur?'#e65100':'#26323c'}">${nm}</text>`;}
+    h+=`<text x="${cx}" y="${cy-6}" text-anchor="middle" font-size="32" font-weight="900" fill="#2e7d32">${Ld.name}</text><text x="${cx}" y="${cy+28}" text-anchor="middle" font-size="18" font-weight="800" fill="#556">印章 ${P.stamps.length} / ${N}</text>`;}
+  else{// 直綫：金鐘喺下面、羅湖喺上面（好似真地圖咁由南向北），維港畫喺會展同紅磡之間
+    const X0=210,Yb=446,Yt=24,dy=(Yb-Yt)/(N-1),Y=i=>Yb-i*dy,XX=i=>X0+Math.sin(i/(N-1)*Math.PI*1.6)*26;
+    h+=`<path d="M0 ${(Y(1)+Y(2))/2+10} Q160 ${(Y(1)+Y(2))/2-4} 640 ${(Y(1)+Y(2))/2+8} L640 ${(Y(1)+Y(2))/2+22} Q160 ${(Y(1)+Y(2))/2+12} 0 ${(Y(1)+Y(2))/2+24}Z" fill="#b9e3f7"/><text x="560" y="${(Y(1)+Y(2))/2+19}" font-size="12" font-weight="800" fill="#4a90b8">維多利亞港</text>`;
+    h+=`<polyline points="${S.map((_,i)=>XX(i).toFixed(1)+','+Y(i).toFixed(1)).join(' ')}" fill="none" stroke="${col}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>`;
+    for(let i=0;i<N;i++){const done=P.stamps.includes(i),isCur=cur.includes(i),x=XX(i),y=Y(i);
+      h+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${isCur?10:7.5}" fill="${done?'#e53935':'#fff'}" stroke="${isCur?'#ff9800':'#1f6f9c'}" stroke-width="${isCur?5:3}"/>`+
+        `<text x="${(x+18).toFixed(1)}" y="${(y+5).toFixed(1)}" font-size="${isCur?16:14}" font-weight="${isCur?900:800}" fill="${isCur?'#e65100':'#26323c'}">${S[i][0]}<tspan dx="6" font-size="11" font-weight="700" fill="#7a8896">${S[i][2]}</tspan></text>`;}
+    h+=`<text x="470" y="120" text-anchor="middle" font-size="34" font-weight="900" fill="#1f6f9c">${Ld.name}</text><text x="470" y="146" text-anchor="middle" font-size="15" font-weight="800" fill="#7a8896">${Ld.en}</text><text x="470" y="184" text-anchor="middle" font-size="18" font-weight="800" fill="#556">印章 ${P.stamps.length} / ${N}</text>`;}
+  svg.innerHTML=h;
+  const box=$('#ymsecs');box.innerHTML='';for(let k=0;k<SN;k++){const b=document.createElement('button'),ok=[1,2].every(i=>P.stamps.includes((k*2+i)%N));b.className='ysec'+(k===P.sec?' cur':'')+(ok?' ok':'');b.innerHTML=(ok?IC('star'):'')+secLabelOf(id,k);
+    b.onclick=()=>{$('#ymap').classList.add('hidden');startRoute(k,id);};box.appendChild(b);}
   $('#ymap').classList.remove('hidden');}
 function setDriveUI(on){for(const s of ['#deck','#cabBtns'])$(s).classList.toggle('hidden',!on);}
 function updNextBox(){const drive=G.state==='drive'||G.state==='stopped'||G.state==='closing',st=drive?ST[Math.min(G.next,ST.length-1)]:ST[G.reached||0];
-  $('#nbLbl').textContent=drive?'次は':'ただいま';$('#nbName').textContent=st.ja;$('#nbEn').textContent=st.en;$('#nbCode').textContent=st.code.slice(2);$('#nbDist').classList.toggle('hidden',!drive);}
+  $('#nbLbl').textContent=drive?LINE.tx.next:LINE.tx.now;$('#nbName').textContent=st.ja;$('#nbEn').textContent=st.en;$('#nbLine').textContent=LINE.code;$('#nbCode').textContent=LINE.id==='jy'?st.code.slice(2):st.code;$('#nbDist').classList.toggle('hidden',!drive);refreshCarLCD(st,drive);}
 function buildNotchBar(){const bar=$('#notchBar');bar.innerHTML='';
   $('#gTicks').innerHTML=[0,20,40,60,80,100,120].map(v=>{const a=v/120*1.5*Math.PI,c=Math.cos(a),s=Math.sin(a);return `<line x1="${(60+c*37).toFixed(1)}" y1="${(60+s*37).toFixed(1)}" x2="${(60+c*43).toFixed(1)}" y2="${(60+s*43).toFixed(1)}"/>`;}).join('');
   NOTCHES.forEach(n=>{const d=document.createElement('div');d.className='nt '+(n>0?'p':n===0?'n':n===-4?'eb':'b');d.textContent=NL[n];bar.appendChild(d);});
@@ -2611,39 +2921,44 @@ function stepNotch(d){const i=NOTCHES.indexOf(G.notch);setMascon(NOTCHES[clamp(i
 function setMascon(n,silent){if(!silent&&G.state!=='drive')return;if(n===G.notch&&!silent)return;G.notch=n;
   $$('#notchBar .nt').forEach((d,k)=>{const v=NOTCHES[k];d.classList.toggle('on',v===n);d.classList.toggle('lit',n!==0&&v!==n&&Math.sign(v)===Math.sign(n)&&Math.abs(v)<Math.abs(n));});
   if(!silent){clickSfx();G.idleT=0;}}
-function qProg(k){$('#qprog').innerHTML=k<0?'':[0,1,2].map(i=>`<i class="${i<k?'done':i===k?'cur':''}"></i>`).join('');}
+const QN=8;   // 每個站答 8 題：中、英、數、推理各 2 題
+function qProg(k){$('#qprog').innerHTML=k<0?'':Array.from({length:QN},(_,i)=>`<i class="${i<k?'done':i===k?'cur':''}"></i>`).join('');}
+function catOrder(){const C=['chi','eng','math','logic'],a=shuffle(C.slice()),b=shuffle(C.slice());if(a[3]===b[0])[b[0],b[1]]=[b[1],b[0]];return a.concat(b);}
 function resetGame(){G.gen++;G.s=ST[0].stop;G.prevS=G.s;G.v=0;G.a=0;G.next=1;G.reached=0;G.stars=0;G.doors=1;G.doorT=1;G.tasc=G.ats=G.announced=G.annDone=G.annPrompt=G.annReady=false;G.idleT=0;onc.active=false;stopSpeech();
   $('#starN').textContent='0';hideCard();qProg(-1);for(const s of ['#finish','#banner','#stampFx','#actions','#bOpen'])$(s).classList.add('hidden');setDriveUI(false);hideGuide();resetPeople();setMascon(0,true);}
 function goTitle(){updTitleCard();resetGame();SK.active=false;SK.timer=8;G.state='title';setCam('title');$('#hud').classList.add('hidden');$('#title').classList.remove('hidden');}
-async function startRoute(k=PROG.sec){initAudio();initAudioExtra();if(k!==SEC)applySection(k);resetGame();const gen=G.gen;annWelcome(ST[0]);  // 喺撳掣嗰下即刻講第一句，iPhone／iPad 先會解鎖語音
-  
-  $('#title').classList.add('hidden');$('#hud').classList.remove('hidden');initHUD();G.catOrder=shuffle(Object.keys(CATS));await departPrep(gen,true);}
+async function startRoute(k,id){initAudio();initAudioExtra();const sw=!!id&&id!==LINE.id;if(sw){setLineData(id);loadProg();}if(k===undefined)k=PROG.sec;const need=sw||k!==SEC;if(need)applySectionData(k);
+  resetGame();const gen=G.gen;annWelcome(ST[0]);   // 喺撳掣嗰下即刻講第一句，iPhone／iPad 先會解鎖語音（重嘅換綫畫面放喺之後）
+  if(sw)switchLineVisuals();if(need)applySectionVisuals();
+  $('#title').classList.add('hidden');$('#hud').classList.remove('hidden');initHUD();await departPrep(gen,true);}
 async function departPrep(gen,first){const st=ST[G.reached];G.state='board';G.annDone=false;G.annReady=false;setCam('platform',st.stop);G.doorT=1;updNextBox();
   if(first){showBanner(st);startBoarding(st,1.0);}lateComers(st,first?4:6);showActions(['ann'],'ann');
   await guide(first?`你係車長！乘客上緊車，準備好就撳${KB('g','mic','發車廣播')}！`:`準備出發！撳${KB('g','mic','發車廣播')}！`);}
+// 發車廣播：山手線之後播發車旋律；港鐵冇旋律，停一陣就可以關門
 async function onAnnDepart(){if(G.state!=='board'||G.annDone)return;const gen=G.gen;G.annDone=true;showActions([],null);hideGuide();stopSpeech();
-  await annDepart(ST[G.reached]);if(gen!==G.gen||G.state!=='board')return;const ms=departMelody();await sleep(ms*0.85);if(gen!==G.gen||G.state!=='board')return;G.annReady=true;showActions(['door'],'door');guide(`好！撳${KB('g','door-close','關門')}！`);}
+  await annDepart(ST[G.reached]);if(gen!==G.gen||G.state!=='board')return;const ms=LINE.id==='jy'?departMelody():1500;await sleep(ms*0.85);if(gen!==G.gen||G.state!=='board')return;G.annReady=true;showActions(['door'],'door');guide(`好！撳${KB('g','door-close','關門')}！`);}
 async function onCloseDoor(){if(G.state!=='board'||!G.annReady)return;const gen=G.gen;G.state='closing';showActions(null);hideGuide();stopSpeech();updNextBox();
-  annClose();doorChime();holdLate();await sleep(900);if(gen!==G.gen)return;G.doorT=0;doorSfx();await sleep(2300);if(gen!==G.gen)return;
+  annClose();(LINE.id==='jy'?doorChime:mtrBeeps)();holdLate();await sleep(900);if(gen!==G.gen)return;G.doorT=0;doorSfx();await sleep(2300);if(gen!==G.gen)return;
   for(const p of PP.list)if(p.on&&p.tag==='q'+G.reached)p.on=false;
   setCam('cab');G.state='drive';G.tasc=G.ats=G.announced=G.annPrompt=G.depAnn=false;G.idleT=0;setMascon(0,true);setDriveUI(true);$('#bAnn2').classList.add('hidden');spawnOncoming();SK.timer=7;updNextBox();
   await sleep(800);if(gen!==G.gen)return;guide(`撳右邊${KB('p','power','加速')}，列車就會開動！`);}
 function onAnnApproach(){if(G.state!=='drive'||G.announced)return;G.announced=true;const b=$('#bAnn2');b.classList.add('hidden');b.classList.remove('hot');hideGuide();stopSpeech();annApproach(ST[G.next]);}
 function arriveStop(){G.state='stopped';setMascon(-4,true);$('#bAnn2').classList.add('hidden');$('#cabBtns').classList.add('hidden');airSfx(1.2,0.3);$('#bOpen').classList.remove('hidden');guide(`到站喇！撳${KB('g','door-open','開門')}！`);}
 async function onOpenDoor(){if(G.state!=='stopped')return;const gen=G.gen,ok=()=>gen===G.gen,idx=G.next,st=ST[idx];G.state='arrived';$('#bOpen').classList.add('hidden');hideGuide();setDriveUI(false);
-  G.reached=idx;updNextBox();setCam('platform',st.stop);showBanner(st);await sleep(500);if(!ok())return;doorChime();G.doorT=1;doorSfx();startAlighting(st);startBoarding(st,2.6);
+  G.reached=idx;updNextBox();setCam('platform',st.stop);showBanner(st);await sleep(500);if(!ok())return;(LINE.id==='jy'?doorChime:mtrChime)();G.doorT=1;doorSfx();startAlighting(st);startBoarding(st,2.6);
   await sleep(1700);if(!ok())return;CAM.doorS=st.stop-HEAD+2.47;clearView(frame(CAM.doorS+2.7,-4.9,PT),frame(CAM.doorS-0.3,-2.2,PT),1.4);setCam('door');await annArrive(st);if(!ok())return;await sleep(1800);if(!ok())return;
-  guide(idx>=ST.length-1?`${st.ja}站！答啱 3 條題目就完成呢一段！`:`${st.ja}站！答啱 3 條題目就可以出發！`);await sleep(1600);if(!ok())return;hideGuide();
-  for(let k=0;k<3;k++){qProg(k);await askUntilCorrect(Math.min(3,1+Math.floor(SEC/5)+(idx-1)),G.catOrder[((idx-1)*3+k)%G.catOrder.length]);if(!ok())return;G.stars++;$('#starN').textContent=G.stars;popStar();}
+  guide(idx>=ST.length-1?`${st.ja}站！答啱 ${QN} 條題目就完成呢一段！`:`${st.ja}站！答啱 ${QN} 條題目就可以出發！`);await sleep(1600);if(!ok())return;hideGuide();
+  const lv=Math.min(3,1+Math.floor(SEC*3/SECN)+(idx-1)),order=catOrder(),used=new Set();
+  for(let k=0;k<QN;k++){qProg(k);await askUntilCorrect(lv,order[k],used);if(!ok())return;G.stars++;$('#starN').textContent=G.stars;popStar();}
   qProg(-1);if(!PROG.stamps.includes(st.y)){PROG.stamps.push(st.y);saveProg();}await stampFx(st);if(!ok())return;if(idx>=ST.length-1)return finishRoute(gen);G.next=idx+1;departPrep(gen,false);}
-async function finishRoute(gen){G.state='finish';fanfare();const loop=PROG.stamps.length>=YN&&SEC===SECN-1;PROG.sec=(SEC+1)%SECN;saveProg();
-  $('#fTitle').textContent=loop?'山手線一周完成！':`到達 ${ST[ST.length-1].ja}！`;$('#fNext').textContent=`下一段：${secLabel(PROG.sec)}`;
+async function finishRoute(gen){G.state='finish';fanfare();const all=PROG.stamps.length>=YN&&SEC===SECN-1;PROG.sec=(SEC+1)%SECN;saveProg();
+  $('#fTitle').textContent=all?(LINE.loop?`${LINE.name}一周完成！`:`${LINE.name}全程完成！`):`到達 ${ST[ST.length-1].ja}！`;$('#fNext').textContent=`下一段：${secLabel(PROG.sec)}`;
   $('#fstamps').innerHTML=ST.slice(1).map(s=>stampHTML(s,'mini')).join('');$('#fstars').innerHTML=`${IC('star')} × ${G.stars}　<span class="fcount">印章 ${PROG.stamps.length} / ${YN}</span>`;$('#finish').classList.remove('hidden');confetti(120);
   await annFinish();}
 function updDrive(dt){const st=ST[G.next],rem=st.stop-G.s;
   if(!G.depAnn&&G.v>1.2){G.depAnn=true;annOnboard(st,ST[G.reached]);}
   if(!G.announced&&!G.annPrompt&&rem<470){G.annPrompt=true;const b=$('#bAnn2');b.classList.remove('hidden');b.classList.add('hot');guide(`快到站喇！撳${KB('g','mic','到站廣播')}！`);}
-  if(!G.tasc&&rem<290&&G.notch<0){G.tasc=true;guide('好叻！TASC 會幫你停喺停車位置！');}
+  if(!G.tasc&&rem<290&&G.notch<0){G.tasc=true;guide(`好叻！${LINE.tx.auto} 會幫你停喺停車位置！`);}
   if(!G.tasc&&rem<150){G.tasc=G.ats=true;guide('要剎車喇！自動剎車幫你停站！');}
   let a=NA[G.notch];if(G.notch>0)a*=1-Math.pow(G.v/VMAX,2);let v=clamp(G.v+a*dt,0,VMAX);
   if(G.tasc){const vt=Math.sqrt(2*0.85*Math.max(0,rem));v=Math.min(v,vt);v=Math.max(v,Math.min(vt,3.2));}
@@ -2690,8 +3005,8 @@ function frameLoop(now){requestAnimationFrame(frameLoop);const dt=Math.min(0.05,
   if(!perfDone&&G.state==='drive'){perfT+=dt;perfN++;if(perfT>4){perfDone=true;const avg=perfT/perfN;if(avg>0.034){G.post=false;setPR(1);}else if(avg>0.024&&PR>1)setPR(1);}}}
 
 /* ======================= 按鍵／鍵盤／拖曳望 ======================= */
-$('#rJY').onclick=()=>startRoute();
-$('#btnMap').onclick=()=>{initAudio();openMap();};$('#ymClose').onclick=()=>$('#ymap').classList.add('hidden');
+$('#rJY').onclick=()=>startRoute(undefined,'jy');$('#rEAL').onclick=()=>startRoute(undefined,'eal');
+$('#btnMap').onclick=()=>{initAudio();openMap('jy');};$('#btnMapE').onclick=()=>{initAudio();openMap('eal');};$('#ymClose').onclick=()=>$('#ymap').classList.add('hidden');
 $('#btnHome').onclick=()=>goTitle();
 $('#btnMute').onclick=()=>{G.muted=!G.muted;$('#btnMute').innerHTML=IC(G.muted?'mute':'sound');if(BUS)BUS.gain.value=G.muted?0:1;if(G.muted)stopSpeech();};
 $('#qsay').onclick=()=>{if(QS&&!QS.locked)speakQ(QS.q);};
@@ -2724,7 +3039,7 @@ function boot(){try{
   }catch(e){console.error(e);$('#loading').innerHTML=`<div>載入失敗，請重新整理</div><div style="font-size:14px;max-width:80vw;color:#a33">${e&&e.message}</div>`;}}
 function iconSheet(keys){const d=document.createElement('div');d.id='sheet';d.style.cssText='position:fixed;inset:0;z-index:99;background:#e9eef3;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:4px;padding:8px';
   for(const k of keys||Object.keys(IB)){const c=document.createElement('div');c.style.cssText='text-align:center;font:11px sans-serif;color:#333';c.innerHTML=`<img src="${icon(k)}" style="width:92px;height:92px;filter:drop-shadow(0 4px 5px rgba(0,0,0,.2))"><div>${k}</div>`;d.appendChild(c);}document.body.appendChild(d);return Object.keys(IB).length;}
-window.__kg={get AC(){return AC;},get BUS(){return BUS;},applySection,get LMK(){return LMK;},qtest:(k,l=2)=>{$('#title').classList.add('hidden');showCard(true);renderQ(makeQ(k,l),()=>{});return Object.keys(QT);},iconSheet,icon,get IB(){return IB;},get TE(){return TE;},SK,G,ST,CAM,startRoute,goTitle,setCam,setMascon,stepNotch,onc,CAB,PP,renderer,camera,scene,composer,get QS(){return QS;},onAnnDepart,onCloseDoor,onOpenDoor,onAnnApproach};
+window.__kg={get AC(){return AC;},get BUS(){return BUS;},get LINE(){return LINE;},setLineData,switchLineVisuals,loadProg,applySection,get LMK(){return LMK;},qtest:(k,l=2)=>{$('#title').classList.add('hidden');showCard(true);renderQ(makeQ(k,l),()=>{});return Object.keys(QT);},iconSheet,icon,get IB(){return IB;},get TE(){return TE;},SK,G,ST,CAM,startRoute,goTitle,setCam,setMascon,stepNotch,onc,CAB,PP,renderer,camera,scene,composer,get QS(){return QS;},onAnnDepart,onCloseDoor,onOpenDoor,onAnnApproach};
 setTimeout(boot,60);
 
 </script>
