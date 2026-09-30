@@ -1644,7 +1644,7 @@ function updCab(dt){if(!CAB.group||!CAB.group.visible)return;const tgt=G.notch*0
 
 /* ======================= 聲音（全部即時合成，唔使下載） ======================= */
 let AC=null,BUS,SFX,NOISE,BROWN,rumG,rumF,hisG,motG,motO1,motO2,motF,sndT=0;
-function initAudio(){if(AC){if(AC.state!=='running')AC.resume();return;}
+function initAudio(){try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}if(AC){if(AC.state!=='running')AC.resume();return;}
   const C=window.AudioContext||window.webkitAudioContext;if(!C)return;AC=new C();
   BUS=AC.createGain();BUS.gain.value=G.muted?0:1;const comp=AC.createDynamicsCompressor();BUS.connect(comp).connect(AC.destination);
   SFX=AC.createGain();SFX.gain.value=0.85;SFX.connect(BUS);
@@ -1682,19 +1682,27 @@ function whoosh(){if(!AC)return;const t=AC.currentTime+0.01;const s=AC.createBuf
 function crossingDing(vol){if(!AC||vol<0.01)return;const t=AC.currentTime+0.01;for(const [fr,a] of [[760,1],[1520,.35],[2290,.15]]){const o=AC.createOscillator();o.type='square';o.frequency.value=fr;const g=AC.createGain();g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol*a*0.25,t+0.004);g.gain.exponentialRampToValueAtTime(0.0001,t+0.32);o.connect(g).connect(SFX);o.start(t);o.stop(t+0.35);}}
 
 /* ======================= 語音（日文廣播／粵語讀題／英文） ======================= */
-const TTS='speechSynthesis' in window?window.speechSynthesis:null;let VOICES=[];
-function loadVoices(){if(TTS)VOICES=TTS.getVoices();}loadVoices();if(TTS)TTS.onvoiceschanged=loadVoices;
-function voiceFor(lang){const Lg=lang.toLowerCase(),norm=v=>v.lang.toLowerCase().replace('_','-');const ex=VOICES.filter(v=>norm(v)===Lg);
-  if(Lg==='zh-hk'){const c=ex.length?ex:VOICES.filter(v=>/yue|cantonese|粵|廣東/i.test(v.name+' '+v.lang));if(c.length)return c.find(v=>/premium|enhanced|sin-?ji/i.test(v.name))||c[0];}
-  if(ex.length)return ex.find(v=>/premium|enhanced/i.test(v.name))||ex[0];
-  const pre=Lg.split('-')[0];return VOICES.find(v=>norm(v).startsWith(pre))||null;}
+const TTS='speechSynthesis' in window?window.speechSynthesis:null;let VOICES=[];const VCACHE={};
+function loadVoices(){if(TTS){VOICES=TTS.getVoices();for(const k in VCACHE)delete VCACHE[k];}}loadVoices();if(TTS)TTS.onvoiceschanged=loadVoices;
+// 揀聲：排除 macOS／iOS 嘅搞笑聲同機械聲，優先自然女聲（日文 Kyoko／O-Ren，英文 Samantha／Ava）
+const BAD_V=/^(albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|good news|hysterical|jester|junior|organ|pipe organ|superstar|trinoids|whisper|wobble|zarvox|fred|ralph|kathy|eddy|flo|grandma|grandpa|reed|rocko|sandy|shelley)\b/i;
+const PREF_V={ja:['kyoko','o-ren','otoya','hattori','google 日本語','nanami','ayumi','haruka','sayaka','keita','ichiro'],en:['samantha','ava','allison','susan','zoe','nicky','joelle','google us english','aria','jenny','zira','karen','moira','tessa','serena','daniel','google uk english female']};
+function voiceFor(lang){const Lg=lang.toLowerCase(),pre=Lg.split('-')[0];if(VCACHE[Lg]!==undefined&&VOICES.length)return VCACHE[Lg];const norm=v=>v.lang.toLowerCase().replace('_','-');
+  const c=VOICES.filter(v=>norm(v).startsWith(pre)&&!BAD_V.test(v.name));if(!c.length)return null;
+  const rank=v=>{const n=v.name.toLowerCase(),i=(PREF_V[pre]||[]).findIndex(p=>n.includes(p));return (/premium|enhanced|高音質|優化/.test(n)?-100:0)+(i<0?60:i)*2+(norm(v)===Lg?0:1);};
+  const best=c.slice().sort((a,b)=>rank(a)-rank(b))[0];if(VOICES.length)VCACHE[Lg]=best;return best;}
+let lastCancel=0,SPG=0;
 function say(text,lang='zh-HK'){return new Promise(res=>{if(String(lang).toLowerCase().startsWith('zh')){setTimeout(res,0);return;}if(!TTS||G.muted||!text){setTimeout(res,G.muted?400:0);return;}
-  const u=new SpeechSynthesisUtterance(text);u.lang=lang;const v=voiceFor(lang);if(v)u.voice=v;
-  u.rate=lang.startsWith('ja')?0.95:lang.startsWith('en')?0.85:0.92;u.pitch=lang.startsWith('zh')?1.12:1.0;
+  const u=new SpeechSynthesisUtterance(text);u.lang=lang;const v=voiceFor(lang);if(v)u.voice=v;u.volume=1;
+  u.rate=lang.startsWith('ja')?0.95:lang.startsWith('en')?0.88:0.92;u.pitch=1.0;
   let done=false,to=0;const fin=()=>{if(!done){done=true;clearTimeout(to);res();}};u.onend=fin;u.onerror=fin;
-  to=setTimeout(fin,1500+text.length*(lang.startsWith('en')?95:280));TTS.speak(u);});}
-function stopSpeech(){if(TTS)TTS.cancel();}
-function unlockSpeech(){if(!TTS)return;const u=new SpeechSynthesisUtterance(' ');u.volume=0;TTS.speak(u);}
+  const go=()=>{if(done)return;try{if(TTS.paused)TTS.resume();}catch(e){}TTS.speak(u);to=setTimeout(fin,2500+text.length*(lang.startsWith('en')?95:280));};
+  // Safari：cancel() 之後即刻 speak() 會食咗句嘢 → 等 0.22 秒；冇 cancel 過就即刻講（喺撳掣嗰下講，iOS 先會解鎖語音）
+  const w=lastCancel+220-performance.now();if(w>0)setTimeout(go,w);else go();});}
+// 一連串廣播（日文→英文），中途有 stopSpeech() 就唔再講落去
+async function sayAll(parts){const g=SPG;for(const [t,l] of parts){if(g!==SPG)return;await say(t,l);}}
+function stopSpeech(){SPG++;if(TTS&&(TTS.speaking||TTS.pending)){TTS.cancel();lastCancel=performance.now();}}
+function unlockSpeech(){if(!TTS||TTS.speaking||TTS.pending)return;const u=new SpeechSynthesisUtterance(' ');u.volume=0;TTS.speak(u);}
 
 
 
@@ -1708,11 +1716,18 @@ function clickSfx(){if(!AC)return;const t=AC.currentTime+0.005,s=AC.createBuffer
 let guideT=0;
 function guide(text,speak=false){const el=$('#guide');el.querySelector('.gtext').innerHTML=text;el.classList.remove('hidden');el.style.animation='none';void el.offsetWidth;el.style.animation='';clearTimeout(guideT);guideT=setTimeout(()=>el.classList.add('hidden'),9000);if(speak)return say(text,'zh-HK');return Promise.resolve();}
 function hideGuide(){$('#guide').classList.add('hidden');}
-async function annDepart(st){announceChime();await sleep(1400);
-  await say(`ご乗車ありがとうございます。この電車は、やまのて線、外回り、うえの、いけぶくろ方面行きです。次は、${st.next?st.next.kana:''}です。`,'ja-JP');}
-async function annApproach(st){announceChime();await sleep(1400);
-  await say(`まもなく、${st.kana}、${st.kana}。お出口は、左側です。`,'ja-JP');await say(`We will soon make a brief stop at ${st.en}.`,'en-US');}
-async function annArrive(st){await say(`${st.kana}、${st.kana}。ご乗車、ありがとうございました。`,'ja-JP');}
+// ---- 車站／車廂廣播：先日文、後英文（JR 東日本自動廣播風格） ----
+const YAMA='やまのて線、外回り、うえの、いけぶくろ方面行き',YAMA_EN='the Yamanote Line train bound for Ueno and Ikebukuro';
+function annWelcome(st){return sayAll([[`${st.kana}、${st.kana}。ご乗車、ありがとうございます。`,'ja-JP'],[`Welcome to ${st.en}. Thank you for riding the Yamanote Line.`,'en-US']]);}
+async function annDepart(st){announceChime();const g=SPG;await sleep(1400);if(g!==SPG)return;
+  await sayAll([[`${YAMA}、まもなく、発車いたします。`,'ja-JP'],[`This is ${YAMA_EN}. The train will soon depart.`,'en-US']]);}
+async function annOnboard(st){announceChime();const g=SPG;await sleep(1400);if(g!==SPG)return;
+  await sayAll([[`この電車は、${YAMA}です。次は、${st.kana}です。`,'ja-JP'],[`The next station is ${st.en}.`,'en-US']]);}
+async function annApproach(st){announceChime();const g=SPG;await sleep(1400);if(g!==SPG)return;
+  await sayAll([[`まもなく、${st.kana}、${st.kana}。お出口は、左側です。`,'ja-JP'],[`We will soon make a brief stop at ${st.en}. The doors on the left side will open.`,'en-US']]);}
+function annArrive(st){return sayAll([[`${st.kana}、${st.kana}。ご乗車、ありがとうございました。`,'ja-JP'],[`${st.en}. ${st.en}. Thank you for riding.`,'en-US']]);}
+function annClose(){return sayAll([['ドアが閉まります。ご注意ください。','ja-JP'],['The doors are closing. Please be careful.','en-US']]);}
+function annFinish(){return sayAll([['ご乗車、ありがとうございました。','ja-JP'],['Thank you for riding the Yamanote Line. See you again!','en-US']]);}
 
 
 /* ======================= 題目圖示：three.js 立體模型（全部取代 emoji） ======================= */
@@ -2299,7 +2314,8 @@ function qProg(k){$('#qprog').innerHTML=k<0?'':[0,1,2].map(i=>`<i class="${i<k?'
 function resetGame(){G.gen++;G.s=ST[0].stop;G.prevS=G.s;G.v=0;G.a=0;G.next=1;G.reached=0;G.stars=0;G.doors=1;G.doorT=1;G.tasc=G.ats=G.announced=G.annDone=G.annPrompt=G.annReady=false;G.idleT=0;onc.active=false;stopSpeech();
   $('#starN').textContent='0';hideCard();qProg(-1);for(const s of ['#finish','#banner','#stampFx','#actions','#bOpen'])$(s).classList.add('hidden');setDriveUI(false);hideGuide();resetPeople();setMascon(0,true);}
 function goTitle(){resetGame();SK.active=false;SK.timer=8;G.state='title';setCam('title');$('#hud').classList.add('hidden');$('#title').classList.remove('hidden');}
-async function startRoute(){initAudio();initAudioExtra();unlockSpeech();resetGame();const gen=G.gen;
+async function startRoute(){initAudio();initAudioExtra();resetGame();const gen=G.gen;annWelcome(ST[0]);  // 喺撳掣嗰下即刻講第一句，iPhone／iPad 先會解鎖語音
+  
   $('#title').classList.add('hidden');$('#hud').classList.remove('hidden');initHUD();G.catOrder=shuffle(Object.keys(CATS));await departPrep(gen,true);}
 async function departPrep(gen,first){const st=ST[G.reached];G.state='board';G.annDone=false;G.annReady=false;setCam('platform',st.stop);G.doorT=1;updNextBox();
   if(first){showBanner(st);startBoarding(st,1.0);}lateComers(st,first?4:6);showActions(['ann'],'ann');
@@ -2307,9 +2323,9 @@ async function departPrep(gen,first){const st=ST[G.reached];G.state='board';G.an
 async function onAnnDepart(){if(G.state!=='board'||G.annDone)return;const gen=G.gen;G.annDone=true;showActions([],null);hideGuide();stopSpeech();
   await annDepart(ST[G.reached]);if(gen!==G.gen||G.state!=='board')return;const ms=departMelody();await sleep(ms*0.85);if(gen!==G.gen||G.state!=='board')return;G.annReady=true;showActions(['door'],'door');guide(`好！撳${KB('g','door-close','關門')}！`);}
 async function onCloseDoor(){if(G.state!=='board'||!G.annReady)return;const gen=G.gen;G.state='closing';showActions(null);hideGuide();stopSpeech();updNextBox();
-  say('ドアが閉まります。ご注意ください。','ja-JP');doorChime();holdLate();await sleep(900);if(gen!==G.gen)return;G.doorT=0;doorSfx();await sleep(2300);if(gen!==G.gen)return;
+  annClose();doorChime();holdLate();await sleep(900);if(gen!==G.gen)return;G.doorT=0;doorSfx();await sleep(2300);if(gen!==G.gen)return;
   for(const p of PP.list)if(p.on&&p.tag==='q'+G.reached)p.on=false;
-  setCam('cab');G.state='drive';G.tasc=G.ats=G.announced=G.annPrompt=false;G.idleT=0;setMascon(0,true);setDriveUI(true);$('#bAnn2').classList.add('hidden');spawnOncoming();SK.timer=7;updNextBox();
+  setCam('cab');G.state='drive';G.tasc=G.ats=G.announced=G.annPrompt=G.depAnn=false;G.idleT=0;setMascon(0,true);setDriveUI(true);$('#bAnn2').classList.add('hidden');spawnOncoming();SK.timer=7;updNextBox();
   await sleep(800);if(gen!==G.gen)return;guide(`撳右邊${KB('p','power','加速')}，列車就會開動！`);}
 function onAnnApproach(){if(G.state!=='drive'||G.announced)return;G.announced=true;const b=$('#bAnn2');b.classList.add('hidden');b.classList.remove('hot');hideGuide();stopSpeech();annApproach(ST[G.next]);}
 function arriveStop(){G.state='stopped';setMascon(-4,true);$('#bAnn2').classList.add('hidden');$('#cabBtns').classList.add('hidden');airSfx(1.2,0.3);$('#bOpen').classList.remove('hidden');guide(`到站喇！撳${KB('g','door-open','開門')}！`);}
@@ -2320,8 +2336,9 @@ async function onOpenDoor(){if(G.state!=='stopped')return;const gen=G.gen,ok=()=
   for(let k=0;k<3;k++){qProg(k);await askUntilCorrect(idx,G.catOrder[((idx-1)*3+k)%G.catOrder.length]);if(!ok())return;G.stars++;$('#starN').textContent=G.stars;popStar();}
   qProg(-1);await stampFx(st);if(!ok())return;if(idx>=ST.length-1)return finishRoute(gen);G.next=idx+1;departPrep(gen,false);}
 async function finishRoute(gen){G.state='finish';fanfare();$('#fstamps').innerHTML=ST.slice(1).map(s=>stampHTML(s,'mini')).join('');$('#fstars').innerHTML=`${IC('star')} × ${G.stars}`;$('#finish').classList.remove('hidden');confetti(120);
-  await say('ご乗車、ありがとうございました。','ja-JP');}
+  await annFinish();}
 function updDrive(dt){const st=ST[G.next],rem=st.stop-G.s;
+  if(!G.depAnn&&G.v>1.2){G.depAnn=true;annOnboard(st);}
   if(!G.announced&&!G.annPrompt&&rem<470){G.annPrompt=true;const b=$('#bAnn2');b.classList.remove('hidden');b.classList.add('hot');guide(`快到站喇！撳${KB('g','mic','到站廣播')}！`);}
   if(!G.tasc&&rem<290&&G.notch<0){G.tasc=true;guide('好叻！TASC 會幫你停喺停車位置！');}
   if(!G.tasc&&rem<150){G.tasc=G.ats=true;guide('要剎車喇！自動剎車幫你停站！');}
