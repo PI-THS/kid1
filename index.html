@@ -348,6 +348,19 @@ button{font-family:inherit;color:inherit;touch-action:manipulation;cursor:pointe
   .gv b{font-size:clamp(24px,6.6vw,34px)}
   .lamps{grid-area:lamps;flex-direction:column;align-items:flex-start;gap:5px}
   #notchBar{grid-area:notch}}
+/* ---- 山手線一周路線圖 ---- */
+.trow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+#btnMap b{font-family:"Baloo 2",sans-serif;color:#2e7d32;margin-left:4px}
+#ymap{position:fixed;inset:0;z-index:18;background:rgba(8,20,35,.55);display:flex;align-items:center;justify-content:center;padding:14px}
+.ymcard{background:#fff;border-radius:28px;padding:16px 18px 18px;width:min(760px,100%);max-height:100%;overflow:auto;box-shadow:var(--shadow)}
+.ymhead{display:flex;justify-content:space-between;align-items:center;gap:10px}.ymhead h2{margin:0;font-size:clamp(20px,5vw,28px);display:flex;align-items:center;gap:8px}.ymhead h2 .ic{color:var(--jy)}
+#ymsvg{width:100%;height:auto;display:block;font-family:"Hiragino Sans","PingFang HK",sans-serif}
+.ymtip{margin:4px 0 8px;font-weight:800;color:#556;text-align:center}
+.ymsecs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.ysec{border:none;border-radius:14px;padding:10px 8px;font-size:16px;font-weight:800;background:#f1f5f0;border-left:6px solid #c5dcb3;display:flex;align-items:center;justify-content:center;gap:6px}
+.ysec.ok{background:#e8f5e1;border-left-color:#43a047}.ysec.ok .ic{color:#f5b400}
+.ysec.cur{background:#fff3c4;border-left-color:#ff9800;box-shadow:0 0 0 3px rgba(255,152,0,.35)}
+.fcount{font-size:.8em;color:#556;margin-left:8px}
 
 </style>
 </head>
@@ -377,6 +390,7 @@ button{font-family:inherit;color:inherit;touch-action:manipulation;cursor:pointe
   <symbol id="i-brush" viewBox="0 0 24 24"><path d="M14.5 3.5l6 6-8.4 8.4-6-6z" fill="currentColor"/><path d="M5.6 12.4l6 6c-1.4 2.6-4.4 3.4-8.1 2.6-.4-3.4.3-6.8 2.1-8.6z" fill="currentColor" opacity=".7"/></symbol>
   <symbol id="i-puzzle" viewBox="0 0 24 24"><path d="M4 7.5h4.2a2.3 2.3 0 1 1 4.4 0H17v4.4a2.3 2.3 0 1 1 0 4.4V20.5H12.6a2.3 2.3 0 1 0-4.4 0H4v-4.3a2.3 2.3 0 1 0 0-4.4z" fill="currentColor"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.4" cy="10.4" r="6.2" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M15 15l5.4 5.4" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-loop" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="7" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="21" cy="12" r="2.3" fill="currentColor"/><circle cx="12" cy="5" r="2.3" fill="currentColor"/><circle cx="3" cy="12" r="2.3" fill="currentColor"/><circle cx="12" cy="19" r="2.3" fill="currentColor"/></symbol>
 </defs></svg>
 <canvas id="c"></canvas>
 <div id="fade"></div>
@@ -385,12 +399,12 @@ button{font-family:inherit;color:inherit;touch-action:manipulation;cursor:pointe
 <div id="title" class="hidden">
   <div class="logo"><div class="l1">小小車長</div><div class="l2">日本鐵道之旅</div><div class="l3">你做車長！廣播、關門、開車、停站！</div></div>
   <div class="routes">
-    <button class="route go" id="rJY" style="--c:#80C241"><div class="rc">JY</div><div class="rn">山手線</div><div class="re">Yamanote Line</div><div class="rs">東京 → 秋葉原<span class="rgo"><svg class="ic"><use href="#i-play"/></svg>出發</span></div></button>
+    <button class="route go" id="rJY" style="--c:#80C241"><div class="rc">JY</div><div class="rn">山手線</div><div class="re">Yamanote Line</div><div class="rs"><span id="rjyTxt">東京 → 秋葉原</span><span class="rgo"><svg class="ic"><use href="#i-play"/></svg>出發</span></div></button>
     <div class="route locked" style="--c:#F15A22"><span class="lock"><svg class="ic"><use href="#i-lock"/></svg></span><div class="rc">JC</div><div class="rn">中央線</div><div class="re">Chūō Line</div><div class="rs">即將開放</div></div>
     <div class="route locked" style="--c:#00B2E5"><span class="lock"><svg class="ic"><use href="#i-lock"/></svg></span><div class="rc">JK</div><div class="rn">京浜東北線</div><div class="re">Keihin-Tōhoku Line</div><div class="rs">即將開放</div></div>
     <div class="route locked" style="--c:#0072BC"><span class="lock"><svg class="ic"><use href="#i-lock"/></svg></span><div class="rc" style="font-size:17px">新幹線</div><div class="rn">東海道新幹線</div><div class="re">Tōkaidō Shinkansen</div><div class="rs">即將開放</div></div>
   </div>
-  <button class="small" id="btnTest"><svg class="ic"><use href="#i-list"/></svg>題目試玩（家長用）</button>
+  <div class="trow"><button class="small" id="btnMap"><svg class="ic"><use href="#i-loop"/></svg>山手線路線圖 <b id="stampCount">0/30</b></button><button class="small" id="btnTest"><svg class="ic"><use href="#i-list"/></svg>題目試玩（家長用）</button></div>
 </div>
 
 <div id="hud" class="hidden">
@@ -441,17 +455,24 @@ button{font-family:inherit;color:inherit;touch-action:manipulation;cursor:pointe
 <div id="stampFx" class="hidden"></div>
 
 <div id="finish" class="hidden"><div class="fcard">
-  <h1><svg class="ic"><use href="#i-flag"/></svg>到達終點站！</h1>
+  <h1><svg class="ic"><use href="#i-flag"/></svg><span id="fTitle">到達終點站！</span></h1>
   <p>你今日儲到嘅車站印章</p>
   <div class="stamps" id="fstamps"></div>
   <p id="fstars"></p>
-  <div><button class="bigbtn" id="fAgain"><svg class="ic"><use href="#i-again"/></svg>再玩一次</button><button class="bigbtn alt" id="fHome"><svg class="ic"><use href="#i-home"/></svg>返主頁</button></div>
+  <div><button class="bigbtn" id="fAgain"><svg class="ic"><use href="#i-play"/></svg><span id="fNext">下一段</span></button><button class="bigbtn alt" id="fHome"><svg class="ic"><use href="#i-home"/></svg>返主頁</button></div>
 </div></div>
 
 <div id="test" class="hidden"><div class="tcard">
   <div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2><svg class="ic"><use href="#i-list"/></svg>題目試玩</h2><button class="small" id="tClose"><svg class="ic"><use href="#i-close"/></svg>關閉</button></div>
   <div class="lv">難度：<button data-l="1" class="on">1</button><button data-l="2">2</button><button data-l="3">3</button></div>
   <div class="tgrid" id="tgrid"></div>
+</div></div>
+
+<div id="ymap" class="hidden"><div class="ymcard">
+  <div class="ymhead"><h2><svg class="ic"><use href="#i-loop"/></svg>山手線一周旅程</h2><button class="small" id="ymClose"><svg class="ic"><use href="#i-close"/></svg>關閉</button></div>
+  <svg id="ymsvg" viewBox="0 0 640 468"></svg>
+  <p class="ymtip">揀一段出發（每段 3 個站）</p>
+  <div class="ymsecs" id="ymsecs"></div>
 </div></div>
 
 <div id="fx"></div>
@@ -600,7 +621,19 @@ const ROUTE={id:'JY',name:'山手線',color:'#80C241',stations:[
   {ja:'秋葉原',kana:'あきはばら',en:'Akihabara',code:'JY03',stop:segS(5)+300}]};
 const ST=ROUTE.stations;
 for(let i=0;i<ST.length;i++){ST[i].idx=i;ST[i].prev=i>0?ST[i-1]:null;ST[i].next=i<ST.length-1?ST[i+1]:null;}
-ST[0].prev={ja:'有楽町',en:'Yūrakuchō'};ST[ST.length-1].next={ja:'御徒町',en:'Okachimachi'};
+// 山手線 30 個站（內回り：東京→神田→秋葉原→上野→池袋→新宿→渋谷→品川→東京）；遊戲每段玩 3 個站，共 15 段一圈
+const YAMA_ST=[['東京','とうきょう','Tokyo'],['神田','かんだ','Kanda'],['秋葉原','あきはばら','Akihabara'],['御徒町','おかちまち','Okachimachi'],['上野','うえの','Ueno'],['鶯谷','うぐいすだに','Uguisudani'],
+  ['日暮里','にっぽり','Nippori'],['西日暮里','にしにっぽり','Nishi-Nippori'],['田端','たばた','Tabata'],['駒込','こまごめ','Komagome'],['巣鴨','すがも','Sugamo'],['大塚','おおつか','Otsuka'],
+  ['池袋','いけぶくろ','Ikebukuro'],['目白','めじろ','Mejiro'],['高田馬場','たかだのばば','Takadanobaba'],['新大久保','しんおおくぼ','Shin-Okubo'],['新宿','しんじゅく','Shinjuku'],['代々木','よよぎ','Yoyogi'],
+  ['原宿','はらじゅく','Harajuku'],['渋谷','しぶや','Shibuya'],['恵比寿','えびす','Ebisu'],['目黒','めぐろ','Meguro'],['五反田','ごたんだ','Gotanda'],['大崎','おおさき','Osaki'],
+  ['品川','しながわ','Shinagawa'],['高輪ゲートウェイ','たかなわゲートウェイ','Takanawa Gateway'],['田町','たまち','Tamachi'],['浜松町','はままつちょう','Hamamatsucho'],['新橋','しんばし','Shimbashi'],['有楽町','ゆうらくちょう','Yurakucho']];
+const YN=YAMA_ST.length,SECN=YN/2,MAJ=[0,4,12,16,19,24];let SEC=0;
+const ylObj=y=>{const [ja,kana,en]=YAMA_ST[((y%YN)+YN)%YN];return {ja,kana,en,y:((y%YN)+YN)%YN,code:'JY'+String(((y%YN)+YN)%YN+1).padStart(2,'0')};};
+// 行車方向：前面最近兩個大站（上野・池袋方面 等）
+function dirOf(y){const d=MAJ.map(m=>[((m-y+YN)%YN)||YN,m]).sort((a,b)=>a[0]-b[0]);return [ylObj(d[0][1]),ylObj(d[1][1])];}
+const dirJa=y=>{const [a,b]=dirOf(y);return a.ja+'・'+b.ja;},dirKana=y=>{const [a,b]=dirOf(y);return a.kana+'、'+b.kana;},dirEn=y=>{const [a,b]=dirOf(y);return a.en+' and '+b.en;};
+function applySectionData(k){SEC=((k%SECN)+SECN)%SECN;for(let i=0;i<ST.length;i++){const o=ylObj(SEC*2+i);Object.assign(ST[i],o);ST[i].prev=ylObj(o.y-1);ST[i].next=ylObj(o.y+1);}}
+applySectionData(0);
 const PB=125, PF=12;                       // 月台範圍：stop-PB ～ stop+PF
 const inStation=(s,m=0)=>ST.some(q=>s>q.stop-PB-m&&s<q.stop+PF+m);
 const ROAD_S=segS(1)+330, RIVER_S=segS(5)+120;   // 過街鐵橋、神田川鐵橋
@@ -919,7 +952,24 @@ function updCars(dt){if(!carIM)return;const RP=posAt(ROAD_S),RF=dirAt(ROAD_S);
     else{const rx=-RF.z,rz=RF.x;_cp.set(RP.x+rx*c.s+RF.x*c.lane,0.05,RP.z+rz*c.s+RF.z*c.lane);hx=rx*c.dir;hz=rz*c.dir;}
     DUMMY.position.copy(_cp);DUMMY.rotation.set(0,Math.atan2(-hz,hx),0);DUMMY.scale.set(1,1,1);DUMMY.updateMatrix();(c.bus?busIM:carIM).setMatrixAt(c.i,DUMMY.matrix);}
   carIM.instanceMatrix.needsUpdate=true;busIM.instanceMatrix.needsUpdate=true;}
-function buildScenery(){buildRiver();buildRoadBridge();buildTokyoStation();buildAkibaSigns();buildFar();buildCars();}
+// 起點站大樓：唔係東京嘅段就用一般車站大樓（大字寫站名）
+const LM={tokyo:[],akiba:[],gen:[],sign:null};
+function stationBldgTex(st){const [c,x]=cv(1024,256);x.fillStyle='#f7f8f9';x.fillRect(0,0,1024,256);x.fillStyle='#80C241';x.fillRect(0,206,1024,50);
+  x.strokeStyle='#80C241';x.lineWidth=12;rr(x,24,40,150,150,18);x.stroke();x.fillStyle='#222';x.textAlign='center';x.textBaseline='middle';x.font='bold 46px Helvetica,Arial,sans-serif';x.fillText('JY',99,88);x.font='bold 64px Helvetica,Arial,sans-serif';x.fillText(st.code.slice(2),99,150);
+  x.textAlign='left';x.font=`900 120px ${JPF}`;x.fillText(st.ja+'駅',210,112,780);x.fillStyle='#fff';x.font='bold 36px Helvetica,Arial,sans-serif';x.fillText(st.en+' Station',210,231);x.fillStyle='#e53935';x.font='900 44px Helvetica,Arial,sans-serif';x.textAlign='right';x.fillText('JR',1000,231);return T(c);}
+function buildStationBldg(){const st=ST[0],sB=st.stop-55,P=posAt(sB),F=dirAt(sB),ang=angOf(F),rx=-F.z,rz=F.x;
+  const [c,x]=cv(256,256);x.fillStyle='#d9e1e7';x.fillRect(0,0,256,256);for(let r=0;r<8;r++)for(let k=0;k<8;k++){const g=x.createLinearGradient(0,r*32,0,r*32+28);g.addColorStop(0,'#9cc2dc');g.addColorStop(1,'#5f86a3');x.fillStyle=g;x.fillRect(k*32+3,r*32+3,26,24);}
+  const ft=T(c,1);ft.repeat.set(14,2.2);const glass=std({map:ft,roughness:.25,metalness:.35}),white=std({color:0xeef1f3,roughness:.6}),roof=std({color:0x9aa3aa,roughness:.8});
+  const g=new THREE.Group();g.position.set(P.x+rx*-58,0,P.z+rz*-58);g.rotation.y=ang;scene.add(g);
+  const b=new THREE.Mesh(new THREE.BoxGeometry(22,16,112),[glass,glass,roof,roof,white,white]);b.position.y=8;g.add(b);
+  const b2=new THREE.Mesh(new THREE.BoxGeometry(24,1.2,114),white);b2.position.y=16.4;g.add(b2);
+  for(const z of [-40,0,40]){const p=new THREE.Mesh(new THREE.BoxGeometry(0.2,16,2.2),white);p.position.set(11.1,8,z);g.add(p);}
+  LM.sign=new THREE.MeshBasicMaterial({map:stationBldgTex(st),color:HDR(0xffffff,1.15)});const sg=new THREE.Mesh(new THREE.PlaneGeometry(26,6.5),LM.sign);sg.position.set(11.3,12.4,0);sg.rotation.y=Math.PI/2;g.add(sg);
+  const sg2=sg.clone();sg2.position.set(0,12.4,-56.2);sg2.rotation.y=Math.PI;sg2.scale.setScalar(0.8);g.add(sg2);}
+function refreshLandmarks(){const tk=ST[0].ja==='東京',ak=ST[2].ja==='秋葉原';for(const o of LM.tokyo)o.visible=tk;for(const o of LM.akiba)o.visible=ak;for(const o of LM.gen)o.visible=!tk;
+  if(LM.sign){const old=LM.sign.map;LM.sign.map=stationBldgTex(ST[0]);LM.sign.needsUpdate=true;if(old)old.dispose();}}
+function buildScenery(){buildRiver();buildRoadBridge();let n=scene.children.length;buildTokyoStation();LM.tokyo=scene.children.slice(n);n=scene.children.length;buildAkibaSigns();LM.akiba=scene.children.slice(n);
+  n=scene.children.length;buildStationBldg();LM.gen=scene.children.slice(n);buildFar();buildCars();refreshLandmarks();}
 
 
 /* ======================= 風景 v3：民房、公園、遠山、東京鐵塔、遊船、雲 ======================= */
@@ -989,9 +1039,10 @@ function signTex(st,flip){const [c,x]=cv(1024,320);const col=ROUTE.color;x.fillS
   const tri=(X,dir)=>{x.beginPath();x.moveTo(X+dir*16,286);x.lineTo(X-dir*6,274);x.lineTo(X-dir*6,298);x.closePath();x.fill();};
   if(A){tri(34,-1);x.textAlign='left';x.fillText(A.ja+'  '+A.en,54,298);}if(B){tri(990,1);x.textAlign='right';x.fillText(B.ja+'  '+B.en,970,298);}return T(c);}
 const texPsdLeaf=(()=>{const [c,x]=cv(128,128);x.fillStyle='#f4f6f7';x.fillRect(0,0,128,128);x.fillStyle='#7dbf3f';x.fillRect(0,26,128,12);x.fillStyle='#d83a3a';x.beginPath();x.arc(64,78,16,0,6.2832);x.fill();x.fillStyle='#fff';x.font='bold 24px Helvetica,sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('!',64,79);return T(c);})();
-const texLED=(()=>{const [c,x]=cv(512,140);x.fillStyle='#060606';x.fillRect(0,0,512,140);x.textBaseline='middle';
-  x.fillStyle='#ffa53a';x.font=`bold 34px ${JPF}`;x.fillText('外回り',16,36);x.fillText('上野・池袋 方面',150,36);x.fillStyle='#63ff8a';x.fillText('17:35',16,92);x.fillStyle='#ffffff';x.fillText('山手線',150,92);x.fillStyle='#ffa53a';x.fillText('5両',330,92);
-  x.fillStyle='rgba(0,0,0,.45)';for(let i=0;i<512;i+=3)x.fillRect(i,0,1,140);for(let j=0;j<140;j+=3)x.fillRect(0,j,512,1);return T(c);})();
+function ledBoardTex(dir){const [c,x]=cv(512,140);x.fillStyle='#060606';x.fillRect(0,0,512,140);x.textBaseline='middle';
+  x.fillStyle='#ffa53a';x.font=`bold 34px ${JPF}`;x.fillText('内回り',16,36);x.fillText(dir+' 方面',150,36,350);x.fillStyle='#63ff8a';x.fillText('17:35',16,92);x.fillStyle='#ffffff';x.fillText('山手線',150,92);x.fillStyle='#ffa53a';x.fillText('5両',330,92);
+  x.fillStyle='rgba(0,0,0,.45)';for(let i=0;i<512;i+=3)x.fillRect(i,0,1,140);for(let j=0;j<140;j+=3)x.fillRect(0,j,512,1);return T(c);}
+const texLED=ledBoardTex(dirJa(0));
 const texExit=(()=>{const [c,x]=cv(256,72);x.fillStyle='#f6c700';x.fillRect(0,0,256,72);x.fillStyle='#111';x.font=`900 40px ${JPF}`;x.textBaseline='middle';x.fillText('出口',16,37);x.font='bold 28px Helvetica,sans-serif';x.fillText('Exit',108,37);x.lineWidth=7;x.lineCap='round';x.lineJoin='round';x.strokeStyle='#111';x.beginPath();x.moveTo(222,18);x.lineTo(222,54);x.moveTo(208,40);x.lineTo(222,55);x.lineTo(236,40);x.stroke();return T(c);})();
 const texClock=(()=>{const [c,x]=cv(256,256);x.fillStyle='#fff';x.beginPath();x.arc(128,128,124,0,6.2832);x.fill();x.strokeStyle='#222';x.lineWidth=8;x.stroke();x.fillStyle='#222';x.textAlign='center';x.textBaseline='middle';x.font='bold 30px Helvetica,sans-serif';
   for(let i=1;i<=12;i++){const a=i/12*6.2832;x.fillText(i,128+Math.sin(a)*92,128-Math.cos(a)*92);}
@@ -1046,7 +1097,7 @@ function buildStation(st){
     const rg=new THREE.ExtrudeGeometry(sh,{depth:PL-4,bevelEnabled:false,curveSegments:16});rg.translate(0,top,-(PL-4)/2);const r=new THREE.Mesh(rg,MS.roof);r.castShadow=true;r.receiveShadow=true;g.add(r);}
   for(const x of [-7.4,-4.2])lm.add(new THREE.PlaneGeometry(0.22,PL-12).rotateX(Math.PI/2),x,top+4.18,0);
   // 站名牌（吊牌＋企牌）
-  const smF=std({map:signTex(st,false),roughness:.5}),smB=std({map:signTex(st,true),roughness:.5});smF.emissive=smB.emissive=new THREE.Color(0xffffff);smF.emissiveMap=smF.map;smB.emissiveMap=smB.map;smF.emissiveIntensity=smB.emissiveIntensity=0.35;
+  const smF=std({map:signTex(st,false),roughness:.5}),smB=std({map:signTex(st,true),roughness:.5});smF.emissive=smB.emissive=new THREE.Color(0xffffff);smF.emissiveMap=smF.map;smB.emissiveMap=smB.map;smF.emissiveIntensity=smB.emissiveIntensity=0.35;st.signMat=[smF,smB];
   const sgeo=new THREE.PlaneGeometry(2.8,0.875);
   for(const z of [-45,-18,18,45]){const a=new THREE.Mesh(sgeo,smF);a.rotation.y=Math.PI/2;a.position.set(-3.9,top+2.75,z);g.add(a);const b=new THREE.Mesh(sgeo,smB);b.rotation.y=-Math.PI/2;b.position.set(-3.94,top+2.75,z);g.add(b);
     sm.add(new THREE.BoxGeometry(0.03,0.95,2.9),-3.92,top+2.75,z);for(const dz of [-1.1,1.1])sm.add(new THREE.CylinderGeometry(0.02,0.02,0.8,6),-3.92,top+3.55,z+dz);}
@@ -1076,6 +1127,9 @@ function buildStation(st){
   for(const [m,mat,c] of [[dm,MS.wall,true],[cm,MS.steel,true],[wm,MS.wood,true],[sm,MS.dark,true],[rm,MS.rail,false],[gm,MS.glass,false]]){const o=m.mesh(mat,c,true);if(o)g.add(o);}
   const lo=lm.mesh(MS.lamp,false,false);if(lo)g.add(lo);}
 function buildStations(){for(const st of ST)buildStation(st);}
+// 換段：重畫三個站嘅站名牌同發車標
+function refreshStationSigns(){for(const st of ST){if(!st.signMat)continue;st.signMat.forEach((m,f)=>{const old=m.map;m.map=m.emissiveMap=signTex(st,!!f);m.needsUpdate=true;if(old)old.dispose();});}
+  const old=MS.led.map;MS.led.map=ledBoardTex(dirJa(ST[0].y));MS.led.needsUpdate=true;if(old&&old!==texLED)old.dispose();}
 
 function setPSD(P){const o=P.open;P.gz.forEach((z,i)=>{for(const [k,sg] of [[0,-1],[1,1]]){DUMMY.position.set(P.X,P.top+0.6,z+sg*(0.5+0.95*o));DUMMY.rotation.set(0,0,0);DUMMY.scale.set(1,1,1);DUMMY.updateMatrix();P.im.setMatrixAt(i*2+k,DUMMY.matrix);}});P.im.instanceMatrix.needsUpdate=true;P.last=o;}
 function updPSD(dt){for(const st of ST){const P=st.psd;if(!P)continue;const tgt=Math.abs(G.s-st.stop)<0.6&&G.state!=='drive'?G.doors:0;P.open+=(tgt-P.open)*Math.min(1,dt*6);if(Math.abs(P.open-P.last)>0.002)setPSD(P);}}
@@ -1372,12 +1426,13 @@ function buildCar(o){const g=new THREE.Group(),mg={},leaves=[];for(const k of ['
   for(const [k,mat,c] of [['steel',TM.steel,true],['lining',TMI.lining,false],['floor',TMI.floor,false],['seat',TMI.seat,true],['seatBase',TMI.seatBase,false],['metal',TMI.metal,false],['strap',TMI.strap,false],['light',TMI.light,false],['lcd',TMI.lcd,false],['pax',TMI.pax,false],['clear',TMI.clear,false],['glass',TM.glass,false],['rubber',TM.rubber,false],['doorway',TM.doorway,false],['door',o.door,true],['under',TM.under,true],['dark',TM.dark,true],['wheel',TM.wheel,true],['stripe',o.stripe,false],['led',TM.sideLed,false],['ac',TM.acBody,true],['grille',TM.grille,false],['bell',TM.bellows,true],['lamp',TM.doorLamp,false]]){const m=mg[k].mesh(mat,c,true);if(m)g.add(m);}
   let glows=[],front=null;if(o.kind!=='mid'){const f=buildNose(o,o.kind==='lead');if(o.kind==='tail')f.g.rotation.y=Math.PI;g.add(f.g);glows=f.glows;front=f.g;}
   return {g,leaves,glows,front};}
-TM.sideLed=new THREE.MeshBasicMaterial({map:ledTex('山手線　上野・池袋'),color:HDR(0xffffff,1.5)});
+TM.sideLed=new THREE.MeshBasicMaterial({map:ledTex('山手線　'+dirJa(0)),color:HDR(0xffffff,1.5)});
+function refreshTrainLED(){const d=dirJa(ST[0].y);for(const [m,t] of [[TA&&TA.led,'山手線　'+d+' 方面'],[TM.sideLed,'山手線　'+d]]){if(!m)continue;const old=m.map;m.map=ledTex(t);m.needsUpdate=true;if(old)old.dispose();}}
 function buildTrain(style,n){const T0={cars:[],leaves:[],glows:[],front:null};
   const [dm,dr]=doorFilm(style),door=new THREE.MeshPhysicalMaterial({map:dm,roughnessMap:dr,metalness:style==='e235'?.2:.8,roughness:1,clearcoat:.4,clearcoatRoughness:.2,transparent:style==='e235'});
   const stripe=std({color:style==='e235'?0x74bd2e:0x00a7e1,roughness:.45,metalness:.15});
   const face=new THREE.MeshPhysicalMaterial({map:faceTex(style),metalness:.2,roughness:.14,clearcoat:1,clearcoatRoughness:.05});
-  const led=new THREE.MeshBasicMaterial({map:ledTex(style==='e235'?'山手線　上野・池袋 方面':'京浜東北線　大宮'),color:HDR(0xffffff,1.6)});
+  const led=new THREE.MeshBasicMaterial({map:ledTex(style==='e235'?'山手線　'+dirJa(ST[0].y)+' 方面':'京浜東北線　大宮'),color:HDR(0xffffff,1.6)});T0.led=led;
   for(let i=0;i<n;i++){const kind=i===0?'lead':i===n-1?'tail':'mid';const c=buildCar({kind,pant:i===1||i===n-2,style,door,stripe,led,face,anim:style==='e235',interior:style==='e235',seed:i});scene.add(c.g);T0.cars.push(c.g);T0.leaves.push(...c.leaves);T0.glows.push(...c.glows);if(i===0)T0.front=c.front;}
   return T0;}
 const _ta=new THREE.Vector3(),_tb=new THREE.Vector3(),_tfa=new THREE.Vector3(),_tfb=new THREE.Vector3();
@@ -1465,7 +1520,7 @@ function notchTex(){const [c,x]=cv(96,320);x.fillStyle='#1a1d20';x.fillRect(0,0,
   ['EB','B3','B2','B1','N','P1','P2','P3'].forEach((t,i)=>{x.fillStyle=t[0]==='P'?'#7fc4ff':t==='N'?'#fff':t==='EB'?'#ff5a5a':'#ffb35c';x.fillText(t,48,22+i*39);x.fillStyle='rgba(255,255,255,.25)';x.fillRect(12,41+i*39,72,1);});return T(c);}
 function plateTex(t){const [c,x]=cv(256,48);x.fillStyle='#f4f4f2';x.fillRect(0,0,256,48);x.fillStyle='#222';x.font=`bold 30px ${JPF}`;x.textAlign='center';x.textBaseline='middle';x.fillText(t,128,26);return T(c);}
 function diamondTex(){const [c,x]=cv(128,128);x.translate(64,64);x.rotate(Math.PI/4);x.fillStyle='#2e9d4f';x.fillRect(-40,-40,80,80);x.strokeStyle='#fff';x.lineWidth=5;x.strokeRect(-34,-34,68,68);x.rotate(-Math.PI/4);x.fillStyle='#fff';x.font='bold 46px Helvetica,Arial,sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('1',0,3);return T(c);}
-function paperTex(){const [c,x]=cv(256,340);x.fillStyle='#f7f3e6';x.fillRect(0,0,256,340);x.strokeStyle='#999';x.lineWidth=2;x.strokeRect(6,6,244,328);x.fillStyle='#222';x.font=`bold 24px ${JPF}`;x.fillText('山手線 外回り',18,38);x.font=`bold 16px ${JPF}`;x.fillStyle='#666';x.fillText('運転時刻表　1101G',18,64);
+function paperTex(){const [c,x]=cv(256,340);x.fillStyle='#f7f3e6';x.fillRect(0,0,256,340);x.strokeStyle='#999';x.lineWidth=2;x.strokeRect(6,6,244,328);x.fillStyle='#222';x.font=`bold 24px ${JPF}`;x.fillText('山手線 内回り',18,38);x.font=`bold 16px ${JPF}`;x.fillStyle='#666';x.fillText('運転時刻表　1101G',18,64);
   ST.forEach((s,i)=>{const y=112+i*66;x.fillStyle='#222';x.font=`bold 30px ${JPF}`;x.fillText(s.ja,24,y);x.font='bold 28px Helvetica,sans-serif';x.fillText(`17:${30+i*3}`,150,y);x.strokeStyle='#ccc';x.beginPath();x.moveTo(16,y+22);x.lineTo(240,y+22);x.stroke();});return T(c);}
 function watchTex(){const [c,x]=cv(128,128);x.fillStyle='#fffdf5';x.beginPath();x.arc(64,64,60,0,6.2832);x.fill();x.strokeStyle='#b89a4a';x.lineWidth=6;x.stroke();x.strokeStyle='#222';x.lineCap='round';
   for(let i=0;i<12;i++){const a=i/12*6.2832;x.lineWidth=3;x.beginPath();x.moveTo(64+Math.sin(a)*48,64-Math.cos(a)*48);x.lineTo(64+Math.sin(a)*54,64-Math.cos(a)*54);x.stroke();}
@@ -1582,7 +1637,7 @@ function buildCab(car){const cab=new THREE.Group();car.add(cab);CAB.group=cab;
   cab.add(bm.mesh(std({vertexColors:true,roughness:.4,metalness:.3}),false,false));
   // 時刻表架（連燈）＋懷錶
   {const g=new THREE.Group();g.position.set(0.28,2.02,-9.47);g.rotation.x=-0.95;cab.add(g);
-    g.add(new THREE.Mesh(new THREE.BoxGeometry(0.22,0.28,0.012),CM.trim));const p=new THREE.Mesh(new THREE.PlaneGeometry(0.2,0.26),std({map:paperTex(),roughness:.9}));p.position.z=0.007;g.add(p);
+    g.add(new THREE.Mesh(new THREE.BoxGeometry(0.22,0.28,0.012),CM.trim));const p=new THREE.Mesh(new THREE.PlaneGeometry(0.2,0.26),std({map:paperTex(),roughness:.9}));CAB.paper=p.material;p.position.z=0.007;g.add(p);
     const lb=new THREE.Mesh(new THREE.BoxGeometry(0.22,0.02,0.03),CM.trim);lb.position.set(0,0.15,0.02);g.add(lb);
     const n=new THREE.Vector3(0,Math.cos(0.95),Math.sin(0.95));
     const w=new THREE.Mesh(new THREE.CylinderGeometry(0.034,0.034,0.012,28),CM.gold);w.position.set(0.14,2.012,-9.34);w.rotation.x=0.95;cab.add(w);
@@ -1621,7 +1676,7 @@ function drawSpeedLCD(s,kmh){const {x,w,h}=s;x.fillStyle='#04070b';x.fillRect(0,
   x.fillStyle='#121a24';x.fillRect(486,174,136,18);x.fillRect(486,214,136,18);x.fillStyle='#ffa33a';x.fillRect(486,174,136*bc,18);x.fillStyle='#46a8ff';x.fillRect(486,214,136*0.82,18);
   x.textAlign='center';x.fillStyle='#4a5b6c';x.font='bold 16px Helvetica,Arial,sans-serif';x.fillText('E235',534,270);s.t.needsUpdate=true;}
 function drawInfoLCD(s,st,rem,drive){const {x,w}=s;x.fillStyle='#06101c';x.fillRect(0,0,w,s.h);const d=new Date(),p2=n=>String(n).padStart(2,'0');
-  lcdHead(x,w,'山手線 外回り　普通',`${p2(d.getHours())}:${p2(d.getMinutes())}:${p2(d.getSeconds())}`);x.textBaseline='middle';x.textAlign='left';
+  lcdHead(x,w,'山手線 内回り　普通',`${p2(d.getHours())}:${p2(d.getMinutes())}:${p2(d.getSeconds())}`);x.textBaseline='middle';x.textAlign='left';
   x.fillStyle='#8fd3ff';x.font=`bold 24px ${JPF}`;x.fillText(drive?'次は':'ただいま',18,78);
   x.fillStyle='#fff';x.font=`bold 64px ${JPF}`;x.fillText(st.ja,18,132);x.fillStyle='#9fb3c4';x.font='bold 24px Helvetica,Arial,sans-serif';x.fillText(st.en,22,176);
   if(drive){x.textAlign='right';x.fillStyle='#ffd24a';x.font='bold 60px Helvetica,Arial,sans-serif';x.fillText(rem,w-58,132);x.font='bold 26px Helvetica,Arial,sans-serif';x.fillText('m',w-24,142);x.textAlign='left';}
@@ -1638,6 +1693,7 @@ function drawCarsLCD(s){const {x,w}=s;x.fillStyle='#06101c';x.fillRect(0,0,w,s.h
 function drawLCD(){const drive=G.state==='drive'||G.state==='stopped'||G.state==='closing',nx=ST[Math.min(G.next,ST.length-1)],st=drive?nx:ST[G.reached||0],kmh=Math.round(G.v*3.6),rem=Math.max(0,Math.round(nx.stop-G.s)),sec=new Date().getSeconds();
   const k0=kmh+'|'+G.notch+'|'+G.tasc+'|'+G.ats+'|'+(G.doors<0.02),k1=st.ja+'|'+rem+'|'+G.next+'|'+G.reached+'|'+sec+'|'+drive,k2=String(G.doors>0.02);
   if(k0!==CAB.keys[0]){CAB.keys[0]=k0;drawSpeedLCD(CAB.scr[0],kmh);}if(k1!==CAB.keys[1]){CAB.keys[1]=k1;drawInfoLCD(CAB.scr[1],st,rem,drive);}if(k2!==CAB.keys[2]){CAB.keys[2]=k2;drawCarsLCD(CAB.scr[2]);}}
+function refreshCabPaper(){if(!CAB.paper)return;const old=CAB.paper.map;CAB.paper.map=paperTex();CAB.paper.needsUpdate=true;if(old)old.dispose();CAB.keys=['','',''];}
 function updCab(dt){if(!CAB.group||!CAB.group.visible)return;const tgt=G.notch*0.12;CAB.ang+=(tgt-CAB.ang)*Math.min(1,dt*10);CAB.handle.rotation.x=CAB.ang;
   CAB.pilot.material=G.doors<0.02?CAB.lampOn.pilot:CAB.lampOff;CAB.atsLamp.material=G.ats?CAB.lampOn.ats:CAB.lampOff;CAB.tascLamp.material=G.tasc?CAB.lampOn.tasc:CAB.lampOff;
   if(G.time-CAB.lastDraw>0.1){CAB.lastDraw=G.time;drawLCD();}}
@@ -1717,12 +1773,12 @@ let guideT=0;
 function guide(text,speak=false){const el=$('#guide');el.querySelector('.gtext').innerHTML=text;el.classList.remove('hidden');el.style.animation='none';void el.offsetWidth;el.style.animation='';clearTimeout(guideT);guideT=setTimeout(()=>el.classList.add('hidden'),9000);if(speak)return say(text,'zh-HK');return Promise.resolve();}
 function hideGuide(){$('#guide').classList.add('hidden');}
 // ---- 車站／車廂廣播：先日文、後英文（JR 東日本自動廣播風格） ----
-const YAMA='やまのて線、外回り、うえの、いけぶくろ方面行き',YAMA_EN='the Yamanote Line train bound for Ueno and Ikebukuro';
+const lineKana=y=>`やまのて線、内回り、${dirKana(y)}方面行き`,lineEn=y=>`the Yamanote Line train bound for ${dirEn(y)}`;
 function annWelcome(st){return sayAll([[`${st.kana}、${st.kana}。ご乗車、ありがとうございます。`,'ja-JP'],[`Welcome to ${st.en}. Thank you for riding the Yamanote Line.`,'en-US']]);}
 async function annDepart(st){announceChime();const g=SPG;await sleep(1400);if(g!==SPG)return;
-  await sayAll([[`${YAMA}、まもなく、発車いたします。`,'ja-JP'],[`This is ${YAMA_EN}. The train will soon depart.`,'en-US']]);}
-async function annOnboard(st){announceChime();const g=SPG;await sleep(1400);if(g!==SPG)return;
-  await sayAll([[`この電車は、${YAMA}です。次は、${st.kana}です。`,'ja-JP'],[`The next station is ${st.en}.`,'en-US']]);}
+  await sayAll([[`${lineKana(st.y)}、まもなく、発車いたします。`,'ja-JP'],[`This is ${lineEn(st.y)}. The train will soon depart.`,'en-US']]);}
+async function annOnboard(st,from){announceChime();const g=SPG;await sleep(1400);if(g!==SPG)return;
+  await sayAll([[`この電車は、${lineKana(from.y)}です。次は、${st.kana}です。`,'ja-JP'],[`This is ${lineEn(from.y)}. The next station is ${st.en}.`,'en-US']]);}
 async function annApproach(st){announceChime();const g=SPG;await sleep(1400);if(g!==SPG)return;
   await sayAll([[`まもなく、${st.kana}、${st.kana}。お出口は、左側です。`,'ja-JP'],[`We will soon make a brief stop at ${st.en}. The doors on the left side will open.`,'en-US']]);}
 function annArrive(st){return sayAll([[`${st.kana}、${st.kana}。ご乗車、ありがとうございました。`,'ja-JP'],[`${st.en}. ${st.en}. Thank you for riding.`,'en-US']]);}
@@ -2293,6 +2349,21 @@ function setCam(mode,anchor){if(G.cam===mode&&(anchor===undefined||CAM.anchor===
   if(CAB.group)CAB.group.visible=mode==='cab';if(TA&&TA.front)TA.front.visible=mode!=='cab';G.yaw=G.pitch=0;}
 function showActions(which,hot){const a=$('#actions');a.classList.toggle('hidden',!which);if(!which)return;$('#aAnn').disabled=!which.includes('ann');$('#aDoor').disabled=!which.includes('door');$('#aAnn').classList.toggle('hot',hot==='ann');$('#aDoor').classList.toggle('hot',hot==='door');}
 const KB=(c,i,t)=>`<span class="k ${c}">${IC(i)}${t}</span>`;
+/* ---- 山手線一周：分段進度（每段 3 個站，印章記住喺呢部機） ---- */
+const PROG={sec:0,stamps:[]};
+function loadProg(){try{const o=JSON.parse(localStorage.getItem('kg_yamanote')||'{}');if(Number.isInteger(o.sec))PROG.sec=((o.sec%SECN)+SECN)%SECN;if(Array.isArray(o.stamps))PROG.stamps=[...new Set(o.stamps.filter(n=>Number.isInteger(n)&&n>=0&&n<YN))];}catch(e){}}
+function saveProg(){try{localStorage.setItem('kg_yamanote',JSON.stringify(PROG));}catch(e){}}
+const secLabel=k=>`${ylObj(k*2).ja} → ${ylObj(k*2+2).ja}`;
+function applySection(k){applySectionData(k);refreshStationSigns();refreshTrainLED();refreshCabPaper();refreshLandmarks();}
+function updTitleCard(){const t=$('#rjyTxt');if(t)t.textContent=secLabel(PROG.sec);const c=$('#stampCount');if(c)c.textContent=`${PROG.stamps.length}/${YN}`;}
+function openMap(){const svg=$('#ymsvg'),cx=320,cy=232,rx=232,ry=168,cur=[0,1,2].map(i=>(PROG.sec*2+i)%YN);let h=`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="#80C241" stroke-width="12"/>`;
+  for(let y=0;y<YN;y++){const a=-y/YN*Math.PI*2,c=Math.cos(a),sn=Math.sin(a),X=cx+c*rx,Y=cy+sn*ry,done=PROG.stamps.includes(y),isCur=cur.includes(y),nm=YAMA_ST[y][0],fs=nm.length>4?10:isCur?15:13;
+    const anc=c>0.3?'start':c<-0.3?'end':'middle',lx=cx+c*(rx+16),ly=cy+sn*(ry+15)+(sn>0.3?fs:sn<-0.3?-3:4);
+    h+=`<circle cx="${X.toFixed(1)}" cy="${Y.toFixed(1)}" r="${isCur?11:8}" fill="${done?'#e53935':'#fff'}" stroke="${isCur?'#ff9800':'#2e7d32'}" stroke-width="${isCur?5:3}"/><text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anc}" font-size="${fs}" font-weight="${isCur?900:700}" fill="${isCur?'#e65100':'#26323c'}">${nm}</text>`;}
+  h+=`<text x="${cx}" y="${cy-6}" text-anchor="middle" font-size="32" font-weight="900" fill="#2e7d32">山手線</text><text x="${cx}" y="${cy+28}" text-anchor="middle" font-size="18" font-weight="800" fill="#556">印章 ${PROG.stamps.length} / ${YN}</text>`;svg.innerHTML=h;
+  const box=$('#ymsecs');box.innerHTML='';for(let k=0;k<SECN;k++){const b=document.createElement('button'),ok=[1,2].every(i=>PROG.stamps.includes((k*2+i)%YN));b.className='ysec'+(k===PROG.sec?' cur':'')+(ok?' ok':'');b.innerHTML=(ok?IC('star'):'')+secLabel(k);
+    b.onclick=()=>{$('#ymap').classList.add('hidden');startRoute(k);};box.appendChild(b);}
+  $('#ymap').classList.remove('hidden');}
 function setDriveUI(on){for(const s of ['#deck','#cabBtns'])$(s).classList.toggle('hidden',!on);}
 function updNextBox(){const drive=G.state==='drive'||G.state==='stopped'||G.state==='closing',st=drive?ST[Math.min(G.next,ST.length-1)]:ST[G.reached||0];
   $('#nbLbl').textContent=drive?'次は':'ただいま';$('#nbName').textContent=st.ja;$('#nbEn').textContent=st.en;$('#nbCode').textContent=st.code.slice(2);$('#nbDist').classList.toggle('hidden',!drive);}
@@ -2313,8 +2384,8 @@ function setMascon(n,silent){if(!silent&&G.state!=='drive')return;if(n===G.notch
 function qProg(k){$('#qprog').innerHTML=k<0?'':[0,1,2].map(i=>`<i class="${i<k?'done':i===k?'cur':''}"></i>`).join('');}
 function resetGame(){G.gen++;G.s=ST[0].stop;G.prevS=G.s;G.v=0;G.a=0;G.next=1;G.reached=0;G.stars=0;G.doors=1;G.doorT=1;G.tasc=G.ats=G.announced=G.annDone=G.annPrompt=G.annReady=false;G.idleT=0;onc.active=false;stopSpeech();
   $('#starN').textContent='0';hideCard();qProg(-1);for(const s of ['#finish','#banner','#stampFx','#actions','#bOpen'])$(s).classList.add('hidden');setDriveUI(false);hideGuide();resetPeople();setMascon(0,true);}
-function goTitle(){resetGame();SK.active=false;SK.timer=8;G.state='title';setCam('title');$('#hud').classList.add('hidden');$('#title').classList.remove('hidden');}
-async function startRoute(){initAudio();initAudioExtra();resetGame();const gen=G.gen;annWelcome(ST[0]);  // 喺撳掣嗰下即刻講第一句，iPhone／iPad 先會解鎖語音
+function goTitle(){updTitleCard();resetGame();SK.active=false;SK.timer=8;G.state='title';setCam('title');$('#hud').classList.add('hidden');$('#title').classList.remove('hidden');}
+async function startRoute(k=PROG.sec){initAudio();initAudioExtra();if(k!==SEC)applySection(k);resetGame();const gen=G.gen;annWelcome(ST[0]);  // 喺撳掣嗰下即刻講第一句，iPhone／iPad 先會解鎖語音
   
   $('#title').classList.add('hidden');$('#hud').classList.remove('hidden');initHUD();G.catOrder=shuffle(Object.keys(CATS));await departPrep(gen,true);}
 async function departPrep(gen,first){const st=ST[G.reached];G.state='board';G.annDone=false;G.annReady=false;setCam('platform',st.stop);G.doorT=1;updNextBox();
@@ -2332,13 +2403,15 @@ function arriveStop(){G.state='stopped';setMascon(-4,true);$('#bAnn2').classList
 async function onOpenDoor(){if(G.state!=='stopped')return;const gen=G.gen,ok=()=>gen===G.gen,idx=G.next,st=ST[idx];G.state='arrived';$('#bOpen').classList.add('hidden');hideGuide();setDriveUI(false);
   G.reached=idx;updNextBox();setCam('platform',st.stop);showBanner(st);await sleep(500);if(!ok())return;doorChime();G.doorT=1;doorSfx();startAlighting(st);startBoarding(st,2.6);
   await sleep(1700);if(!ok())return;CAM.doorS=st.stop-HEAD+2.47;clearView(frame(CAM.doorS+2.7,-4.9,PT),frame(CAM.doorS-0.3,-2.2,PT),1.4);setCam('door');await annArrive(st);if(!ok())return;await sleep(1800);if(!ok())return;
-  guide(idx>=ST.length-1?`終點站${st.ja}！答啱 3 條題目！`:`${st.ja}站！答啱 3 條題目就可以出發！`);await sleep(1600);if(!ok())return;hideGuide();
-  for(let k=0;k<3;k++){qProg(k);await askUntilCorrect(idx,G.catOrder[((idx-1)*3+k)%G.catOrder.length]);if(!ok())return;G.stars++;$('#starN').textContent=G.stars;popStar();}
-  qProg(-1);await stampFx(st);if(!ok())return;if(idx>=ST.length-1)return finishRoute(gen);G.next=idx+1;departPrep(gen,false);}
-async function finishRoute(gen){G.state='finish';fanfare();$('#fstamps').innerHTML=ST.slice(1).map(s=>stampHTML(s,'mini')).join('');$('#fstars').innerHTML=`${IC('star')} × ${G.stars}`;$('#finish').classList.remove('hidden');confetti(120);
+  guide(idx>=ST.length-1?`${st.ja}站！答啱 3 條題目就完成呢一段！`:`${st.ja}站！答啱 3 條題目就可以出發！`);await sleep(1600);if(!ok())return;hideGuide();
+  for(let k=0;k<3;k++){qProg(k);await askUntilCorrect(Math.min(3,1+Math.floor(SEC/5)+(idx-1)),G.catOrder[((idx-1)*3+k)%G.catOrder.length]);if(!ok())return;G.stars++;$('#starN').textContent=G.stars;popStar();}
+  qProg(-1);if(!PROG.stamps.includes(st.y)){PROG.stamps.push(st.y);saveProg();}await stampFx(st);if(!ok())return;if(idx>=ST.length-1)return finishRoute(gen);G.next=idx+1;departPrep(gen,false);}
+async function finishRoute(gen){G.state='finish';fanfare();const loop=PROG.stamps.length>=YN&&SEC===SECN-1;PROG.sec=(SEC+1)%SECN;saveProg();
+  $('#fTitle').textContent=loop?'山手線一周完成！':`到達 ${ST[ST.length-1].ja}！`;$('#fNext').textContent=`下一段：${secLabel(PROG.sec)}`;
+  $('#fstamps').innerHTML=ST.slice(1).map(s=>stampHTML(s,'mini')).join('');$('#fstars').innerHTML=`${IC('star')} × ${G.stars}　<span class="fcount">印章 ${PROG.stamps.length} / ${YN}</span>`;$('#finish').classList.remove('hidden');confetti(120);
   await annFinish();}
 function updDrive(dt){const st=ST[G.next],rem=st.stop-G.s;
-  if(!G.depAnn&&G.v>1.2){G.depAnn=true;annOnboard(st);}
+  if(!G.depAnn&&G.v>1.2){G.depAnn=true;annOnboard(st,ST[G.reached]);}
   if(!G.announced&&!G.annPrompt&&rem<470){G.annPrompt=true;const b=$('#bAnn2');b.classList.remove('hidden');b.classList.add('hot');guide(`快到站喇！撳${KB('g','mic','到站廣播')}！`);}
   if(!G.tasc&&rem<290&&G.notch<0){G.tasc=true;guide('好叻！TASC 會幫你停喺停車位置！');}
   if(!G.tasc&&rem<150){G.tasc=G.ats=true;guide('要剎車喇！自動剎車幫你停站！');}
@@ -2388,6 +2461,7 @@ function frameLoop(now){requestAnimationFrame(frameLoop);const dt=Math.min(0.05,
 
 /* ======================= 按鍵／鍵盤／拖曳望 ======================= */
 $('#rJY').onclick=()=>startRoute();
+$('#btnMap').onclick=()=>{initAudio();openMap();};$('#ymClose').onclick=()=>$('#ymap').classList.add('hidden');
 $('#btnHome').onclick=()=>goTitle();
 $('#btnMute').onclick=()=>{G.muted=!G.muted;$('#btnMute').innerHTML=IC(G.muted?'mute':'sound');if(BUS)BUS.gain.value=G.muted?0:1;if(G.muted)stopSpeech();};
 $('#qsay').onclick=()=>{if(QS&&!QS.locked)speakQ(QS.q);};
@@ -2414,6 +2488,7 @@ $$('.lv button').forEach(b=>b.onclick=()=>{TL=+b.dataset.l;$$('.lv button').forE
 function boot(){try{
     buildTrack();buildShinViaduct();buildStreets();buildCity();planStreetTrees();buildScenery();buildScenery2();buildTrees();buildHouses();buildStations();buildPeople();
     TA=buildTrain('e235',5);TB=buildTrain('e233',5);for(const c of TB.cars)c.visible=false;TE=buildE5(6);for(const c of TE.cars)c.visible=false;buildCab(TA.cars[0]);buildNotchBar();
+    loadProg();applySection(PROG.sec);updTitleCard();
     G.s=ST[0].stop;G.prevS=G.s;resetPeople();placeTrain(TA,G.s,0,false);G.state='title';updCam(0);updSun();renderer.compile(scene,camera);
     $('#loading').classList.add('hidden');$('#title').classList.remove('hidden');icoWarm();requestAnimationFrame(t=>{last=t;frameLoop(t);});
   }catch(e){console.error(e);$('#loading').innerHTML=`<div>載入失敗，請重新整理</div><div style="font-size:14px;max-width:80vw;color:#a33">${e&&e.message}</div>`;}}
