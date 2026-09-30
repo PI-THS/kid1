@@ -1907,9 +1907,13 @@ function updCab(dt){if(!CAB.group||!CAB.group.visible)return;const tgt=G.notch*0
   if(G.time-CAB.lastDraw>0.1){CAB.lastDraw=G.time;drawLCD();}}
 
 /* ======================= 聲音（全部即時合成，唔使下載） ======================= */
-let AC=null,BUS,SFX,NOISE,BROWN,rumG,rumF,hisG,motG,motO1,motO2,motF,sndT=0;
-function initAudio(){try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}if(AC){if(AC.state!=='running')AC.resume();return;}
-  const C=window.AudioContext||window.webkitAudioContext;if(!C)return;AC=new C();
+let AC=null,BUS,SFX,NOISE,BROWN,rumG,rumF,hisG,motG,motO1,motO2,motF,sndT=0,audStuck=0,kickT=0,audChk=0,audCT=-1;
+// ⚠ iOS：唔好設 audioSession 'playback'——嗰個模式唔可以同其他聲混，日英語音廣播一講嘢就會打斷晒 Web Audio，
+//   關門聲、開門聲、行車聲會冇咗而且唔會自己返嚟；'ambient' 可以同語音廣播一齊出聲（代價：iPad 開咗靜音就冇音效）
+function initAudio(){try{if(navigator.audioSession&&navigator.audioSession.type!=='ambient')navigator.audioSession.type='ambient';}catch(e){}
+  if(!AC)buildAudio();kickAudio(true);}
+function buildAudio(){const C=window.AudioContext||window.webkitAudioContext;if(!C)return;AC=new C();sndT=0;audCT=-1;
+  AC.onstatechange=()=>{if(AC&&AC.state!=='running'&&AC.state!=='closed')setTimeout(()=>kickAudio(false),400);};
   BUS=AC.createGain();BUS.gain.value=G.muted?0:1;const comp=AC.createDynamicsCompressor();BUS.connect(comp).connect(AC.destination);
   SFX=AC.createGain();SFX.gain.value=0.85;SFX.connect(BUS);
   const len=AC.sampleRate*2;NOISE=AC.createBuffer(1,len,AC.sampleRate);BROWN=AC.createBuffer(1,len,AC.sampleRate);
@@ -1919,6 +1923,19 @@ function initAudio(){try{if(navigator.audioSession)navigator.audioSession.type='
   const hf=AC.createBiquadFilter();hf.type='bandpass';hf.frequency.value=1100;hf.Q.value=0.6;hisG=AC.createGain();hisG.gain.value=0;loop(NOISE).connect(hf).connect(hisG).connect(BUS);
   motF=AC.createBiquadFilter();motF.type='bandpass';motF.frequency.value=600;motF.Q.value=3;motG=AC.createGain();motG.gain.value=0;
   motO1=AC.createOscillator();motO1.type='sawtooth';motO2=AC.createOscillator();motO2.type='square';motO1.connect(motF);motO2.connect(motF);motF.connect(motG).connect(BUS);motO1.start();motO2.start();}
+// 叫醒音效：iOS 講完語音、切走 app、鎖機之後 AudioContext 會變 suspended／interrupted；撳極都唔醒（或者時鐘唔行）就喺撳掣嗰下成個重新整過
+function kickAudio(gesture){if(!AC)return;
+  if(gesture&&audStuck>=2&&!(TTS&&TTS.speaking)){rebuildAudio();return;}
+  if(AC.state==='running')return;
+  try{const p=AC.resume();if(p&&p.catch)p.catch(()=>{});}catch(e){}
+  if(gesture){audStuck++;const a=AC;setTimeout(()=>{if(a===AC&&AC.state==='running')audStuck=0;},700);}}
+function rebuildAudio(){const old=AC;AC=null;try{old.close();}catch(e){}sqG=null;buildAudio();initAudioExtra();audStuck=0;try{AC.resume();}catch(e){}}
+function audWatch(dt){if(!AC||document.hidden)return;audChk+=dt;if(audChk<1.5)return;audChk=0;
+  if(AC.state!=='running'){kickAudio(false);audCT=-1;return;}
+  const t=AC.currentTime;if(audCT>=0&&t-audCT<0.05)audStuck=Math.max(audStuck,2);audCT=t;}
+function gestureKick(){const n=performance.now();if(n-kickT<300)return;kickT=n;kickAudio(true);}
+for(const ev of ['touchend','pointerup','keydown'])document.addEventListener(ev,gestureKick,{capture:true,passive:true});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)kickAudio(false);});
 function setTrainSound(v,a){if(!AC)return;const t=AC.currentTime;if(t-sndT<0.08)return;sndT=t;const sp=Math.min(1,v/VMAX);
   rumG.gain.setTargetAtTime(0.05+sp*0.6,t,0.3);rumF.frequency.setTargetAtTime(110+sp*300,t,0.3);hisG.gain.setTargetAtTime(sp*sp*0.09,t,0.3);
   const f=150+v*36;motO1.frequency.setTargetAtTime(f,t,0.1);motO2.frequency.setTargetAtTime(f*1.498,t,0.1);motF.frequency.setTargetAtTime(400+v*60,t,0.2);
@@ -1959,7 +1976,7 @@ let lastCancel=0,SPG=0;
 function say(text,lang='zh-HK'){return new Promise(res=>{if(String(lang).toLowerCase().startsWith('zh')){setTimeout(res,0);return;}if(!TTS||G.muted||!text){setTimeout(res,G.muted?400:0);return;}
   const u=new SpeechSynthesisUtterance(text);u.lang=lang;const v=voiceFor(lang);if(v)u.voice=v;u.volume=1;
   u.rate=lang.startsWith('ja')?0.92:lang.startsWith('en')?0.9:0.92;u.pitch=1.0;
-  let done=false,to=0;const fin=()=>{if(!done){done=true;clearTimeout(to);res();}};u.onend=fin;u.onerror=fin;
+  let done=false,to=0;const fin=()=>{if(!done){done=true;clearTimeout(to);res();if(AC&&AC.state!=='running')setTimeout(()=>kickAudio(false),150);}};u.onend=fin;u.onerror=fin;
   const go=()=>{if(done)return;try{if(TTS.paused)TTS.resume();}catch(e){}TTS.speak(u);to=setTimeout(fin,2500+text.length*(lang.startsWith('en')?95:280));};
   // Safari：cancel() 之後即刻 speak() 會食咗句嘢 → 等 0.22 秒；冇 cancel 過就即刻講（喺撳掣嗰下講，iOS 先會解鎖語音）
   const w=lastCancel+220-performance.now();if(w>0)setTimeout(go,w);else go();});}
@@ -2667,7 +2684,7 @@ function frameLoop(now){requestAnimationFrame(frameLoop);const dt=Math.min(0.05,
   updPSD(dt);updLandmarks(G.time);updOnc(dt);updE5(dt);updBoats(dt);updPeople(dt);updCars(dt);texWaterN.offset.x+=dt*0.004;texWaterN.offset.y+=dt*0.012;
   if(G.v>2&&Math.floor(G.prevS/25)!==Math.floor(G.s/25)){jointClacks(G.v);G.bumpE=0.008+0.012*G.v/VMAX;}G.prevS=G.s;G.bump=(G.bumpE||0)*Math.sin(G.time*38);G.bumpE=(G.bumpE||0)*Math.exp(-dt*9);
   updCam(dt);updSun();updCab(dt);
-  setTrainSound(G.v,G.a);updSqueal(G.v,G.state==='drive'&&(G.notch<0||G.tasc));
+  audWatch(dt);setTrainSound(G.v,G.a);updSqueal(G.v,G.state==='drive'&&(G.notch<0||G.tasc));
   if(G.state!=='title'&&G.state!=='loading')updHUD();if(G.state==='drive'||G.state==='stopped')updDriveHUD();
   if(G.post)composer.render();else renderer.render(scene,camera);
   if(!perfDone&&G.state==='drive'){perfT+=dt;perfN++;if(perfT>4){perfDone=true;const avg=perfT/perfN;if(avg>0.034){G.post=false;setPR(1);}else if(avg>0.024&&PR>1)setPR(1);}}}
@@ -2707,7 +2724,7 @@ function boot(){try{
   }catch(e){console.error(e);$('#loading').innerHTML=`<div>載入失敗，請重新整理</div><div style="font-size:14px;max-width:80vw;color:#a33">${e&&e.message}</div>`;}}
 function iconSheet(keys){const d=document.createElement('div');d.id='sheet';d.style.cssText='position:fixed;inset:0;z-index:99;background:#e9eef3;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:4px;padding:8px';
   for(const k of keys||Object.keys(IB)){const c=document.createElement('div');c.style.cssText='text-align:center;font:11px sans-serif;color:#333';c.innerHTML=`<img src="${icon(k)}" style="width:92px;height:92px;filter:drop-shadow(0 4px 5px rgba(0,0,0,.2))"><div>${k}</div>`;d.appendChild(c);}document.body.appendChild(d);return Object.keys(IB).length;}
-window.__kg={applySection,get LMK(){return LMK;},qtest:(k,l=2)=>{$('#title').classList.add('hidden');showCard(true);renderQ(makeQ(k,l),()=>{});return Object.keys(QT);},iconSheet,icon,get IB(){return IB;},get TE(){return TE;},SK,G,ST,CAM,startRoute,goTitle,setCam,setMascon,stepNotch,onc,CAB,PP,renderer,camera,scene,composer,get QS(){return QS;},onAnnDepart,onCloseDoor,onOpenDoor,onAnnApproach};
+window.__kg={get AC(){return AC;},get BUS(){return BUS;},applySection,get LMK(){return LMK;},qtest:(k,l=2)=>{$('#title').classList.add('hidden');showCard(true);renderQ(makeQ(k,l),()=>{});return Object.keys(QT);},iconSheet,icon,get IB(){return IB;},get TE(){return TE;},SK,G,ST,CAM,startRoute,goTitle,setCam,setMascon,stepNotch,onc,CAB,PP,renderer,camera,scene,composer,get QS(){return QS;},onAnnDepart,onCloseDoor,onOpenDoor,onAnnApproach};
 setTimeout(boot,60);
 
 </script>
