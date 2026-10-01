@@ -357,11 +357,14 @@ button{font-family:inherit;color:inherit;touch-action:manipulation;cursor:pointe
 .ymcard{background:#fff;border-radius:28px;padding:16px 18px 18px;width:min(760px,100%);max-height:100%;overflow:auto;box-shadow:var(--shadow)}
 .ymhead{display:flex;justify-content:space-between;align-items:center;gap:10px}.ymhead h2{margin:0;font-size:clamp(20px,5vw,28px);display:flex;align-items:center;gap:8px}.ymhead h2 .ic{color:var(--jy)}
 #ymsvg{width:100%;height:auto;display:block;font-family:"Hiragino Sans","PingFang HK",sans-serif}
-.ymtip{margin:4px 0 8px;font-weight:800;color:#556;text-align:center}
-.ymsecs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
-.ysec{border:none;border-radius:14px;padding:10px 8px;font-size:16px;font-weight:800;background:#f1f5f0;border-left:6px solid #c5dcb3;display:flex;align-items:center;justify-content:center;gap:6px}
-.ysec.ok{background:#e8f5e1;border-left-color:#43a047}.ysec.ok .ic{color:#f5b400}
-.ysec.cur{background:#fff3c4;border-left-color:#ff9800;box-shadow:0 0 0 3px rgba(255,152,0,.35)}
+/* 揀站畫面：出發／到達＋開始掣 */
+#ymsvg .yst{cursor:pointer}
+.ymtip{margin:4px 2px 8px;font-size:16px;font-weight:800;color:#556;text-align:center}
+.ympick{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ymsel{display:flex;align-items:center;gap:8px;font-size:clamp(20px,4.8vw,28px);flex-wrap:wrap}.ymsel b{font-weight:900;color:#26323c}
+.ymtag{font-size:14px;font-weight:900;color:#fff;border-radius:99px;padding:4px 10px}.ymtag.f{background:#2e9d3a}.ymtag.t{background:#e65100}
+.ymarr{color:#9aa5b1;font-weight:900}.ymn{font-size:16px;font-weight:800;color:#7a8896}
+#ymGo{margin:0;box-shadow:0 7px 0 rgba(0,0,0,.22)}#ymGo:disabled{opacity:.4}
 .fcount{font-size:.8em;color:#556;margin-left:8px}
 
 </style>
@@ -401,12 +404,12 @@ button{font-family:inherit;color:inherit;touch-action:manipulation;cursor:pointe
 <div id="title" class="hidden">
   <div class="logo"><div class="l1">小小車長</div><div class="l2">日本・香港鐵道之旅</div><div class="l3">你做車長！廣播、關門、開車、停站！</div></div>
   <div class="routes">
-    <button class="route go" id="rJY" style="--c:#80C241"><div class="rc">JY</div><div class="rn">山手線</div><div class="re">Yamanote Line</div><div class="rs"><span id="rjyTxt">東京 → 秋葉原</span><span class="rgo"><svg class="ic"><use href="#i-play"/></svg>出發</span></div></button>
-    <button class="route go" id="rEAL" style="--c:#5EB6E4"><div class="rc">EAL</div><div class="rn">東鐵綫</div><div class="re">East Rail Line</div><div class="rs"><span id="realTxt">金鐘 → 紅磡</span><span class="rgo"><svg class="ic"><use href="#i-play"/></svg>出發</span></div></button>
+    <button class="route go" id="rJY" style="--c:#80C241"><div class="rc">JY</div><div class="rn">山手線</div><div class="re">Yamanote Line</div><div class="rs"><span id="rjyTxt">東京 → 秋葉原</span><span class="rgo"><svg class="ic"><use href="#i-play"/></svg>揀站</span></div></button>
+    <button class="route go" id="rEAL" style="--c:#5EB6E4"><div class="rc">EAL</div><div class="rn">東鐵綫</div><div class="re">East Rail Line</div><div class="rs"><span id="realTxt">金鐘 → 紅磡</span><span class="rgo"><svg class="ic"><use href="#i-play"/></svg>揀站</span></div></button>
     <div class="route locked" style="--c:#F15A22"><span class="lock"><svg class="ic"><use href="#i-lock"/></svg></span><div class="rc">JC</div><div class="rn">中央線</div><div class="re">Chūō Line</div><div class="rs">即將開放</div></div>
     <div class="route locked" style="--c:#0072BC"><span class="lock"><svg class="ic"><use href="#i-lock"/></svg></span><div class="rc" style="font-size:17px">新幹線</div><div class="rn">東海道新幹線</div><div class="re">Tōkaidō Shinkansen</div><div class="rs">即將開放</div></div>
   </div>
-  <div class="trow"><button class="small" id="btnMap"><svg class="ic"><use href="#i-loop"/></svg>山手線路線圖 <b id="jyStamps">0/30</b></button><button class="small" id="btnMapE"><svg class="ic"><use href="#i-list"/></svg>東鐵綫路線圖 <b id="ealStamps">0/15</b></button><button class="small" id="btnTest"><svg class="ic"><use href="#i-list"/></svg>題目試玩（家長用）</button></div>
+  <div class="trow"><button class="small" id="btnMap"><svg class="ic"><use href="#i-loop"/></svg>山手線路線圖 <b id="jyStamps">0/30</b></button><button class="small" id="btnMapE"><svg class="ic"><use href="#i-list"/></svg>東鐵綫路線圖 <b id="ealStamps">0/14</b></button><button class="small" id="btnTest"><svg class="ic"><use href="#i-list"/></svg>題目試玩（家長用）</button></div>
 </div>
 
 <div id="hud" class="hidden">
@@ -473,8 +476,9 @@ button{font-family:inherit;color:inherit;touch-action:manipulation;cursor:pointe
 <div id="ymap" class="hidden"><div class="ymcard">
   <div class="ymhead"><h2><svg class="ic"><use href="#i-loop"/></svg><span id="ymTitle">山手線一周旅程</span></h2><button class="small" id="ymClose"><svg class="ic"><use href="#i-close"/></svg>關閉</button></div>
   <svg id="ymsvg" viewBox="0 0 640 468"></svg>
-  <p class="ymtip">揀一段出發（每段 3 個站）</p>
-  <div class="ymsecs" id="ymsecs"></div>
+  <p class="ymtip" id="ymTip">撳地圖上嘅站：先揀出發站，再揀到達站</p>
+  <div class="ympick"><div class="ymsel"><span class="ymtag f">出發</span><b id="ymFrom">東京</b><span class="ymarr">→</span><span class="ymtag t">到達</span><b id="ymTo">秋葉原</b><span class="ymn" id="ymN"></span></div>
+    <button class="bigbtn" id="ymGo"><svg class="ic"><use href="#i-play"/></svg>開始</button></div>
 </div></div>
 
 <div id="fx"></div>
@@ -668,7 +672,8 @@ const LINES={jy:{id:'jy',name:'山手線',en:'Yamanote Line',color:'#80C241',cod
     tx:{next:'次は',now:'ただいま',auto:'TASC',ats:'ATS',door:'戸閉',lcdHead:'山手線 内回り　普通',doorOpen:'ドア開',doorShut:'戸閉 完了',ac:'空調 24℃',paper:['山手線 内回り','運転時刻表　1101G'],model:'E235',stamp:'JR 山手線',plate:'クハE235-1'}},
   eal:{id:'eal',name:'東鐵綫',en:'East Rail Line',color:'#5EB6E4',code:'EAL',loop:false,st:EAL_ST,store:'kg_eastrail',
     tx:{next:'下一站',now:'本站',auto:'ATO',ats:'ATP',door:'車門',lcdHead:'東鐵綫　往羅湖',doorOpen:'車門開',doorShut:'車門已關',ac:'冷氣 24℃',paper:['東鐵綫　往羅湖','行車時間表　E101'],model:'R-Train',stamp:'港鐵 東鐵綫',plate:'E001 R-Train'}}};
-let LINE=LINES.jy,YN=YAMA_ST.length,SECN=YN/2,SEC=0;const MAJ=[0,4,12,16,19,24];
+// SECB＝三個站位入面站位 0 係邊個站（行程可以由任何站開始）
+let LINE=LINES.jy,YN=YAMA_ST.length,SECN=YN/2,SEC=0,SECB=0;const MAJ=[0,4,12,16,19,24];
 function setLineData(id){LINE=LINES[id]||LINES.jy;YN=LINE.st.length;SECN=secCountOf(LINE);}
 const ylObj=y=>{if(!LINE.loop&&(y<0||y>=YN))return null;const i=((y%YN)+YN)%YN,r=LINE.st[i];
   if(LINE.id==='jy'){const [ja,kana,en]=r;return {ja,kana,en,y:i,code:'JY'+String(i+1).padStart(2,'0'),zh:ja,ic:null};}
@@ -676,7 +681,8 @@ const ylObj=y=>{if(!LINE.loop&&(y<0||y>=YN))return null;const i=((y%YN)+YN)%YN,r
 // 行車方向：山手線＝前面最近兩個大站（上野・池袋方面 等）；東鐵綫＝往羅湖
 function dirOf(y){if(LINE.id!=='jy'){const t=ylObj(YN-1);return [t,t];}const d=MAJ.map(m=>[((m-y+YN)%YN)||YN,m]).sort((a,b)=>a[0]-b[0]);return [ylObj(d[0][1]),ylObj(d[1][1])];}
 const dirJa=y=>{const [a,b]=dirOf(y);return a===b?a.ja:a.ja+'・'+b.ja;},dirKana=y=>{const [a,b]=dirOf(y);return a.kana+'、'+b.kana;},dirEn=y=>{const [a,b]=dirOf(y);return a===b?a.en:a.en+' and '+b.en;};
-function applySectionData(k){SEC=LINE.loop?((k%SECN)+SECN)%SECN:clamp(k,0,SECN-1);const y0=secStartOf(LINE,SEC);for(let i=0;i<ST.length;i++){const o=ylObj(y0+i);Object.assign(ST[i],o);ST[i].prev=ylObj(o.y-1);ST[i].next=ylObj(o.y+1);}}
+function applySectionBase(b){SECB=LINE.loop?((b%YN)+YN)%YN:clamp(b,0,YN-3);SEC=Math.floor(SECB/2);for(let i=0;i<ST.length;i++){const o=ylObj(SECB+i);Object.assign(ST[i],o);ST[i].prev=ylObj(o.y-1);ST[i].next=ylObj(o.y+1);}}
+function applySectionData(k){const kk=LINE.loop?((k%SECN)+SECN)%SECN:clamp(k,0,SECN-1);applySectionBase(secStartOf(LINE,kk));SEC=kk;}
 applySectionData(0);
 const PB=125, PF=12;                       // 月台範圍：stop-PB ～ stop+PF
 const inStation=(s,m=0)=>ST.some(q=>s>q.stop-PB-m&&s<q.stop+PF+m);
@@ -1305,7 +1311,7 @@ function lmFill(c,dense=0.85){const big=c.occ.filter(o=>(o[1]-o[0])*(o[3]-o[2])>
 function lmPlace(g,st){const s=st.stop-LMA,P=posAt(s),F=dirAt(s);g.position.set(P.x,0,P.z);g.rotation.y=angOf(F);}
 function refreshLandmarkSets(){for(const k in LMK.built)LMK.built[k].visible=false;const hk=LINE.id==='eal',B=hk?LMB_EAL:LMB,NF=hk?LMNOFILL_EAL:LMNOFILL;
   for(const st of ST){const key=LINE.id+':'+st.y;let g=LMK.built[key];if(!g&&B[st.y]){const c=lmNew();B[st.y](c);if(!NF.includes(st.y))lmFill(c);g=lmFinish(c);g.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=true;}});LMK.built[key]=g;scene.add(g);}if(g){lmPlace(g,st);g.visible=true;}}
-  const shin=!hk&&[0,1,2,3,11,12,13,14].includes(SEC);for(const o of LMK.shv)o.visible=shin;SK.enabled=shin;if(!shin)SK.active=false;}   // 新幹線高架只係山手線有
+  const shin=!hk&&(SECB<=7||SECB>=22);for(const o of LMK.shv)o.visible=shin;SK.enabled=shin;if(!shin)SK.active=false;}   // 新幹線高架只係山手線有
 function updLandmarks(t){for(const k in LMK.built){const g=LMK.built[k];if(g.visible&&g.userData.anim)for(const f of g.userData.anim)f(t);}}
 
 
@@ -1490,7 +1496,7 @@ const TUNM={wall:std({map:texConcrete,color:0x7d7c77,roughness:.95,side:THREE.Do
 const UG_B=135,UG_F=30;   // 地底站外殼：停車位前 135m 至後 30m
 const TPROF=[[-3.4,6.9],[-3.4,13.5],[-2.6,14.3],[6.6,14.3],[7.4,13.5],[7.4,6.9]];
 // 呢一段邊度係隧道、邊個站喺地底
-function tunnelPlan(){const P={key:LINE.id+':'+SEC,ug:[false,false,false],tubes:[],portals:[],hills:[],podiums:[],hoods:[]};if(LINE.id!=='eal')return P;
+function tunnelPlan(){const P={key:LINE.id+':'+SECB,ug:[false,false,false],tubes:[],portals:[],hills:[],podiums:[],hoods:[]};if(LINE.id!=='eal')return P;
   P.ug=ST.map(q=>q.y<=2);const shells=[];ST.forEach((q,i)=>{if(P.ug[i])shells.push([q.stop-UG_B,q.stop+UG_F]);});
   if(P.ug[0]){const last=P.ug.lastIndexOf(true),end=last===2?L:ST[last].stop+150;let s=0;for(const [a,b] of shells){if(a>s)P.tubes.push([s,a]);s=b;}if(end>s)P.tubes.push([s,end]);
     if(end<L){P.portals.push({s:end,dir:-1,kind:'city'});P.podiums.push([end-70,end]);}}
@@ -1510,9 +1516,11 @@ function trackGrid(s0,s1,l0,l1,ds,dl,hf,cf){const pos=[],col=[],idx=[],V=new THR
   for(let s=s0;s<=s1+0.01;s+=ds){rows++;for(let k=0;k<nl;k++){const l=l0+k*dl,h=hf(s,l);frame(s,l,h,V);pos.push(V.x,V.y,V.z);cf(s,l,h,C);col.push(C.r,C.g,C.b);}}
   for(let r=0;r<rows-1;r++)for(let k=0;k<nl-1;k++){const a=r*nl+k,b=a+1,c=a+nl,d=c+1;idx.push(a,c,b,b,c,d);}
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('color',new THREE.Float32BufferAttribute(col,3));g.setIndex(idx);g.computeVertexNormals();return g;}
+// 隧道頂兩角係斜角（TPROF），牆個開口係長方形 → 兩角會留三角形窿望到外面（10-01 用戶：金鐘出發隧道口「損壞、不完整」），用實心方塊補返
+function tubeCorners(m,d){for(const x of [-3.0,7.0])m.add(new THREE.BoxGeometry(0.8,0.8,d),x,13.9,0);}
 function portalWall(G,s,kind,name){const F=dirAt(s),P=posAt(s),g=new THREE.Group();g.position.set(P.x,0,P.z);g.rotation.y=angOf(F);G.add(g);const m=new Merger();
   const top=kind==='hill'?26:17;m.add(new THREE.BoxGeometry(10,top-6,2.2),-8.4,(top+6)/2,0);m.add(new THREE.BoxGeometry(10,top-6,2.2),12.4,(top+6)/2,0);m.add(new THREE.BoxGeometry(10.8,top-14.3,2.2),2,(top+14.3)/2,0);
-  m.add(new THREE.BoxGeometry(31,0.8,2.8),2,top,0);g.add(m.mesh(TUNM.portal,true,true));
+  m.add(new THREE.BoxGeometry(31,0.8,2.8),2,top,0);tubeCorners(m,2.2);g.add(m.mesh(TUNM.portal,true,true));
   if(name){const t=new THREE.Mesh(new THREE.PlaneGeometry(9,2.2),new THREE.MeshBasicMaterial({map:boardTex(name,'#ffffff','#37474f'),color:HDR(0xffffff,1.1)}));t.position.set(2,18.2,-1.15);t.rotation.y=Math.PI;g.add(t);
     const t2=t.clone();t2.position.z=1.15;t2.rotation.y=0;g.add(t2);}}
 function buildTunnelSet(P){const G=new THREE.Group();scene.add(G);
@@ -1553,7 +1561,8 @@ function buildShell(i){const st=ST[i],a=st.stop-UG_B,b=st.stop+UG_F,G=new THREE.
   const lm=new Merger(),V=new THREE.Vector3();for(let s=a+3;s<b-2;s+=6){for(const lat of [-7.5,-4.2,0.2,4.2]){frame(s,lat,14.45,V);lm.add(new THREE.BoxGeometry(0.3,0.08,5),V.x,V.y,V.z,0,angOf(dirAt(s)),0);}}G.add(lm.mesh(TUNM.lamp,false,false));
   mesh(sweep([[-2.12,top+2.35],[-2.12,top+2.95]],st.stop-PB,st.stop+PF,2,0,4,4),TUNM.glass,false,false,G);mesh(sweep([[-2.22,top+2.95],[-2.22,top+3.45],[-2.02,top+3.45],[-2.02,top+2.95]],st.stop-PB,st.stop+PF,2,0,4,4),TUNM.head,false,false,G);
   for(const s of [a,b]){const F=dirAt(s),P=posAt(s),g=new THREE.Group();g.position.set(P.x,0,P.z);g.rotation.y=angOf(F);G.add(g);const m=new Merger();
-    m.add(new THREE.BoxGeometry(7.8,9.1,0.6),-7.3,10.05,0);m.add(new THREE.BoxGeometry(1.0,7.7,0.6),7.9,10.75,0);m.add(new THREE.BoxGeometry(10.8,0.3,0.6),2,14.45,0);g.add(m.mesh(TUNM.wall,false,true));}
+    m.add(new THREE.BoxGeometry(7.8,9.1,0.6),-7.3,10.05,0);m.add(new THREE.BoxGeometry(1.0,7.7,0.6),7.9,10.75,0);m.add(new THREE.BoxGeometry(10.8,0.3,0.6),2,14.45,0);
+    tubeCorners(m,0.6);g.add(m.mesh(TUNM.wall,false,true));}
   const sm=std({map:ugNameTex(st,'#8e9aa6'),roughness:.5,emissive:0xffffff,emissiveIntensity:.25});sm.emissiveMap=sm.map;const names=[];
   for(let s=st.stop-110;s<=st.stop+10;s+=24){const P=frame(s,8.2,10.2),F=dirAt(s),p=new THREE.Mesh(new THREE.PlaneGeometry(9,2.25),sm);p.position.copy(P);p.rotation.y=angOf(F)-Math.PI/2;G.add(p);names.push(p);}
   G.visible=false;return {G,band,sm,st:null};}
@@ -2107,7 +2116,7 @@ function buildCar(o){const g=new THREE.Group(),mg={},leaves=[];for(const k of ['
   let glows=[],front=null,nose=null;if(o.kind!=='mid'){const f=buildNose(o,o.kind==='lead');if(o.kind==='tail')f.g.rotation.y=Math.PI;g.add(f.g);glows=f.glows;front=f.g;nose=f;}
   return {g,leaves,glows,front,nose};}
 TM.sideLed=new THREE.MeshBasicMaterial({map:ledTex('山手線　'+dirJa(0)),color:HDR(0xffffff,1.5)});
-function refreshParallelLine(){if(!TB||!TB.stripe)return;if(LINE.id==='eal'){const old=TB.led.map;TB.led.map=ledTex('金鐘　Admiralty','#ff5a3a');TB.led.needsUpdate=true;if(old)old.dispose();return;}const west=SEC>=4&&SEC<=10;TB.stripe.color.set(west?0x00ac9a:0x00a7e1);const old=TB.led.map;TB.led.map=ledTex(west?'埼京線　大宮':(SEC>=11?'京浜東北線　大宮':'京浜東北線　大船'));TB.led.needsUpdate=true;if(old)old.dispose();}
+function refreshParallelLine(){if(!TB||!TB.stripe)return;if(LINE.id==='eal'){const old=TB.led.map;TB.led.map=ledTex('金鐘　Admiralty','#ff5a3a');TB.led.needsUpdate=true;if(old)old.dispose();return;}const west=SECB>=8&&SECB<=21;TB.stripe.color.set(west?0x00ac9a:0x00a7e1);const old=TB.led.map;TB.led.map=ledTex(west?'埼京線　大宮':(SECB>=22?'京浜東北線　大宮':'京浜東北線　大船'));TB.led.needsUpdate=true;if(old)old.dispose();}
 function refreshTrainLED(){const hk=LINE.id==='eal',d=dirJa(ST[0].y);for(const [m,t] of [[TA&&TA.led,hk?'羅湖　Lo Wu':'山手線　'+d+' 方面'],[TM.sideLed,hk?'東鐵綫　往羅湖':'山手線　'+d]]){if(!m)continue;const old=m.map;m.map=hk?ledTex(t,'#ff5a3a'):ledTex(t);m.needsUpdate=true;if(old)old.dispose();}}
 // 車廂門頂 LCD：跟住下一站／本站轉字
 let carLcdKey='';
@@ -2398,14 +2407,16 @@ function updCab(dt){if(!CAB.group||!CAB.group.visible)return;const tgt=G.notch*0
   if(G.time-CAB.lastDraw>(LOWQ?0.2:0.1)){CAB.lastDraw=G.time;drawLCD();}}
 
 /* ======================= 聲音（全部即時合成，唔使下載） ======================= */
-let AC=null,BUS,SFX,NOISE,BROWN,rumG,rumF,hisG,motG,motO1,motO2,motF,sndT=0,audStuck=0,kickT=0,audChk=0,audCT=-1;
+let AC=null,BUS,SFX,VOXN=null,TDUCK=null,NOISE,BROWN,rumG,rumF,hisG,motG,motO1,motO2,motF,sndT=0,audStuck=0,kickT=0,audChk=0,audCT=-1;
 // ⚠ iOS：唔好設 audioSession 'playback'——嗰個模式唔可以同其他聲混，日英語音廣播一講嘢就會打斷晒 Web Audio，
 //   關門聲、開門聲、行車聲會冇咗而且唔會自己返嚟；'ambient' 可以同語音廣播一齊出聲（代價：iPad 開咗靜音就冇音效）
 function initAudio(){try{if(navigator.audioSession&&navigator.audioSession.type!=='ambient')navigator.audioSession.type='ambient';}catch(e){}
   if(!AC)buildAudio();kickAudio(true);}
 function buildAudio(){const C=window.AudioContext||window.webkitAudioContext;if(!C)return;AC=new C();sndT=0;audCT=-1;
   AC.onstatechange=()=>{if(AC&&AC.state!=='running'&&AC.state!=='closed')setTimeout(()=>kickAudio(false),400);};
-  BUS=AC.createGain();BUS.gain.value=G.muted?0:1;const comp=AC.createDynamicsCompressor();BUS.connect(comp).connect(AC.destination);
+  BUS=AC.createGain();BUS.gain.value=G.muted?0:1;TDUCK=AC.createGain();const comp=AC.createDynamicsCompressor();BUS.connect(TDUCK).connect(comp).connect(AC.destination);
+  // 廣播聲檔（普通話／英文）自己一條路：唔經行車聲嗰個壓縮器（10-01 用戶：國語有時細聲＝行車聲大時壓縮器連聲檔一齊壓細），淨係限住頂峰唔好爆
+  VOXN=AC.createDynamicsCompressor();VOXN.threshold.value=-4;VOXN.knee.value=4;VOXN.ratio.value=20;VOXN.attack.value=0.002;VOXN.release.value=0.12;VOXN.connect(AC.destination);
   SFX=AC.createGain();SFX.gain.value=0.85;SFX.connect(BUS);
   const len=AC.sampleRate*2;NOISE=AC.createBuffer(1,len,AC.sampleRate);BROWN=AC.createBuffer(1,len,AC.sampleRate);
   {const w=NOISE.getChannelData(0),b=BROWN.getChannelData(0);let l=0;for(let i=0;i<len;i++){const r=Math.random()*2-1;w[i]=r;l=(l+0.02*r)/1.02;b[i]=l*3.5;}const d=b[len-1]-b[0];for(let i=0;i<len;i++)b[i]-=d*i/(len-1);}
@@ -2483,16 +2494,28 @@ function say(text,lang='zh-HK',ann=false){return new Promise(res=>{if(!ann&&Stri
 // ⚠ 一次只可以有一段廣播：新廣播開始就截停舊嗰段（唔係兩段會交叉排隊，日文英文次序亂晒）
 // 預先錄好嘅廣播聲檔（東鐵綫普通話／英文，用 Kokoro 開源語音生成，Apache-2.0）：key → base64 m4a；由 voice_clips.js 填入
 // ⚠ iOS 機預設語言係中文（香港）嘅時候，網頁語音就算指明普通話都會用廣東話讀，所以普通話一定要用錄好嘅聲檔
-const VCLIP={},VTXT={},VBUF={};let CLIPSRC=null;
+const VCLIP={},VTXT={},VBUF={},VGAIN={};let CLIPSRC=null;
+// 聲檔音量統一：計每段「有聲部分」（每 20 毫秒一格，最大以下 30dB 內）嘅 RMS，調到 −16 dBFS，
+// 再經限幅器（佢自動補約 +1.3 dB）＝ 出口約 −14.7 dBFS ＝ Apple 語音（善怡）實測響度（Mac 錄出：粵 −14.8、英 −15.6）
+// Kokoro 原檔普通話 −22.5、英文 −21.6；舊接法（經行車聲壓縮器）出口約 −19.5，行車時再被壓細，所以之前細聲 5 dB 以上
+const VOX_T=Math.pow(10,-16/20);
+function clipNorm(b){const x=b.getChannelData(0),fr=Math.max(1,Math.round(b.sampleRate*0.02)),n=Math.floor(x.length/fr);if(!n)return 1;const e=new Float32Array(n);let mx=0;
+  for(let i=0;i<n;i++){let q=0;for(let j=i*fr,J=j+fr;j<J;j++)q+=x[j]*x[j];e[i]=q/fr;if(e[i]>mx)mx=e[i];}
+  let sm=0,c=0;for(let i=0;i<n;i++)if(e[i]>mx*0.001){sm+=e[i];c++;}const rms=Math.sqrt(sm/Math.max(1,c));return clamp(VOX_T/Math.max(rms,1e-4),0.5,4);}
 async function clipBuf(k){if(VBUF[k])return VBUF[k];const b64=VCLIP[k];if(!b64||!AC)return null;const bin=atob(b64),u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);
-  VBUF[k]=await new Promise((res,rej)=>AC.decodeAudioData(u8.buffer,res,rej)).catch(()=>null);return VBUF[k];}
+  VBUF[k]=await new Promise((res,rej)=>AC.decodeAudioData(u8.buffer,res,rej)).catch(()=>null);if(VBUF[k])VGAIN[k]=clipNorm(VBUF[k]);return VBUF[k];}
 function playClip(k){return new Promise(res=>{clipBuf(k).then(b=>{if(!b||!AC||G.muted){res(!!b);return;}let done=false;const fin=()=>{if(!done){done=true;if(CLIPSRC===src)CLIPSRC=null;res(true);}};
-  const src=AC.createBufferSource();src.buffer=b;src.connect(BUS);src.onended=fin;kickAudio(false);src.start();CLIPSRC=src;setTimeout(fin,b.duration*1000+900);});});}
+  const src=AC.createBufferSource(),g=AC.createGain();src.buffer=b;g.gain.value=VGAIN[k]||1;src.connect(g).connect(VOXN||BUS);src.onended=fin;kickAudio(false);src.start();CLIPSRC=src;setTimeout(fin,b.duration*1000+900);});});}
+// 廣播期間行車聲收細一半（三種語言都清楚啲；廣東話係 iPad 語音唔經 Web Audio，所以只可以收細背景）
+function duckTrain(on){if(!AC||!TDUCK)return;TDUCK.gain.setTargetAtTime(on?0.5:1,AC.currentTime,on?0.15:0.4);}
 function preloadClips(keys){for(const k of keys)if(VCLIP[k])clipBuf(k);}
 // 一段廣播：[文字, 語言] 用網頁語音；{c:聲檔key, t:文字, l:語言} 有聲檔就播聲檔，冇就用網頁語音頂住
-async function sayAll(parts){stopSpeech();const g=SPG;for(const p of parts){if(g!==SPG)return;if(Array.isArray(p)){await say(p[0],p[1],true);continue;}
-  if(p.c&&VCLIP[p.c]&&AC){await playClip(p.c);if(g===SPG)await sleep(p.gap??260);}else await say(p.t,p.l,true);}}
-function stopSpeech(){SPG++;if(CLIPSRC){try{CLIPSRC.stop();}catch(e){}CLIPSRC=null;}if(TTS&&(TTS.speaking||TTS.pending)){TTS.cancel();lastCancel=performance.now();}}
+// 一段段講（廣東話語音 → 普通話聲檔 → 英文聲檔）；語音講完先停 0.3 秒再播聲檔（iPad 語音講完要等一陣先完全放返其他聲，太快接住播會細聲）
+async function sayAll(parts){stopSpeech();const g=SPG;if(parts.length)duckTrain(true);let prevTTS=false;
+  for(const p of parts){if(g!==SPG)return;if(Array.isArray(p)){await say(p[0],p[1],true);prevTTS=true;continue;}
+    if(p.c&&VCLIP[p.c]&&AC){if(prevTTS){await sleep(300);if(g!==SPG)return;}await playClip(p.c);prevTTS=false;if(g===SPG)await sleep(p.gap??260);}else{await say(p.t,p.l,true);prevTTS=true;}}
+  if(g===SPG)duckTrain(false);}
+function stopSpeech(){SPG++;duckTrain(false);if(CLIPSRC){try{CLIPSRC.stop();}catch(e){}CLIPSRC=null;}if(TTS&&(TTS.speaking||TTS.pending)){TTS.cancel();lastCancel=performance.now();}}
 function unlockSpeech(){if(!TTS||TTS.speaking||TTS.pending)return;const u=new SpeechSynthesisUtterance(' ');u.volume=0;TTS.speak(u);}
 
 
@@ -2529,7 +2552,7 @@ const ealParts=(...ks)=>ks.flatMap(k=>[[VTXT['c_'+k]||'','zh-HK'],{c:'p_'+k,t:VT
 const EAL_LV=['MKK','KOT','UNI','LOW'],ealEnd=st=>st.y===LINES.eal.st.length-1;
 const ANN_EAL={welcome:st=>ealParts(st.code==='ADM'?'pa_adm':st.y<=2?'pa_ug':'pa_sf'),depart:()=>ealParts('dep'),onboard:st=>ealParts('next_'+st.y),
   approach:st=>ealParts(EAL_LV.includes(st.code)?'gaplv':'gap',...(ealEnd(st)?['end']:[])),arrive:st=>ealEnd(st)?ealParts('thanks','exit'):[],
-  close:()=>ealParts('close'),finish:()=>ealEnd(ST[ST.length-1])?[]:ealParts('thanks')};
+  close:()=>ealParts('close'),finish:()=>ealEnd(ST[G.reached])?[]:ealParts('thanks')};
 const annSet=()=>LINE.id==='eal'?ANN_EAL:ANN_JY,annChime=()=>{if(LINE.id!=='eal')announceChime();},annLead=()=>LINE.id==='eal'?350:1400;
 function annWelcome(st){return sayAll(annSet().welcome(st));}
 async function annDepart(st){annChime();const g=SPG;await sleep(annLead());if(g!==SPG)return;await sayAll(annSet().depart(st));}
@@ -3116,40 +3139,74 @@ function setCam(mode,anchor){if(G.cam===mode&&(anchor===undefined||CAM.anchor===
   if(CAB.group)CAB.group.visible=mode==='cab';if(TA&&TA.front)TA.front.visible=mode!=='cab';G.yaw=G.pitch=0;}
 function showActions(which,hot){const a=$('#actions');a.classList.toggle('hidden',!which);if(!which)return;$('#aAnn').disabled=!which.includes('ann');$('#aDoor').disabled=!which.includes('door');$('#aAnn').classList.toggle('hot',hot==='ann');$('#aDoor').classList.toggle('hot',hot==='door');}
 const KB=(c,i,t)=>`<span class="k ${c}">${IC(i)}${t}</span>`;
-/* ---- 分段進度（山手線 15 段一周／東鐵綫 7 段全程；每段 3 個站，印章記住喺呢部機，每條綫分開儲） ---- */
+/* ---- 行程同進度：玩家自己揀出發站同到達站（10-01 用戶要求）；印章記住喺呢部機，每條綫分開儲 ---- */
 // 印章用站序號儲；n＝儲嗰陣條綫有幾多個站。東鐵綫舊紀錄（冇 n，15 個站連馬場）：拎走馬場（8），之後嘅站號減 1
-const PROG={sec:0,stamps:[]};
-function progOf(id){const Ld=LINES[id],N=Ld.st.length,SN=secCountOf(Ld),o={sec:0,stamps:[]};
+// from／to＝下次建議行程（主頁卡同揀站畫面預先揀好）；舊紀錄冇就由 sec 推
+// 行程合唔合法：直綫（東鐵綫）只可以向羅湖方向行；山手線係環狀，順內回り方向去邊個站都得
+const tripOK=(Ld,f,t)=>{const N=Ld.st.length;return Number.isInteger(f)&&Number.isInteger(t)&&f>=0&&t>=0&&f<N&&t<N&&f!==t&&(Ld.loop||t>f);};
+const tripLabel=(id,f,t)=>`${LINES[id].st[f][0]} → ${LINES[id].st[t][0]}`;
+const PROG={sec:0,stamps:[],from:0,to:2};
+function progOf(id){const Ld=LINES[id],N=Ld.st.length,SN=secCountOf(Ld),o={sec:0,stamps:[],from:0,to:2};
   try{const j=JSON.parse(localStorage.getItem(Ld.store)||'{}');let st=Array.isArray(j.stamps)?j.stamps:[];if(id==='eal'&&j.n===undefined&&st.length)st=st.filter(n=>n!==8).map(n=>n>8?n-1:n);
-    if(Number.isInteger(j.sec))o.sec=((j.sec%SN)+SN)%SN;o.stamps=[...new Set(st.filter(n=>Number.isInteger(n)&&n>=0&&n<N))];}catch(e){}return o;}
+    if(Number.isInteger(j.sec))o.sec=((j.sec%SN)+SN)%SN;o.stamps=[...new Set(st.filter(n=>Number.isInteger(n)&&n>=0&&n<N))];
+    const f0=secStartOf(Ld,o.sec);o.from=f0;o.to=Ld.loop?(f0+2)%N:f0+2;if(tripOK(Ld,j.from,j.to)){o.from=j.from;o.to=j.to;}}catch(e){}return o;}
 function loadProg(){Object.assign(PROG,progOf(LINE.id));}
-function saveProg(){try{localStorage.setItem(LINE.store,JSON.stringify({sec:PROG.sec,stamps:PROG.stamps,n:YN}));}catch(e){}}
-const secLabelOf=(id,k)=>{const Ld=LINES[id],S=Ld.st,N=S.length,a=secStartOf(Ld,k);return `${S[a%N][0]} → ${S[(a+2)%N][0]}`;},secLabel=k=>secLabelOf(LINE.id,k);
+function saveProg(){try{localStorage.setItem(LINE.store,JSON.stringify({sec:PROG.sec,stamps:PROG.stamps,n:YN,from:PROG.from,to:PROG.to}));}catch(e){}}
+// 行程經過嘅站（順方向）
+function tripStations(Ld,f,t){const N=Ld.st.length,out=[f];let y=f;while(y!==t&&out.length<=N){y=(y+1)%N;out.push(y);}return out;}
+// 路軌得 3 個站位：長行程拆做幾程，每程用站位 0→2（行兩個站）；單數站距就頭一程淨係行一個站（站位 0→1），
+// 但係直綫最尾一個站之後冇站（例如上水→羅湖）就改用站位 1→2
+function planSegs(Ld,ys){const N=Ld.st.length,H=ys.length-1,segs=[];let i=0;
+  if(H%2){const y0=ys[0];segs.push(Ld.loop||y0+2<=N-1?{base:y0,i0:0,i1:1}:{base:y0-1,i0:1,i1:2});i=1;}
+  for(;i<H;i+=2)segs.push({base:ys[i],i0:0,i1:2});return segs;}
+const TRIP={id:'jy',from:0,to:2,ys:[0,1,2],segs:[{base:0,i0:0,i1:2}],seg:0,done:0};
+// 主頁背景：擺去建議行程嘅起點
+function applyTripStart(){const sg=planSegs(LINE,tripStations(LINE,PROG.from,PROG.to))[0];applySectionBase(sg.base);applySectionVisuals();}
 function applySectionVisuals(){refreshStationSigns();refreshTrainLED();refreshParallelLine();refreshCabPaper();refreshLandmarks();refreshLandmarkSets();refreshTunnels();lodScan();}
 function applySection(k){applySectionData(k);applySectionVisuals();}
 // 換綫：站牌／閘門、列車塗裝、駕駛室、遠景同街景、HUD 顏色同燈號
 function switchLineVisuals(){document.documentElement.style.setProperty('--jy',LINE.color);restyleStations();restyleTrains();restyleCab();restyleScenery();lodScan();
   $('#tascLamp').textContent=LINE.tx.auto;$('#atsLamp').textContent=LINE.tx.ats;$('#doorLamp').textContent=LINE.tx.door;}
-function updTitleCard(){for(const id of ['jy','eal']){const p=progOf(id),t=$('#r'+id+'Txt');if(t)t.textContent=secLabelOf(id,p.sec);const c=$('#'+id+'Stamps');if(c)c.textContent=`${p.stamps.length}/${LINES[id].st.length}`;}}
-function openMap(id=LINE.id){const P=progOf(id),Ld=LINES[id],S=Ld.st,N=S.length,SN=secCountOf(Ld),col=Ld.color,svg=$('#ymsvg'),cur=[0,1,2].map(i=>(secStartOf(Ld,P.sec)+i)%N);let h='';
-  $('#ymTitle').textContent=Ld.loop?`${Ld.name}一周旅程`:`${Ld.name}全程旅程`;
-  if(Ld.loop){const cx=320,cy=232,rx=232,ry=168;h=`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="${col}" stroke-width="12"/>`;
-    for(let y=0;y<N;y++){const a=-y/N*Math.PI*2,c=Math.cos(a),sn=Math.sin(a),X=cx+c*rx,Y=cy+sn*ry,done=P.stamps.includes(y),isCur=cur.includes(y),nm=S[y][0],fs=nm.length>4?10:isCur?15:13;
-      const anc=c>0.3?'start':c<-0.3?'end':'middle',lx=cx+c*(rx+16),ly=cy+sn*(ry+15)+(sn>0.3?fs:sn<-0.3?-3:4);
-      h+=`<circle cx="${X.toFixed(1)}" cy="${Y.toFixed(1)}" r="${isCur?11:8}" fill="${done?'#e53935':'#fff'}" stroke="${isCur?'#ff9800':'#2e7d32'}" stroke-width="${isCur?5:3}"/><text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anc}" font-size="${fs}" font-weight="${isCur?900:700}" fill="${isCur?'#e65100':'#26323c'}">${nm}</text>`;}
+function updTitleCard(){for(const id of ['jy','eal']){const p=progOf(id),t=$('#r'+id+'Txt');if(t)t.textContent=tripLabel(id,p.from,p.to);const c=$('#'+id+'Stamps');if(c)c.textContent=`${p.stamps.length}/${LINES[id].st.length}`;}}
+// 揀站畫面（路線圖）：撳一個站做出發站、再撳一個站做到達站，之後撳「開始」；印章站係紅色
+const PICK={id:'jy',from:0,to:2,step:0};
+function openMap(id=LINE.id){const P=progOf(id);Object.assign(PICK,{id,from:P.from,to:P.to,step:0});drawPick();$('#ymap').classList.remove('hidden');}
+function pickTip(t){$('#ymTip').textContent=t;}
+function pickTap(y){const Ld=LINES[PICK.id],N=Ld.st.length;clickSfx();
+  if(PICK.step===0){if(!Ld.loop&&y>=N-1){pickTip(`${Ld.st[y][0]}係尾站，唔可以由呢度出發，揀第二個站啦`);return;}PICK.from=y;PICK.to=null;PICK.step=1;}
+  else if(y===PICK.from)return;
+  else if(tripOK(Ld,PICK.from,y)){PICK.to=y;PICK.step=0;}
+  else if(!Ld.loop&&y<N-1)PICK.from=y;   // 東鐵綫撳咗出發站之前嘅站：當改出發站
+  drawPick();}
+function drawPick(){const id=PICK.id,P=progOf(id),Ld=LINES[id],S=Ld.st,N=S.length,col=Ld.color,svg=$('#ymsvg'),f=PICK.from,t=PICK.to;
+  const on=new Set(t===null?[f]:tripStations(Ld,f,t)),can=y=>PICK.step===0?(Ld.loop||y<N-1):(y!==f&&(Ld.loop||y>f));
+  const HI='#ff9800',FC='#2e9d3a',TC='#e65100';
+  $('#ymTitle').textContent=`${Ld.name}：揀出發站同到達站`;let h='';
+  // 一個站：透明大圓（易撳）＋站圈＋站名；出發／到達加標籤
+  // 標籤擺站點側邊（直綫：左邊；環狀：圈入面），唔遮其他站名
+  const node=(i,X,Y,label,base,TX,TY)=>{const isF=i===f,isT=i===t,inT=on.has(i),done=P.stamps.includes(i),dim=!can(i)&&!isF&&!isT,x=X.toFixed(1),y=Y.toFixed(1);
+    let g=`<g class="yst" data-y="${i}"${dim?' opacity=".35"':''}><circle cx="${x}" cy="${y}" r="19" fill="#fff" fill-opacity="0"/>`+
+      `<circle cx="${x}" cy="${y}" r="${isF||isT?12:inT?9.5:7.5}" fill="${done?'#e53935':'#fff'}" stroke="${isF?FC:isT?TC:inT?HI:base}" stroke-width="${isF||isT?6:inT?5:3}"/>`+label(inT||isF||isT);
+    if(isF||isT){const c=isF?FC:TC;g+=`<rect x="${(TX-22).toFixed(1)}" y="${(TY-11).toFixed(1)}" width="44" height="22" rx="11" fill="${c}"/><text x="${TX.toFixed(1)}" y="${(TY+5).toFixed(1)}" text-anchor="middle" font-size="14" font-weight="900" fill="#fff">${isF?'出發':'到達'}</text>`;}
+    return g+'</g>';};
+  if(Ld.loop){const cx=320,cy=232,rx=232,ry=168,pt=y=>{const a=-y/N*Math.PI*2;return [cx+Math.cos(a)*rx,cy+Math.sin(a)*ry];};
+    h=`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="${col}" stroke-width="12"/>`;
+    if(on.size>1)h+=`<polyline points="${[...on].map(y=>pt(y).map(v=>v.toFixed(1)).join(',')).join(' ')}" fill="none" stroke="${HI}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>`;
+    for(let y=0;y<N;y++){const a=-y/N*Math.PI*2,c=Math.cos(a),sn=Math.sin(a),[X,Y]=pt(y),nm=S[y][0];
+      h+=node(y,X,Y,hl=>{const fs=nm.length>4?10:hl?14:13,anc=c>0.3?'start':c<-0.3?'end':'middle',lx=cx+c*(rx+16),ly=cy+sn*(ry+15)+(sn>0.3?fs:sn<-0.3?-3:4);
+        return `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anc}" font-size="${fs}" font-weight="${hl?900:700}" fill="${hl?'#e65100':'#26323c'}">${nm}</text>`;},'#2e7d32',X-c*44,Y-sn*36);}
     h+=`<text x="${cx}" y="${cy-6}" text-anchor="middle" font-size="32" font-weight="900" fill="#2e7d32">${Ld.name}</text><text x="${cx}" y="${cy+28}" text-anchor="middle" font-size="18" font-weight="800" fill="#556">印章 ${P.stamps.length} / ${N}</text>`;}
   else{// 直綫：金鐘喺下面、羅湖喺上面（好似真地圖咁由南向北），維港畫喺會展同紅磡之間
     const X0=210,Yb=446,Yt=24,dy=(Yb-Yt)/(N-1),Y=i=>Yb-i*dy,XX=i=>X0+Math.sin(i/(N-1)*Math.PI*1.6)*26;
     h+=`<path d="M0 ${(Y(1)+Y(2))/2+10} Q160 ${(Y(1)+Y(2))/2-4} 640 ${(Y(1)+Y(2))/2+8} L640 ${(Y(1)+Y(2))/2+22} Q160 ${(Y(1)+Y(2))/2+12} 0 ${(Y(1)+Y(2))/2+24}Z" fill="#b9e3f7"/><text x="560" y="${(Y(1)+Y(2))/2+19}" font-size="12" font-weight="800" fill="#4a90b8">維多利亞港</text>`;
     h+=`<polyline points="${S.map((_,i)=>XX(i).toFixed(1)+','+Y(i).toFixed(1)).join(' ')}" fill="none" stroke="${col}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>`;
-    for(let i=0;i<N;i++){const done=P.stamps.includes(i),isCur=cur.includes(i),x=XX(i),y=Y(i);
-      h+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${isCur?10:7.5}" fill="${done?'#e53935':'#fff'}" stroke="${isCur?'#ff9800':'#1f6f9c'}" stroke-width="${isCur?5:3}"/>`+
-        `<text x="${(x+18).toFixed(1)}" y="${(y+5).toFixed(1)}" font-size="${isCur?16:14}" font-weight="${isCur?900:800}" fill="${isCur?'#e65100':'#26323c'}">${S[i][0]}<tspan dx="6" font-size="11" font-weight="700" fill="#7a8896">${S[i][2]}</tspan></text>`;}
-    h+=`<text x="470" y="120" text-anchor="middle" font-size="34" font-weight="900" fill="#1f6f9c">${Ld.name}</text><text x="470" y="146" text-anchor="middle" font-size="15" font-weight="800" fill="#7a8896">${Ld.en}</text><text x="470" y="184" text-anchor="middle" font-size="18" font-weight="800" fill="#556">印章 ${P.stamps.length} / ${N}</text>`;}
-  svg.innerHTML=h;
-  const box=$('#ymsecs');box.innerHTML='';for(let k=0;k<SN;k++){const b=document.createElement('button'),ok=[1,2].every(i=>P.stamps.includes((secStartOf(Ld,k)+i)%N));b.className='ysec'+(k===P.sec?' cur':'')+(ok?' ok':'');b.innerHTML=(ok?IC('star'):'')+secLabelOf(id,k);
-    b.onclick=()=>{$('#ymap').classList.add('hidden');startRoute(k,id);};box.appendChild(b);}
-  $('#ymap').classList.remove('hidden');}
+    if(on.size>1)h+=`<polyline points="${[...on].map(i=>XX(i).toFixed(1)+','+Y(i).toFixed(1)).join(' ')}" fill="none" stroke="${HI}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>`;
+    for(let i=0;i<N;i++)h+=node(i,XX(i),Y(i),hl=>`<text x="${(XX(i)+20).toFixed(1)}" y="${(Y(i)+5).toFixed(1)}" font-size="${hl?16:14}" font-weight="${hl?900:800}" fill="${hl?'#e65100':'#26323c'}">${S[i][0]}<tspan dx="6" font-size="11" font-weight="700" fill="#7a8896">${S[i][2]}</tspan></text>`,'#1f6f9c',XX(i)-42,Y(i));
+    h+=`<text x="470" y="120" text-anchor="middle" font-size="34" font-weight="900" fill="#1f6f9c">${Ld.name}</text><text x="470" y="146" text-anchor="middle" font-size="15" font-weight="800" fill="#7a8896">${Ld.en}</text><text x="470" y="184" text-anchor="middle" font-size="18" font-weight="800" fill="#556">印章 ${P.stamps.length} / ${N}</text><text x="470" y="212" text-anchor="middle" font-size="14" font-weight="800" fill="#7a8896">列車往羅湖方向行</text>`;}
+  svg.innerHTML=h;svg.querySelectorAll('.yst').forEach(g=>g.onclick=()=>pickTap(+g.dataset.y));
+  const n=on.size-1;$('#ymFrom').textContent=S[f][0];$('#ymTo').textContent=t===null?'？':S[t][0];$('#ymN').textContent=t===null?'':`（${n} 個站）`;
+  const go=$('#ymGo');go.disabled=t===null;go.style.background=col;
+  pickTip(PICK.step===1?`而家撳到達站${Ld.loop?'':'（要喺出發站之後）'}`:'撳地圖上嘅站可以改：先揀出發站，再揀到達站');}
 function setDriveUI(on){for(const s of ['#deck','#cabBtns'])$(s).classList.toggle('hidden',!on);}
 function updNextBox(){const drive=G.state==='drive'||G.state==='stopped'||G.state==='closing',st=drive?ST[Math.min(G.next,ST.length-1)]:ST[G.reached||0];
   $('#nbLbl').textContent=drive?LINE.tx.next:LINE.tx.now;$('#nbName').textContent=st.ja;$('#nbEn').textContent=st.en;$('#nbLine').textContent=LINE.code;$('#nbCode').textContent=LINE.id==='jy'?st.code.slice(2):st.code;$('#nbDist').classList.toggle('hidden',!drive);refreshCarLCD(st,drive);}
@@ -3170,16 +3227,36 @@ function setMascon(n,silent){if(!silent&&G.state!=='drive')return;if(n===G.notch
 const QN=8;   // 每個站答 8 題：中、英、數、推理各 2 題
 function qProg(k){$('#qprog').innerHTML=k<0?'':Array.from({length:QN},(_,i)=>`<i class="${i<k?'done':i===k?'cur':''}"></i>`).join('');}
 function catOrder(){const C=['chi','eng','math','logic'],a=shuffle(C.slice()),b=shuffle(C.slice());if(a[3]===b[0])[b[0],b[1]]=[b[1],b[0]];return a.concat(b);}
-function resetGame(){G.gen++;G.s=ST[0].stop;G.prevS=G.s;G.v=0;G.a=0;G.next=1;G.reached=0;G.stars=0;G.doors=1;G.doorT=1;G.tasc=G.ats=G.announced=G.annDone=G.annPrompt=G.annReady=false;G.idleT=0;onc.active=false;stopSpeech();
+function resetGame(i0=0,arr=false){G.gen++;G.reached=i0;G.next=Math.min(i0+1,ST.length-1);G.s=ST[i0].stop-(arr?ARR.D:0);G.prevS=G.s;G.v=0;G.a=0;G.arrT=arr?0:1;G.stars=0;G.doors=G.doorT=arr?0:1;G.tasc=G.ats=G.announced=G.annDone=G.annPrompt=G.annReady=false;G.idleT=0;onc.active=false;stopSpeech();
   $('#starN').textContent='0';hideCard();qProg(-1);for(const s of ['#finish','#banner','#stampFx','#actions','#bOpen'])$(s).classList.add('hidden');setDriveUI(false);hideGuide();resetPeople();setMascon(0,true);}
 // 返主頁：起點站喺地底就用月台鏡頭（外面嘅環迴鏡頭會喺隧道外面）
 function goTitle(){updTitleCard();resetGame();SK.active=false;SK.timer=8;G.state='title';setCam(TUN.ug[0]?'platform':'title',ST[0].stop);$('#hud').classList.add('hidden');$('#title').classList.remove('hidden');}
-async function startRoute(k,id){initAudio();initAudioExtra();const sw=!!id&&id!==LINE.id;if(sw){setLineData(id);loadProg();}if(k===undefined)k=PROG.sec;const need=sw||k!==SEC;if(need)applySectionData(k);
-  resetGame();const gen=G.gen;annWelcome(ST[0]);   // 喺撳掣嗰下即刻講第一句，iPhone／iPad 先會解鎖語音（重嘅換綫畫面放喺之後）
+// 開始行程：撳掣嗰下即刻講第一句廣播（iPhone／iPad 先會解鎖語音），重嘅換綫／換段畫面放喺之後
+async function startTrip(id,from,to){initAudio();initAudioExtra();const sw=id!==LINE.id;if(sw){setLineData(id);loadProg();}
+  if(!tripOK(LINE,from,to)){from=PROG.from;to=PROG.to;}
+  Object.assign(TRIP,{id:LINE.id,from,to,seg:0,done:0});TRIP.ys=tripStations(LINE,from,to);TRIP.segs=planSegs(LINE,TRIP.ys);PROG.from=from;PROG.to=to;saveProg();
+  const S0=TRIP.segs[0],need=sw||S0.base!==SECB;if(need)applySectionBase(S0.base);
+  resetGame(S0.i0,true);const gen=G.gen;annWelcome(ST[S0.i0]);
   if(sw)switchLineVisuals();if(need)applySectionVisuals();
-  $('#title').classList.add('hidden');$('#hud').classList.remove('hidden');initHUD();await departPrep(gen,true);}
-async function departPrep(gen,first){const st=ST[G.reached];G.state='board';G.annDone=false;G.annReady=false;setCam('platform',st.stop);G.doorT=1;updNextBox();
-  if(first){showBanner(st);startBoarding(st,1.0);}lateComers(st,first?4:6);showActions(['ann'],'ann');
+  $('#title').classList.add('hidden');$('#ymap').classList.add('hidden');$('#hud').classList.remove('hidden');initHUD();await arrivePrep(gen);}
+// 舊介面／測試用：第 k 段（3 個站），唔俾 k 就行建議行程
+function startRoute(k,id){const Ld=LINES[id||LINE.id];if(k===undefined){const P=Ld.id===LINE.id?PROG:progOf(Ld.id);return startTrip(Ld.id,P.from,P.to);}
+  const f=secStartOf(Ld,k);return startTrip(Ld.id,f,Ld.loop?(f+2)%Ld.st.length:f+2);}
+// 開頭：列車由月台尾慢慢駛入（約 60 km/h 勻減速，12 秒停定），停定先開門，乘客落車、上車，之後先可以發車廣播（10-01 用戶要求）
+const ARR={D:100,T:12};
+function updArrive(dt){const st=ST[G.reached];G.arrT=Math.min(1,G.arrT+dt/ARR.T);const u=G.arrT,v=2*ARR.D*(1-u)/ARR.T;G.a=(v-G.v)/Math.max(dt,1e-3);G.v=v;G.s=st.stop-ARR.D*(1-u)*(1-u);if(u>=1){G.s=st.stop;G.v=0;G.a=0;}}
+async function arrivePrep(gen){const st=ST[G.reached],ok=()=>gen===G.gen;G.state='arriving';setCam('platform',st.stop);updNextBox();showBanner(st);guide('列車入站喇！');
+  while(G.arrT<1){await sleep(100);if(!ok())return;}
+  hideGuide();await sleep(500);if(!ok())return;(LINE.id==='jy'?doorChime:mtrChime)();G.doorT=1;doorSfx();startAlighting(st);startBoarding(st,2.6);
+  await sleep(1500);if(!ok())return;departPrep(gen,'arr');}
+// 一程行完但未到終點：喺同一個站換去下一程（白色蓋住畫面先換景，換完繼續上車）
+async function nextSeg(gen){TRIP.seg++;const S=TRIP.segs[TRIP.seg],fd=$('#fade');fd.style.transition='none';fd.style.opacity='1';
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));if(gen!==G.gen){flash();return;}
+  applySectionBase(S.base);applySectionVisuals();G.s=ST[S.i0].stop;G.prevS=G.s;G.reached=S.i0;G.next=S.i0+1;G.v=G.a=0;G.doors=G.doorT=1;onc.active=false;resetPeople();initHUD();
+  flash();departPrep(gen,'cont');}
+// mode：'arr'＝列車啱啱入站（已經開咗門上緊車）；'cont'＝換程後喺同一個站繼續；true＝直接喺月台上車；false＝中途站
+async function departPrep(gen,mode){const st=ST[G.reached],first=mode===true||mode==='arr';G.state='board';G.annDone=false;G.annReady=false;setCam('platform',st.stop);G.doorT=1;updNextBox();
+  if(mode===true||mode==='cont'){showBanner(st);startBoarding(st,1.0);}lateComers(st,first?4:6);showActions(['ann'],'ann');
   await guide(first?`你係車長！乘客上緊車，準備好就撳${KB('g','mic','發車廣播')}！`:`準備出發！撳${KB('g','mic','發車廣播')}！`);}
 // 發車廣播：山手線之後播發車旋律；港鐵冇旋律，停一陣就可以關門
 async function onAnnDepart(){if(G.state!=='board'||G.annDone)return;const gen=G.gen;G.annDone=true;showActions([],null);hideGuide();stopSpeech();
@@ -3196,13 +3273,16 @@ function arriveStop(){G.state='stopped';setMascon(-4,true);$('#bAnn2').classList
 async function onOpenDoor(){if(G.state!=='stopped')return;const gen=G.gen,ok=()=>gen===G.gen,idx=G.next,st=ST[idx];G.state='arrived';$('#bOpen').classList.add('hidden');hideGuide();setDriveUI(false);
   G.reached=idx;updNextBox();setCam('platform',st.stop);showBanner(st);await sleep(500);if(!ok())return;(LINE.id==='jy'?doorChime:mtrChime)();G.doorT=1;doorSfx();startAlighting(st);startBoarding(st,2.6);
   await sleep(1700);if(!ok())return;CAM.doorS=st.stop-HEAD+2.47;clearView(frame(CAM.doorS+2.7,-4.9,PT),frame(CAM.doorS-0.3,-2.2,PT),1.4);setCam('door');await annArrive(st);if(!ok())return;await sleep(1800);if(!ok())return;
-  guide(idx>=ST.length-1?`${st.ja}站！答啱 ${QN} 條題目就完成呢一段！`:`${st.ja}站！答啱 ${QN} 條題目就可以出發！`);await sleep(1600);if(!ok())return;hideGuide();
-  const lv=Math.min(3,1+Math.floor(SEC*3/SECN)+(idx-1)),order=catOrder(),used=new Set();
+  const last=TRIP.seg>=TRIP.segs.length-1&&idx>=TRIP.segs[TRIP.seg].i1;guide(last?`${st.ja}站！答啱 ${QN} 條題目就完成呢一程！`:`${st.ja}站！答啱 ${QN} 條題目就可以出發！`);await sleep(1600);if(!ok())return;hideGuide();
+  const lv=Math.min(3,Math.max(1+Math.floor(st.y*3/YN),1+Math.floor(TRIP.done/2))),order=catOrder(),used=new Set();   // 難度：條綫後段難啲，同一程行得耐都會難啲
   for(let k=0;k<QN;k++){qProg(k);await askUntilCorrect(lv,order[k],used);if(!ok())return;G.stars++;$('#starN').textContent=G.stars;popStar();}
-  qProg(-1);if(!PROG.stamps.includes(st.y)){PROG.stamps.push(st.y);saveProg();}await stampFx(st);if(!ok())return;if(idx>=ST.length-1)return finishRoute(gen);G.next=idx+1;departPrep(gen,false);}
-async function finishRoute(gen){G.state='finish';fanfare();const all=PROG.stamps.length>=YN&&SEC===SECN-1;PROG.sec=(SEC+1)%SECN;saveProg();
-  $('#fTitle').textContent=all?(LINE.loop?`${LINE.name}一周完成！`:`${LINE.name}全程完成！`):`到達 ${ST[ST.length-1].ja}！`;$('#fNext').textContent=`下一段：${secLabel(PROG.sec)}`;
-  $('#fstamps').innerHTML=ST.slice(1).map(s=>stampHTML(s,'mini')).join('');$('#fstars').innerHTML=`${IC('star')} × ${G.stars}　<span class="fcount">印章 ${PROG.stamps.length} / ${YN}</span>`;$('#finish').classList.remove('hidden');confetti(120);
+  qProg(-1);if(!PROG.stamps.includes(st.y)){PROG.stamps.push(st.y);saveProg();}await stampFx(st);if(!ok())return;TRIP.done++;
+  if(idx>=TRIP.segs[TRIP.seg].i1)return TRIP.seg>=TRIP.segs.length-1?finishRoute(gen):nextSeg(gen);G.next=idx+1;departPrep(gen,false);}
+// 完成一程：下一程建議由呢個站再行兩個站（東鐵綫到咗羅湖就由金鐘開過）
+async function finishRoute(gen){G.state='finish';fanfare();const N=YN,all=PROG.stamps.length>=N,st=ST[G.reached];
+  const nf=!LINE.loop&&TRIP.to>=N-1?0:TRIP.to,nt=LINE.loop?(nf+2)%N:Math.min(nf+2,N-1);PROG.from=nf;PROG.to=nt;PROG.sec=Math.floor(nf/2);saveProg();
+  $('#fTitle').textContent=all?(LINE.loop?`${LINE.name}一周完成！`:`${LINE.name}全程完成！`):`到達 ${st.ja}！`;$('#fNext').textContent=`下一程：${tripLabel(LINE.id,nf,nt)}`;
+  $('#fstamps').innerHTML=TRIP.ys.slice(1).slice(-6).map(y=>stampHTML(ylObj(y),'mini')).join('');$('#fstars').innerHTML=`${IC('star')} × ${G.stars}　<span class="fcount">印章 ${PROG.stamps.length} / ${YN}</span>`;$('#finish').classList.remove('hidden');confetti(120);
   await annFinish();}
 function updDrive(dt){const st=ST[G.next],rem=st.stop-G.s;
   if(!G.depAnn&&G.v>1.2){G.depAnn=true;annOnboard(st,ST[G.reached]);}
@@ -3273,7 +3353,7 @@ function lodTick(){const A=LODS.list,n=A.length;if(!n)return;const c=camera.posi
 // 玩緊（月台／駕駛／開門答題）每 2 秒計一次平均每格時間；慢過約 40 格／秒：
 // 主要係 JS（繪圖次數多）就收多啲遠處細件同乘客；主要係顯示卡就降解像度（每次 ×0.85，最低 0.7）
 const PERF={t:0,n:0,js:0,skip:2,min:LOWQ?0.7:0.8,f:0};
-function perfTick(raw,js){if(document.hidden||G.card||!['board','closing','drive','stopped','arrived'].includes(G.state)){PERF.t=PERF.n=PERF.js=0;return;}
+function perfTick(raw,js){if(document.hidden||G.card||!['arriving','board','closing','drive','stopped','arrived'].includes(G.state)){PERF.t=PERF.n=PERF.js=0;return;}
   if(raw>0.25)return;   // 載入／編譯 shader 嗰下嘅卡頓唔計
   PERF.t+=raw;PERF.js+=js;PERF.n++;if(PERF.t<2)return;const avg=PERF.t/PERF.n,jsAvg=PERF.js/PERF.n;PERF.t=PERF.n=PERF.js=0;if(PERF.skip>0){PERF.skip--;return;}
   if(avg<0.025)return;PERF.skip=1;
@@ -3286,13 +3366,13 @@ function perfTick(raw,js){if(document.hidden||G.card||!['board','closing','drive
 /* ======================= 主迴圈 ======================= */
 let last=performance.now();
 function frameLoop(now){requestAnimationFrame(frameLoop);const t0=performance.now(),raw=(now-last)/1000,dt=Math.min(0.05,raw);last=now;G.time+=dt;
-  if(G.state==='drive')updDrive(dt);
+  if(G.state==='drive')updDrive(dt);else if(G.state==='arriving')updArrive(dt);
   const dd=G.doorT-G.doors;G.doors+=Math.sign(dd)*Math.min(Math.abs(dd),dt/1.6);
   placeTrain(TA,G.s,0,false);for(const m of TA.leaves)m.scale.x=Math.max(0.03,1-G.doors*0.97);TM.doorLamp.color.setHex(G.doors>0.02?0xff3030:0x3a1010);
   updPSD(dt);updLandmarks(G.time);updOnc(dt);updE5(dt);updBoats(dt);updPeople(dt);updCars(dt);texWaterN.offset.x+=dt*0.004;texWaterN.offset.y+=dt*0.012;
   if(G.v>2&&Math.floor(G.prevS/25)!==Math.floor(G.s/25)){jointClacks(G.v);G.bumpE=0.008+0.012*G.v/VMAX;}G.prevS=G.s;G.bump=(G.bumpE||0)*Math.sin(G.time*38);G.bumpE=(G.bumpE||0)*Math.exp(-dt*9);
   updCam(dt);updSun();updTunnelLight(dt);updCab(dt);
-  audWatch(dt);setTrainSound(G.v,G.a);updSqueal(G.v,G.state==='drive'&&(G.notch<0||G.tasc));
+  audWatch(dt);setTrainSound(G.v,G.a);updSqueal(G.v,(G.state==='drive'&&(G.notch<0||G.tasc))||G.state==='arriving');
   if(G.state!=='title'&&G.state!=='loading')updHUD();if(G.state==='drive'||G.state==='stopped')updDriveHUD();
   lodTick();
   // 答題卡蓋住大半個畫面：後面嘅 3D 隔格先畫（慳電，撳掣更順）
@@ -3300,7 +3380,8 @@ function frameLoop(now){requestAnimationFrame(frameLoop);const t0=performance.no
   perfTick(raw,(performance.now()-t0)/1000);}
 
 /* ======================= 按鍵／鍵盤／拖曳望 ======================= */
-$('#rJY').onclick=()=>startRoute(undefined,'jy');$('#rEAL').onclick=()=>startRoute(undefined,'eal');
+// 主頁揀咗條綫：先開揀站畫面（出發站、到達站），再撳「開始」
+$('#rJY').onclick=()=>{initAudio();openMap('jy');};$('#rEAL').onclick=()=>{initAudio();openMap('eal');};$('#ymGo').onclick=()=>{if(PICK.to!==null)startTrip(PICK.id,PICK.from,PICK.to);};
 $('#btnMap').onclick=()=>{initAudio();openMap('jy');};$('#btnMapE').onclick=()=>{initAudio();openMap('eal');};$('#ymClose').onclick=()=>$('#ymap').classList.add('hidden');
 $('#btnHome').onclick=()=>goTitle();
 $('#btnMute').onclick=()=>{G.muted=!G.muted;$('#btnMute').innerHTML=IC(G.muted?'mute':'sound');if(BUS)BUS.gain.value=G.muted?0:1;if(G.muted)stopSpeech();};
@@ -3337,13 +3418,13 @@ function boot(){try{
     TA=buildTrain('e235',5);TB=buildTrain('e233',5);for(const c of TB.cars)c.visible=false;
     if(LOWQ)for(const T0 of [TA,TB])for(const c of T0.cars)c.traverse(o=>{if(o.isMesh&&o.castShadow&&o.material!==TM.steel&&o.material!==T0.face)o.castShadow=false;});   // iPad：車門、座位、車底細件唔投影
     TE=buildE5(6);for(const c of TE.cars)c.visible=false;buildCab(TA.cars[0]);ensureHeadlight();buildNotchBar();
-    loadProg();applySection(PROG.sec);updTitleCard();
+    loadProg();applyTripStart();updTitleCard();
     G.s=ST[0].stop;G.prevS=G.s;resetPeople();placeTrain(TA,G.s,0,false);G.state='title';updCam(0);updSun();lodScan();renderer.compile(scene,camera);
     $('#loading').classList.add('hidden');$('#title').classList.remove('hidden');icoWarm();requestAnimationFrame(t=>{last=t;frameLoop(t);});
   }catch(e){console.error(e);$('#loading').innerHTML=`<div>載入失敗，請重新整理</div><div style="font-size:14px;max-width:80vw;color:#a33">${e&&e.message}</div>`;}}
 function iconSheet(keys){const d=document.createElement('div');d.id='sheet';d.style.cssText='position:fixed;inset:0;z-index:99;background:#e9eef3;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:4px;padding:8px';
   for(const k of keys||Object.keys(IB)){const c=document.createElement('div');c.style.cssText='text-align:center;font:11px sans-serif;color:#333';c.innerHTML=`<img src="${icon(k)}" style="width:92px;height:92px;filter:drop-shadow(0 4px 5px rgba(0,0,0,.2))"><div>${k}</div>`;d.appendChild(c);}document.body.appendChild(d);return Object.keys(IB).length;}
-window.__kg={get AC(){return AC;},get BUS(){return BUS;},get LINE(){return LINE;},setLineData,switchLineVisuals,loadProg,applySection,get LMK(){return LMK;},qtest:(k,l=2)=>{$('#title').classList.add('hidden');showCard(true);renderQ(makeQ(k,l),()=>{});return Object.keys(QT);},iconSheet,icon,get IB(){return IB;},get TE(){return TE;},SK,G,ST,CAM,startRoute,goTitle,setCam,setMascon,stepNotch,onc,CAB,PP,renderer,camera,scene,composer,get QS(){return QS;},onAnnDepart,onCloseDoor,onOpenDoor,onAnnApproach,annSet,sayAll,clipBuf,get VCLIP(){return VCLIP;},get VTXT(){return VTXT;},posAt,dirAt,frame,get TUN(){return TUN;},get TA(){return TA;},get TB(){return TB;},get PERF(){return PERF;},get LODS(){return LODS;},LOWQ,setPR,get PR(){return PR;}};
+window.__kg={get AC(){return AC;},get BUS(){return BUS;},get LINE(){return LINE;},setLineData,switchLineVisuals,loadProg,applySection,get LMK(){return LMK;},qtest:(k,l=2)=>{$('#title').classList.add('hidden');showCard(true);renderQ(makeQ(k,l),()=>{});return Object.keys(QT);},iconSheet,icon,get IB(){return IB;},get TE(){return TE;},SK,G,ST,CAM,startRoute,goTitle,setCam,setMascon,stepNotch,onc,CAB,PP,renderer,camera,scene,composer,get QS(){return QS;},onAnnDepart,onCloseDoor,onOpenDoor,onAnnApproach,annSet,sayAll,clipBuf,get VCLIP(){return VCLIP;},get VTXT(){return VTXT;},posAt,dirAt,frame,get TUN(){return TUN;},get TA(){return TA;},get TB(){return TB;},get PERF(){return PERF;},get LODS(){return LODS;},LOWQ,setPR,get PR(){return PR;},startTrip,TRIP,PICK,openMap,pickTap,planSegs,tripStations,get SECB(){return SECB;},get VGAIN(){return VGAIN;},get TDUCK(){return TDUCK;},initAudio};
 setTimeout(boot,60);
 
 </script>
