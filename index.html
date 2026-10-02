@@ -352,6 +352,9 @@ button{font-family:inherit;color:inherit;touch-action:manipulation;cursor:pointe
   #notchBar{grid-area:notch}}
 /* ---- 山手線一周路線圖 ---- */
 .trow{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+/* iPad 靜音模式提示：網頁音效（叮噹、普通話英文聲檔）會被靜音，系統語音（廣東話）照講 */
+.sndtip{margin:10px auto 0;max-width:min(92vw,760px);background:rgba(12,17,24,.62);color:#fff;border-radius:14px;padding:8px 14px;font-size:15px;font-weight:700;text-align:center;line-height:1.6}
+.sndtip .small{margin:0 6px;padding:6px 14px;font-size:15px;color:#1f2a36}
 #btnMap b,#btnMapE b{font-family:"Baloo 2",sans-serif;color:#2e7d32;margin-left:4px}#btnMapE b{color:#1f6f9c}
 #ymap{position:fixed;inset:0;z-index:18;background:rgba(8,20,35,.55);display:flex;align-items:center;justify-content:center;padding:14px}
 .ymcard{background:#fff;border-radius:28px;padding:16px 18px 18px;width:min(760px,100%);max-height:100%;overflow:auto;box-shadow:var(--shadow)}
@@ -410,6 +413,7 @@ button{font-family:inherit;color:inherit;touch-action:manipulation;cursor:pointe
     <div class="route locked" style="--c:#0072BC"><span class="lock"><svg class="ic"><use href="#i-lock"/></svg></span><div class="rc" style="font-size:17px">新幹線</div><div class="rn">東海道新幹線</div><div class="re">Tōkaidō Shinkansen</div><div class="rs">即將開放</div></div>
   </div>
   <div class="trow"><button class="small" id="btnMap"><svg class="ic"><use href="#i-loop"/></svg>山手線路線圖 <b id="jyStamps">0/30</b></button><button class="small" id="btnMapE"><svg class="ic"><use href="#i-list"/></svg>東鐵綫路線圖 <b id="ealStamps">0/14</b></button><button class="small" id="btnTest"><svg class="ic"><use href="#i-list"/></svg>題目試玩（家長用）</button></div>
+  <div class="sndtip hidden" id="sndTip">iPad 開咗「靜音模式」會冇叮噹聲、冇普通話同英文廣播（廣東話照講）。撳<button class="small" id="sndTest">試聲</button>聽唔到，就由右上角向下掃開控制中心，關咗靜音（鐘仔圖示）。</div>
 </div>
 
 <div id="hud" class="hidden">
@@ -516,6 +520,11 @@ const VMAX=22.2; // 最高 80 km/h
 const URLP=new URLSearchParams(location.search);
 const IOS=URLP.get('ios')==='1'||(URLP.get('ios')!=='0'&&(/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)));
 const LOWQ=IOS;
+// 除錯：網址加 ?dbg=1 喺畫面左上角顯示聲音紀錄（iPad 冇 console，用嚟查「冇聲」）
+const DLOG=URLP.get('dbg')==='1'?[]:null;
+function dlog(m){if(!DLOG)return;DLOG.push((performance.now()/1000).toFixed(1)+' '+m);if(DLOG.length>22)DLOG.shift();let b=document.getElementById('dlog');
+  if(!b){b=document.createElement('div');b.id='dlog';b.style.cssText='position:fixed;left:4px;top:4px;z-index:99999;background:rgba(0,0,0,.72);color:#9f9;font:11px/1.3 Menlo,monospace;padding:4px 6px;border-radius:6px;max-width:62vw;pointer-events:none;white-space:pre-wrap';document.body.appendChild(b);}
+  b.textContent=DLOG.join('\n');}
 // 陰影邊柔化：原本每點讀 16 次陰影圖，iPad 改做 2×2 雙線性（讀 4 次），邊位仍然順滑
 if(LOWQ){const k='shadowmap_pars_fragment',src=THREE.ShaderChunk[k],a=src.indexOf('#elif defined( SHADOWMAP_TYPE_PCF_SOFT )'),b=a<0?-1:src.indexOf('#elif defined( SHADOWMAP_TYPE_VSM )',a);
   if(a>0&&b>a)THREE.ShaderChunk[k]=src.slice(0,a)+`#elif defined( SHADOWMAP_TYPE_PCF_SOFT )
@@ -2542,9 +2551,10 @@ let AC=null,BUS,SFX,VOXN=null,TDUCK=null,NOISE,BROWN,rumG,rumF,hisG,motG,motO1,m
 // ⚠ iOS：唔好設 audioSession 'playback'——嗰個模式唔可以同其他聲混，日英語音廣播一講嘢就會打斷晒 Web Audio，
 //   關門聲、開門聲、行車聲會冇咗而且唔會自己返嚟；'ambient' 可以同語音廣播一齊出聲（代價：iPad 開咗靜音就冇音效）
 function initAudio(){try{if(navigator.audioSession&&navigator.audioSession.type!=='ambient')navigator.audioSession.type='ambient';}catch(e){}
-  if(!AC)buildAudio();kickAudio(true);}
+  if(!AC)buildAudio();kickAudio(true);dlog('initAudio session='+(navigator.audioSession?navigator.audioSession.type:'-')+' AC='+(AC&&AC.state)+' sr='+(AC&&AC.sampleRate));}
 function buildAudio(){const C=window.AudioContext||window.webkitAudioContext;if(!C)return;AC=new C();sndT=0;audCT=-1;
-  AC.onstatechange=()=>{if(AC&&AC.state!=='running'&&AC.state!=='closed')setTimeout(()=>kickAudio(false),400);};
+  AC.onstatechange=()=>{dlog('AC state → '+(AC&&AC.state));if(AC&&AC.state!=='running'&&AC.state!=='closed')setTimeout(()=>kickAudio(false),400);};
+  if(DLOG)setInterval(()=>{if(AC)dlog('tick AC='+AC.state+' t='+AC.currentTime.toFixed(1)+(navigator.audioSession?' sess='+navigator.audioSession.type:''));},15000);
   BUS=AC.createGain();BUS.gain.value=G.muted?0:1;TDUCK=AC.createGain();const comp=AC.createDynamicsCompressor();BUS.connect(TDUCK).connect(comp).connect(AC.destination);
   // 廣播聲檔（普通話／英文）自己一條路：唔經行車聲嗰個壓縮器（10-01 用戶：國語有時細聲＝行車聲大時壓縮器連聲檔一齊壓細），淨係限住頂峰唔好爆
   VOXN=AC.createDynamicsCompressor();VOXN.threshold.value=-4;VOXN.knee.value=4;VOXN.ratio.value=20;VOXN.attack.value=0.002;VOXN.release.value=0.12;VOXN.connect(AC.destination);
@@ -2560,7 +2570,7 @@ function buildAudio(){const C=window.AudioContext||window.webkitAudioContext;if(
 function kickAudio(gesture){if(!AC)return;
   if(gesture&&audStuck>=2&&!(TTS&&TTS.speaking)){rebuildAudio();return;}
   if(AC.state==='running')return;
-  try{const p=AC.resume();if(p&&p.catch)p.catch(()=>{});}catch(e){}
+  dlog('kick '+(gesture?'gesture':'auto')+' AC='+AC.state);try{const p=AC.resume();if(p&&p.catch)p.catch(()=>{});}catch(e){}
   if(gesture){audStuck++;const a=AC;setTimeout(()=>{if(a===AC&&AC.state==='running')audStuck=0;},700);}}
 function rebuildAudio(){const old=AC;AC=null;try{old.close();}catch(e){}sqG=null;buildAudio();initAudioExtra();audStuck=0;try{AC.resume();}catch(e){}}
 function audWatch(dt){if(!AC||document.hidden)return;audChk+=dt;if(audChk<1.5)return;audChk=0;
@@ -2596,7 +2606,7 @@ function whoosh(){if(!AC)return;const t=AC.currentTime+0.01;const s=AC.createBuf
 // 港鐵（統一開關門提示聲）：關門「嘟嘟」18 下、開門「叮噹」2 次
 function mtrBeeps(){if(!AC)return;const t=AC.currentTime+0.02;for(let i=0;i<18;i++){const s=t+i*0.23,o=AC.createOscillator(),f=AC.createBiquadFilter(),g=AC.createGain();o.type='square';o.frequency.value=1245;f.type='lowpass';f.frequency.value=2600;
   g.gain.setValueAtTime(0.0001,s);g.gain.exponentialRampToValueAtTime(0.06,s+0.008);g.gain.setValueAtTime(0.06,s+0.13);g.gain.exponentialRampToValueAtTime(0.0001,s+0.15);o.connect(f).connect(g).connect(SFX);o.start(s);o.stop(s+0.17);}}
-function mtrChime(){if(!AC)return;const t=AC.currentTime+0.02;for(let i=0;i<2;i++){bell(mf(81),t+i*1.05,1.0,0.16);bell(mf(76),t+i*1.05+0.36,1.3,0.16);}}
+function mtrChime(){dlog('chime AC='+(AC&&AC.state));if(!AC)return;const t=AC.currentTime+0.02;for(let i=0;i<2;i++){bell(mf(81),t+i*1.05,1.0,0.16);bell(mf(76),t+i*1.05+0.36,1.3,0.16);}}
 function crossingDing(vol){if(!AC||vol<0.01)return;const t=AC.currentTime+0.01;for(const [fr,a] of [[760,1],[1520,.35],[2290,.15]]){const o=AC.createOscillator();o.type='square';o.frequency.value=fr;const g=AC.createGain();g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol*a*0.25,t+0.004);g.gain.exponentialRampToValueAtTime(0.0001,t+0.32);o.connect(g).connect(SFX);o.start(t);o.stop(t+0.35);}}
 
 /* ======================= 語音（日文廣播／粵語讀題／英文） ======================= */
@@ -2617,7 +2627,7 @@ let lastCancel=0,SPG=0;
 function say(text,lang='zh-HK',ann=false){return new Promise(res=>{if(!ann&&String(lang).toLowerCase().startsWith('zh')){setTimeout(res,0);return;}if(!TTS||G.muted||!text){setTimeout(res,G.muted?400:0);return;}
   const u=new SpeechSynthesisUtterance(text);u.lang=lang;const v=voiceFor(lang);if(v)u.voice=v;u.volume=1;
   u.rate=lang.startsWith('ja')?0.92:lang.startsWith('en')?0.95:0.95;u.pitch=1.0;
-  let done=false,to=0;const fin=()=>{if(!done){done=true;clearTimeout(to);res();if(AC&&AC.state!=='running')setTimeout(()=>kickAudio(false),150);}};u.onend=fin;u.onerror=fin;
+  let done=false,to=0;const fin=e=>{if(!done){done=true;clearTimeout(to);dlog('TTS '+(e&&e.type||'timeout')+' '+lang+' AC='+(AC&&AC.state));res();if(AC&&AC.state!=='running')setTimeout(()=>kickAudio(false),150);}};u.onend=fin;u.onerror=fin;dlog('TTS speak '+lang+' '+text.slice(0,8)+' voice='+(v?v.name:'-'));
   const go=()=>{if(done)return;try{if(TTS.paused)TTS.resume();}catch(e){}TTS.speak(u);to=setTimeout(fin,2500+text.length*(lang.startsWith('en')?95:300));};
   // Safari：cancel() 之後即刻 speak() 會食咗句嘢 → 等 0.22 秒；冇 cancel 過就即刻講（喺撳掣嗰下講，iOS 先會解鎖語音）
   const w=lastCancel+220-performance.now();if(w>0)setTimeout(go,w);else go();});}
@@ -2634,9 +2644,9 @@ function clipNorm(b){const x=b.getChannelData(0),fr=Math.max(1,Math.round(b.samp
   for(let i=0;i<n;i++){let q=0;for(let j=i*fr,J=j+fr;j<J;j++)q+=x[j]*x[j];e[i]=q/fr;if(e[i]>mx)mx=e[i];}
   let sm=0,c=0;for(let i=0;i<n;i++)if(e[i]>mx*0.001){sm+=e[i];c++;}const rms=Math.sqrt(sm/Math.max(1,c));return clamp(VOX_T/Math.max(rms,1e-4),0.5,4);}
 async function clipBuf(k){if(VBUF[k])return VBUF[k];const b64=VCLIP[k];if(!b64||!AC)return null;const bin=atob(b64),u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);
-  VBUF[k]=await new Promise((res,rej)=>AC.decodeAudioData(u8.buffer,res,rej)).catch(()=>null);if(VBUF[k])VGAIN[k]=clipNorm(VBUF[k]);return VBUF[k];}
+  VBUF[k]=await new Promise((res,rej)=>AC.decodeAudioData(u8.buffer,res,rej)).catch(e=>{dlog('decode FAIL '+k+' '+e);return null;});if(VBUF[k])VGAIN[k]=clipNorm(VBUF[k]);return VBUF[k];}
 function playClip(k){return new Promise(res=>{clipBuf(k).then(b=>{if(!b||!AC||G.muted){res(!!b);return;}let done=false;const fin=()=>{if(!done){done=true;if(CLIPSRC===src)CLIPSRC=null;res(true);}};
-  const src=AC.createBufferSource(),g=AC.createGain();src.buffer=b;g.gain.value=VGAIN[k]||1;src.connect(g).connect(VOXN||BUS);src.onended=fin;kickAudio(false);src.start();CLIPSRC=src;setTimeout(fin,b.duration*1000+900);});});}
+  const src=AC.createBufferSource(),g=AC.createGain();src.buffer=b;g.gain.value=VGAIN[k]||1;src.connect(g).connect(VOXN||BUS);src.onended=()=>{dlog('clip ended '+k);fin();};kickAudio(false);src.start();CLIPSRC=src;dlog('clip start '+k+' '+b.duration.toFixed(1)+'s AC='+AC.state+' t='+AC.currentTime.toFixed(1));setTimeout(()=>{if(!done)dlog('clip TIMEOUT '+k+' AC='+AC.state);fin();},b.duration*1000+900);});});}
 // 廣播期間行車聲收細一半（三種語言都清楚啲；廣東話係 iPad 語音唔經 Web Audio，所以只可以收細背景）
 function duckTrain(on){if(!AC||!TDUCK)return;TDUCK.gain.setTargetAtTime(on?0.5:1,AC.currentTime,on?0.15:0.4);}
 function preloadClips(keys){for(const k of keys)if(VCLIP[k])clipBuf(k);}
@@ -3538,6 +3548,8 @@ function frameLoop(now){requestAnimationFrame(frameLoop);const t0=performance.no
 $('#rJY').onclick=()=>{initAudio();openMap('jy');};$('#rEAL').onclick=()=>{initAudio();openMap('eal');};$('#ymGo').onclick=()=>{if(PICK.to!==null)startTrip(PICK.id,PICK.from,PICK.to);};
 $('#btnMap').onclick=()=>{initAudio();openMap('jy');};$('#btnMapE').onclick=()=>{initAudio();openMap('eal');};$('#ymClose').onclick=()=>$('#ymap').classList.add('hidden');
 $('#btnHome').onclick=()=>goTitle();
+// 試聲：叮噹（網頁音效）＋普通話、英文聲檔；聽唔到＝iPad 靜音模式（網頁音效會被靜音，系統語音唔會）
+$('#sndTest').onclick=async()=>{initAudio();initAudioExtra();mtrChime();await sleep(2300);await sayAll(ealParts('thanks').slice(1));};
 $('#btnMute').onclick=()=>{G.muted=!G.muted;$('#btnMute').innerHTML=IC(G.muted?'mute':'sound');if(BUS)BUS.gain.value=G.muted?0:1;if(G.muted)stopSpeech();};
 $('#qsay').onclick=()=>{if(QS&&!QS.locked)speakQ(QS.q);};
 $('#fAgain').onclick=()=>startRoute();$('#fHome').onclick=()=>goTitle();
@@ -3572,7 +3584,7 @@ function boot(){try{
     TA=buildTrain('e235',5);TB=buildTrain('e233',5);for(const c of TB.cars)c.visible=false;
     if(LOWQ)for(const T0 of [TA,TB])for(const c of T0.cars)c.traverse(o=>{if(o.isMesh&&o.castShadow&&o.material!==TM.steel&&o.material!==T0.face)o.castShadow=false;});   // iPad：車門、座位、車底細件唔投影
     TE=buildE5(6);for(const c of TE.cars)c.visible=false;buildCab(TA.cars[0]);ensureHeadlight();buildNotchBar();
-    loadProg();applyTripStart();updTitleCard();
+    loadProg();applyTripStart();updTitleCard();if(IOS)$('#sndTip').classList.remove('hidden');
     G.s=ST[0].stop;G.prevS=G.s;resetPeople();placeTrain(TA,G.s,0,false);G.state='title';updCam(0);updSun();lodScan();renderer.compile(scene,camera);
     $('#loading').classList.add('hidden');$('#title').classList.remove('hidden');icoWarm();requestAnimationFrame(t=>{last=t;frameLoop(t);});
   }catch(e){console.error(e);$('#loading').innerHTML=`<div>載入失敗，請重新整理</div><div style="font-size:14px;max-width:80vw;color:#a33">${e&&e.message}</div>`;}}
