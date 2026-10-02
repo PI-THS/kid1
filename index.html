@@ -150,6 +150,43 @@ button{font-family:inherit;color:inherit;touch-action:manipulation;cursor:pointe
 .fcell{border:none;background:rgba(255,255,255,.18);border-radius:16px;font-size:min(8.5vh,64px);padding:4px;line-height:1.2}
 .fcell.found{background:#d8f8d2;box-shadow:0 0 0 5px #43b649 inset}
 .fcell.bad{background:#ffd3d3;animation:shake .45s}
+/* 答錯（10-02）：揀錯嗰個打紅色交叉，正確答案打綠色圈 */
+.opt,.fcell{position:relative}
+.opt.xmark::after,.fcell.xmark::after,.opt.ring::after,.fcell.ring::after{content:"";position:absolute;inset:-4%;pointer-events:none;background-repeat:no-repeat;background-position:center;background-size:contain;animation:markin .35s cubic-bezier(.2,1.6,.4,1) both}
+.opt.xmark::after,.fcell.xmark::after{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M18 18 L82 82 M82 18 L18 82' stroke='%23e53935' stroke-width='13' stroke-linecap='round'/%3E%3C/svg%3E")}
+.opt.ring::after,.fcell.ring::after{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cellipse cx='50' cy='50' rx='45' ry='42' fill='none' stroke='%2343b649' stroke-width='9'/%3E%3C/svg%3E")}
+.opt.ring{border-color:#43b649;opacity:1}
+@keyframes markin{from{transform:scale(1.6);opacity:0}to{transform:scale(1);opacity:1}}
+/* 重問嘅題目：卡頂顯示「再答一次」 */
+#qcard.retry #qcat::after{content:" 再答一次";color:#fff3c4}
+#qprog i.miss{background:#f06464}
+/* 新題型 */
+.zhbig{font-size:min(18vh,150px);font-family:"PingFang HK",sans-serif;font-weight:800;color:#253548;background:#fff8e1;border:6px dashed #f3c14b;border-radius:28px;padding:0 .35em;line-height:1.25}
+.enbig{font-size:min(10vh,80px);font-family:"Baloo 2","Arial Rounded MT Bold",sans-serif;letter-spacing:.06em;color:#5b3fc4;background:#f1ecff;border-radius:24px;padding:4px .5em}
+.numbig{font-size:min(16vh,130px);font-family:"Baloo 2",sans-serif;color:#2f7fe0;line-height:1.1}
+.num{font-family:"Baloo 2","Arial Rounded MT Bold",sans-serif}
+.tile.qw{background:#eef6ff}
+.opp{display:flex;align-items:center;gap:18px}.opp b{font-size:min(8vh,60px);color:#f08a24}
+.posgrid{display:grid;grid-template-columns:repeat(3,min(13vh,110px));grid-template-rows:repeat(3,min(12vh,100px));grid-template-areas:". t ." "l m r" ". b .";align-items:center;justify-items:center;font-size:min(10vh,84px)}
+.posgrid .pp{line-height:1}.posgrid .top{grid-area:t}.posgrid .bottom{grid-area:b}.posgrid .left{grid-area:l}.posgrid .right{grid-area:r}.posgrid .mid{grid-area:m;font-size:1.25em}
+.posgrid .ico{width:1.1em;height:1.1em}
+.ntrain{display:flex;align-items:flex-end;gap:6px;flex-wrap:wrap;justify-content:center}
+.ntrain .tloco{font-size:min(11vh,90px);line-height:1}.ntrain .tloco .ico{width:1.2em;height:1.2em;transform:scaleX(-1)}
+.tcar{min-width:min(10vh,82px);height:min(9vh,72px);border-radius:14px 14px 8px 8px;background:#4dabf7;color:#fff;font:800 min(6.5vh,50px) "Baloo 2",sans-serif;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 -10px 0 rgba(0,0,0,.18),0 6px 0 #2b2f36;position:relative}
+.tcar.blank{background:#fff7d1;color:#e0a500;border:4px dashed #f0c02e}.tcar.fillin{background:#43b649;animation:bounce .5s}
+.ordrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;font-size:min(10vh,80px)}
+.ordrow .ordarrow{width:100%;font-size:min(3.6vh,26px);font-weight:900;color:#2f7fe0;text-align:left;padding-left:8px}
+.ordrow span:not(.ordarrow){line-height:1}.ordrow .ico{width:1.1em;height:1.1em}
+.memrow{display:flex;gap:14px;justify-content:center;font-size:min(13vh,110px)}
+.memrow span{background:#fff;border:5px solid #e3e9f0;border-radius:22px;padding:4px 8px;line-height:1;transition:transform .3s}
+.memrow span.cover{transform:rotateY(90deg)}
+.memrow span.gone .ico{visibility:hidden}.memrow span.gone{background:#fff7d1;border:5px dashed #f0c02e}
+.memrow span.back{background:#d8f8d2;border-color:#43b649;animation:bounce .5s}
+.memrow .ico{width:1.1em;height:1.1em}
+.memtimer{width:min(70%,520px);height:12px;border-radius:6px;background:#e3e9f0;overflow:hidden}.memtimer i{display:block;height:100%;width:100%;background:#43b649}
+#qopts.wait{opacity:.35;pointer-events:none}
+.optgrp.small{font-size:min(5.6vh,46px)}.optgrp.small .ico{width:1.05em;height:1.05em}
+.rebus+.hint{width:100%}
 .optgrp{display:flex;flex-wrap:wrap;justify-content:center;gap:2px 6px;font-size:min(8vh,60px);line-height:1.15;max-width:92%}
 
 /* 彩紙、印章、完成 */
@@ -414,8 +451,8 @@ button{font-family:inherit;color:inherit;touch-action:manipulation;cursor:pointe
   <div class="routes">
     <button class="route go" id="rJY" style="--c:#80C241"><div class="rc">JY</div><div class="rn">山手線</div><div class="re">Yamanote Line</div><div class="rs"><span id="rjyTxt">東京 → 秋葉原</span><span class="rgo"><svg class="ic"><use href="#i-play"/></svg>揀站</span></div></button>
     <button class="route go" id="rEAL" style="--c:#5EB6E4"><div class="rc">EAL</div><div class="rn">東鐵綫</div><div class="re">East Rail Line</div><div class="rs"><span id="realTxt">金鐘 → 紅磡</span><span class="rgo"><svg class="ic"><use href="#i-play"/></svg>揀站</span></div></button>
-    <div class="route locked" style="--c:#F15A22"><span class="lock"><svg class="ic"><use href="#i-lock"/></svg></span><div class="rc">JC</div><div class="rn">中央線</div><div class="re">Chūō Line</div><div class="rs">即將開放</div></div>
-    <div class="route locked" style="--c:#0072BC"><span class="lock"><svg class="ic"><use href="#i-lock"/></svg></span><div class="rc" style="font-size:17px">新幹線</div><div class="rn">東海道新幹線</div><div class="re">Tōkaidō Shinkansen</div><div class="rs">即將開放</div></div>
+    <button class="route go" id="rHAYA" style="--c:#1d8a68"><div class="rc">E5</div><div class="rn">はやぶさ</div><div class="re">新幹線　東京 → 新函館北斗</div><div class="rs"><span id="rhayaTxt">東京 → 大宮</span><span class="rgo"><svg class="ic"><use href="#i-play"/></svg>揀站</span></div></button>
+    <button class="route go" id="rKOMA" style="--c:#c8102e"><div class="rc">E6</div><div class="rn">こまち</div><div class="re">新幹線　東京 → 秋田</div><div class="rs"><span id="rkomaTxt">東京 → 大宮</span><span class="rgo"><svg class="ic"><use href="#i-play"/></svg>揀站</span></div></button>
   </div>
   <div class="trow"><button class="small" id="btnMap"><svg class="ic"><use href="#i-loop"/></svg>山手線路線圖 <b id="jyStamps">0/30</b></button><button class="small" id="btnMapE"><svg class="ic"><use href="#i-list"/></svg>東鐵綫路線圖 <b id="ealStamps">0/14</b></button><button class="small" id="btnTest"><svg class="ic"><use href="#i-list"/></svg>題目試玩（家長用）</button></div>
   <div class="sndtip hidden" id="sndTip">iPad 開咗「靜音模式」會冇叮噹聲、冇普通話同英文廣播（廣東話照講）。撳<button class="small" id="sndTest">試聲</button>聽唔到，就由右上角向下掃開控制中心，關咗靜音（鐘仔圖示）。</div>
@@ -518,7 +555,7 @@ const srand=()=>{SEED=(SEED*16807)%2147483647;return (SEED-1)/2147483646;};
 const sr=(a,b)=>a+srand()*(b-a);
 const spick=a=>a[Math.floor(srand()*a.length)];
 const DUMMY=new THREE.Object3D();
-const VMAX=22.2; // 最高 80 km/h
+let VMAX=22.2; // 最高 80 km/h（新幹線換綫時改做 31，見 setLineData）
 // iPad／iPhone 繪圖記憶體有限（10-01 用戶 iPad 入唔到遊戲＝WebGL 被系統收咗）：預設唔開光暈後製（慳大約 100MB 全螢幕高精度畫布）
 // 10-01 用戶話 iPad「畫面極不順暢」→ IOS 用慳力畫質（LOWQ）：解像度由 1.0 起跳、平啲嘅陰影過濾、冇車頭射燈、乘客唔投影、樹葉卡少啲
 // 網址加 ?ios=1／?ios=0 可以喺電腦強制試 iPad 版／正常版
@@ -679,18 +716,30 @@ const EAL_ST=[['金鐘','金钟','Admiralty','ADM',['荃灣綫、港島綫及南
   ['紅磡','红磡','Hung Hom','HUH',['屯馬綫','屯马线','the Tuen Ma Line']],['旺角東','旺角东','Mong Kok East','MKK'],['九龍塘','九龙塘','Kowloon Tong','KOT',['觀塘綫','观塘线','the Kwun Tong Line']],
   ['大圍','大围','Tai Wai','TAW',['屯馬綫','屯马线','the Tuen Ma Line']],['沙田','沙田','Sha Tin','SHT'],['火炭','火炭','Fo Tan','FOT'],['大學','大学','University','UNI'],
   ['大埔墟','大埔墟','Tai Po Market','TAP'],['太和','太和','Tai Wo','TWO'],['粉嶺','粉岭','Fanling','FAN'],['上水','上水','Sheung Shui','SHS'],['羅湖','罗湖','Lo Wu','LOW']];
-// 路線：山手線（環狀、15 段）／東鐵綫（直線、7 段）；換綫用 setLineData()，畫面用 switchLine()
+// 東北新幹線（10-02 用戶）：東京→盛岡 はやぶさ（E5）同こまち（E6）連結行，盛岡分開；はやぶさ去新函館北斗、こまち去秋田
+const TOHOKU_ST=[['東京','とうきょう','Tokyo'],['上野','うえの','Ueno'],['大宮','おおみや','Omiya'],['仙台','せんだい','Sendai'],['盛岡','もりおか','Morioka']];
+const HAYA_ST=TOHOKU_ST.concat([['八戸','はちのへ','Hachinohe'],['新青森','しんあおもり','Shin-Aomori'],['木古内','きこない','Kikonai'],['新函館北斗','しんはこだてほくと','Shin-Hakodate-Hokuto']]);
+const KOMA_ST=TOHOKU_ST.concat([['田沢湖','たざわこ','Tazawako'],['角館','かくのだて','Kakunodate'],['大曲','おおまがり','Omagari'],['秋田','あきた','Akita']]);
+const MORIOKA=4;
+// 路線：山手線（環狀、15 段）／東鐵綫（直線、7 段）／はやぶさ・こまち（直線、各 4 段）；換綫用 setLineData()，畫面用 switchLine()
 // 第 k 段由邊個站開：直線最後一段唔夠兩個站距就向前移（東鐵綫第 6 段＝粉嶺開）
 const secCountOf=Ld=>Ld.loop?Ld.st.length/2:Math.ceil((Ld.st.length-1)/2),secStartOf=(Ld,k)=>Ld.loop?k*2:Math.min(k*2,Ld.st.length-3);
-const LINES={jy:{id:'jy',name:'山手線',en:'Yamanote Line',color:'#80C241',code:'JY',loop:true,st:YAMA_ST,store:'kg_yamanote',
+// vmax＝最高速度（米／秒）、kmax＝畫面顯示嘅最高時速（新幹線：遊戲入面行 31 米／秒，顯示 320 km/h）
+const LINES={jy:{id:'jy',name:'山手線',en:'Yamanote Line',color:'#80C241',code:'JY',jp:true,loop:true,st:YAMA_ST,store:'kg_yamanote',vmax:22.2,kmax:80,
     tx:{next:'次は',now:'ただいま',auto:'TASC',ats:'ATS',door:'戸閉',lcdHead:'山手線 内回り　普通',doorOpen:'ドア開',doorShut:'戸閉 完了',ac:'空調 24℃',paper:['山手線 内回り','運転時刻表　1101G'],model:'E235',stamp:'JR 山手線',plate:'クハE235-1'}},
-  eal:{id:'eal',name:'東鐵綫',en:'East Rail Line',color:'#5EB6E4',code:'EAL',loop:false,st:EAL_ST,store:'kg_eastrail',
-    tx:{next:'下一站',now:'本站',auto:'ATO',ats:'ATP',door:'車門',lcdHead:'東鐵綫　往羅湖',doorOpen:'車門開',doorShut:'車門已關',ac:'冷氣 24℃',paper:['東鐵綫　往羅湖','行車時間表　E101'],model:'R-Train',stamp:'港鐵 東鐵綫',plate:'E001 R-Train'}}};
+  eal:{id:'eal',name:'東鐵綫',en:'East Rail Line',color:'#5EB6E4',code:'EAL',loop:false,st:EAL_ST,store:'kg_eastrail',vmax:22.2,kmax:80,
+    tx:{next:'下一站',now:'本站',auto:'ATO',ats:'ATP',door:'車門',lcdHead:'東鐵綫　往羅湖',doorOpen:'車門開',doorShut:'車門已關',ac:'冷氣 24℃',paper:['東鐵綫　往羅湖','行車時間表　E101'],model:'R-Train',stamp:'港鐵 東鐵綫',plate:'E001 R-Train'}},
+  haya:{id:'haya',name:'はやぶさ',full:'東北・北海道新幹線',en:'Hayabusa',sub:'Tōhoku · Hokkaidō Shinkansen',color:'#1d8a68',code:'E5',jp:true,shin:true,loop:false,st:HAYA_ST,store:'kg_hayabusa',vmax:31,kmax:320,
+    tx:{next:'次は',now:'ただいま',auto:'TASC',ats:'DS-ATC',door:'戸閉',lcdHead:'はやぶさ　新函館北斗ゆき',doorOpen:'ドア開',doorShut:'戸閉 完了',ac:'空調 24℃',paper:['はやぶさ　新函館北斗ゆき','運転時刻表　はやぶさ 1号'],model:'E5',stamp:'はやぶさ',plate:'E523-1'}},
+  koma:{id:'koma',name:'こまち',full:'秋田新幹線',en:'Komachi',sub:'Akita Shinkansen',color:'#c8102e',code:'E6',jp:true,shin:true,loop:false,st:KOMA_ST,store:'kg_komachi',vmax:31,kmax:320,
+    tx:{next:'次は',now:'ただいま',auto:'TASC',ats:'DS-ATC',door:'戸閉',lcdHead:'こまち　秋田ゆき',doorOpen:'ドア開',doorShut:'戸閉 完了',ac:'空調 24℃',paper:['こまち　秋田ゆき','運転時刻表　こまち 1号'],model:'E6',stamp:'こまち',plate:'E621-1'}}};
 // SECB＝三個站位入面站位 0 係邊個站（行程可以由任何站開始）
 let LINE=LINES.jy,YN=YAMA_ST.length,SECN=YN/2,SEC=0,SECB=0;const MAJ=[0,4,12,16,19,24];
-function setLineData(id){LINE=LINES[id]||LINES.jy;YN=LINE.st.length;SECN=secCountOf(LINE);}
+function setLineData(id){LINE=LINES[id]||LINES.jy;YN=LINE.st.length;SECN=secCountOf(LINE);VMAX=LINE.vmax||22.2;}
+// 顯示時速（新幹線按比例放大到 320）
+const KMH=v=>Math.round(v/VMAX*(LINE.kmax||80)),GMAX=()=>LINE.shin?360:120;
 const ylObj=y=>{if(!LINE.loop&&(y<0||y>=YN))return null;const i=((y%YN)+YN)%YN,r=LINE.st[i];
-  if(LINE.id==='jy'){const [ja,kana,en]=r;return {ja,kana,en,y:i,code:'JY'+String(i+1).padStart(2,'0'),zh:ja,ic:null};}
+  if(LINE.jp){const [ja,kana,en]=r;return {ja,kana,en,y:i,code:LINE.shin?'':'JY'+String(i+1).padStart(2,'0'),zh:ja,ic:null};}
   const [ja,zh,en,code,ic]=r;return {ja,kana:'',en,y:i,code,zh,ic:ic||null};};
 // 行車方向：山手線＝前面最近兩個大站（上野・池袋方面 等）；東鐵綫＝往羅湖
 function dirOf(y){if(LINE.id!=='jy'){const t=ylObj(YN-1);return [t,t];}const d=MAJ.map(m=>[((m-y+YN)%YN)||YN,m]).sort((a,b)=>a[0]-b[0]);return [ylObj(d[0][1]),ylObj(d[1][1])];}
@@ -713,7 +762,7 @@ const ROAD_S=segS(1)+330, RIVER_S=segS(5)+120;   // 過街鐵橋、神田川鐵�
 // 過街路＋鐵橋：落咗隧道（東鐵綫筆架山）就收埋
 const ROAD_X=[];let ROAD_HID=false;
 const DOORZ=[-7.4,-2.47,2.47,7.4];
-function doorsOf(st){const a=[];for(let i=0;i<5;i++)for(const dz of DOORZ)a.push(st.stop-HEAD-i*20-dz);return a;}
+function doorsOf(st){if(shinOn())return shinDoorsAt(st);const a=[];for(let i=0;i<5;i++)for(const dz of DOORZ)a.push(st.stop-HEAD-i*20-dz);return a;}
 const HDR=(hex,k)=>new THREE.Color(hex).multiplyScalar(k);
 
 /* ======================= 路軌貼圖（碎石＋混凝土枕木＋扣件，連法線） ======================= */
@@ -979,10 +1028,13 @@ function buildTrees(){const n=TREES.length;if(!n)return;const NC=LOWQ?14:26,CS=L
       DUMMY.position.set(x+Math.sin(ph)*Math.cos(th)*2.3*sc*r,cy+Math.cos(ph)*1.6*sc*r,z+Math.sin(ph)*Math.sin(th)*2.3*sc*r);DUMMY.rotation.set(srand()*6.28,srand()*6.28,srand()*6.28);DUMMY.scale.setScalar(sr(1.3,1.9)*sc*CS);DUMMY.updateMatrix();imL.setMatrixAt(k,DUMMY.matrix);
       col.set(sak?spick(['#ffd6e2','#ffc4d6','#ffe6ee','#ffb8cd','#fff0f4']):spick(['#6f9a4a','#5d8a3c','#7fa956','#4f7a33']));imL.setColorAt(k,col);k++;}});
   imT.castShadow=imB.castShadow=imC.castShadow=imL.castShadow=true;imC.receiveShadow=imL.receiveShadow=true;scene.add(imT,imB,imC,imL);
-  TREEIM={imC,imL,NC,c0:[Float32Array.from(imC.instanceColor.array),Float32Array.from(imL.instanceColor.array)],hk:false};}
+  TREEIM={imC,imL,NC,c0:[Float32Array.from(imC.instanceColor.array),Float32Array.from(imL.instanceColor.array)],mode:'jp'};}
 let TREEIM=null;
 // 東鐵綫：櫻花樹（粉紅）換做綠樹；山手線還原
-function treeHK(hk){const T0=TREEIM;if(!T0||T0.hk===hk)return;T0.hk=hk;const [cC,cL]=T0.c0,aC=T0.imC.instanceColor.array,aL=T0.imL.instanceColor.array;aC.set(cC);aL.set(cL);
+// mode：'jp'（山手線：櫻花＋綠樹）、'hk'（東鐵綫：全部綠樹）、'au'（東北新幹線 10 月：紅葉，橙紅黃綠）
+function treeHK(mode){if(mode===true)mode='hk';else if(mode===false)mode='jp';const T0=TREEIM;if(!T0||T0.mode===mode)return;T0.mode=mode;const hk=mode==='hk',[cC,cL]=T0.c0,aC=T0.imC.instanceColor.array,aL=T0.imL.instanceColor.array;aC.set(cC);aL.set(cL);
+  if(mode==='au'){const A=['#c8742c','#b8452c','#d6a63a','#e0b84a','#6f9a4a','#c25a2a','#8a9a3a'].map(h=>new THREE.Color(h)),c=new THREE.Color();
+    TREES.forEach((t,i)=>{const k=i%A.length;A[k].toArray(aC,i*3);for(let j=0;j<T0.NC;j++){c.copy(A[j%4?k:(k+1)%A.length]).multiplyScalar(0.92+0.16*((j*7)%5)/4);c.toArray(aL,(i*T0.NC+j)*3);}});}
   if(hk){const G=['#6f9a4a','#5d8a3c','#7fa956','#4f7a33'].map(h=>new THREE.Color(h)),gB=new THREE.Color('#3b5e2a');TREES.forEach(([x,z,sak],i)=>{if(!sak)return;gB.toArray(aC,i*3);for(let j=0;j<T0.NC;j++)G[(i+j)%4].toArray(aL,(i*T0.NC+j)*3);});}
   T0.imC.instanceColor.needsUpdate=true;T0.imL.instanceColor.needsUpdate=true;}
 function planStreetTrees(){for(const [lat,side] of [[-10.9,-1],[22.2,1]])for(let s=8;s<L;s+=sr(12,18)){if(Math.abs(s-ROAD_S)<12||Math.abs(s-RIVER_S)<26)continue;if(side<0&&inStation(s,4))continue;const P=frame(s,lat,0.14);addTree(P.x,P.z,srand()<.45,sr(0.8,1.05),0.14);}}
@@ -1089,8 +1141,10 @@ function stationBldgTexHK(st){const [c,x]=cv(1024,256);x.fillStyle='#f7f8f9';x.f
   x.fillStyle=LINE.color;rr(x,24,40,150,150,18);x.fill();x.fillStyle='#fff';x.textAlign='center';x.textBaseline='middle';x.font=`900 50px ${JPF}`;x.fillText('東鐵',99,94);x.font='bold 40px Helvetica,Arial,sans-serif';x.fillText('EAL',99,148);
   x.fillStyle='#222';x.textAlign='left';x.font=`900 120px ${JPF}`;x.fillText(st.ja+'站',210,112,640);x.fillStyle='#fff';x.font='bold 36px Helvetica,Arial,sans-serif';x.fillText(st.en+' Station',210,231);
   x.fillStyle='#d7262e';x.font='900 italic 64px Helvetica,Arial,sans-serif';x.textAlign='right';x.fillText('MTR',1000,112);x.font=`900 34px ${JPF}`;x.fillText('港鐵',1000,160);return T(c);}
-function stationBldgTex(st){if(LINE.id==='eal')return stationBldgTexHK(st);const [c,x]=cv(1024,256);x.fillStyle='#f7f8f9';x.fillRect(0,0,1024,256);x.fillStyle='#80C241';x.fillRect(0,206,1024,50);
-  x.strokeStyle='#80C241';x.lineWidth=12;rr(x,24,40,150,150,18);x.stroke();x.fillStyle='#222';x.textAlign='center';x.textBaseline='middle';x.font='bold 46px Helvetica,Arial,sans-serif';x.fillText('JY',99,88);x.font='bold 64px Helvetica,Arial,sans-serif';x.fillText(st.code.slice(2),99,150);
+function stationBldgTex(st){if(LINE.id==='eal')return stationBldgTexHK(st);const [c,x]=cv(1024,256),col=LINE.color;x.fillStyle='#f7f8f9';x.fillRect(0,0,1024,256);x.fillStyle=col;x.fillRect(0,206,1024,50);
+  x.strokeStyle=col;x.lineWidth=12;rr(x,24,40,150,150,18);x.stroke();x.fillStyle='#222';x.textAlign='center';x.textBaseline='middle';
+  if(LINE.shin){x.fillStyle=col;x.font=`900 40px ${JPF}`;x.fillText('新幹',99,92);x.fillText('線',99,140);x.fillStyle='#222';}
+  else{x.font='bold 46px Helvetica,Arial,sans-serif';x.fillText('JY',99,88);x.font='bold 64px Helvetica,Arial,sans-serif';x.fillText(st.code.slice(2),99,150);}
   x.textAlign='left';x.font=`900 120px ${JPF}`;x.fillText(st.ja+'駅',210,112,780);x.fillStyle='#fff';x.font='bold 36px Helvetica,Arial,sans-serif';x.fillText(st.en+' Station',210,231);x.fillStyle='#e53935';x.font='900 44px Helvetica,Arial,sans-serif';x.textAlign='right';x.fillText('JR',1000,231);return T(c);}
 function buildStationBldg(){const st=ST[0],sB=st.stop-55,P=posAt(sB),F=dirAt(sB),ang=angOf(F),rx=-F.z,rz=F.x;
   const [c,x]=cv(256,256);x.fillStyle='#d9e1e7';x.fillRect(0,0,256,256);for(let r=0;r<8;r++)for(let k=0;k<8;k++){const g=x.createLinearGradient(0,r*32,0,r*32+28);g.addColorStop(0,'#9cc2dc');g.addColorStop(1,'#5f86a3');x.fillStyle=g;x.fillRect(k*32+3,r*32+3,26,24);}
@@ -1113,7 +1167,7 @@ function buildHKFar(){const G0=new THREE.Group(),mat=new THREE.MeshLambertMateri
   // 獅子山：山脊左邊有塊似獅子頭嘅大石
   const rock=new THREE.MeshLambertMaterial({color:0x8b8272}),hd=new THREE.Mesh(new THREE.SphereGeometry(70,20,14),rock);hd.scale.set(1.25,0.85,0.9);hd.position.set(-800,392,-2330);G0.add(hd);
   const mn=new THREE.Mesh(new THREE.SphereGeometry(60,16,12),rock);mn.scale.set(1.1,0.7,0.9);mn.position.set(-705,370,-2345);G0.add(mn);}
-function restyleScenery(){const hk=LINE.id==='eal';if(hk&&!FAR_HK)buildHKFar();if(FAR_HK)FAR_HK.visible=hk;for(const o of FAR_JP)o.visible=!hk;treeHK(hk);
+function restyleScenery(){const hk=LINE.id==='eal';if(hk&&!FAR_HK)buildHKFar();if(FAR_HK)FAR_HK.visible=hk;for(const o of FAR_JP)o.visible=!hk;treeHK(hk?'hk':LINE.shin?'au':'jp');
   SHOPM.forEach(m=>{const t=shopTex(hk?SHOPN_HK:SHOPN_JP),o=[m.map,m.emissiveMap];m.map=t.map;m.emissiveMap=t.em;m.needsUpdate=true;for(const q of o)if(q)q.dispose();});
   if(busIM){if(!BUSG)BUSG={jp:busIM.geometry,hk:busGeoHK()};busIM.geometry=hk?BUSG.hk:BUSG.jp;const col=new THREE.Color();for(let i=0;i<busIM.count;i++){col.set(hk?(i%2?'#ffd100':'#c8102e'):(i%2?'#e8f5e9':'#ffffff'));busIM.setColorAt(i,col);}if(busIM.instanceColor)busIM.instanceColor.needsUpdate=true;}}
 function refreshLandmarks(){const tk=ST[0].ja==='東京',ak=ST[2].ja==='秋葉原';for(const o of LM.tokyo)o.visible=tk;for(const o of LM.akiba)o.visible=ak;for(const o of LM.gen)o.visible=!tk;
@@ -1378,9 +1432,10 @@ function lmFill(c,dense=0.85,low=false){const big=c.occ.filter(o=>(o[1]-o[0])*(o
 // 建立／放置：換段時把三個站嘅地標搬去對應站位
 function lmPlace(g,st){const s=st.stop-LMA,P=posAt(s),F=dirAt(s);g.position.set(P.x,0,P.z);g.rotation.y=angOf(F);}
 // 東鐵綫過咗火炭嘅站：自動補樓用矮樓（10-01 用戶）
-function refreshLandmarkSets(){for(const k in LMK.built)LMK.built[k].visible=false;const hk=LINE.id==='eal',B=hk?LMB_EAL:LMB,NF=hk?LMNOFILL_EAL:LMNOFILL;
-  for(const st of ST){const key=LINE.id+':'+st.y;let g=LMK.built[key];if(!g&&B[st.y]){const c=lmNew();B[st.y](c);if(!NF.includes(st.y))lmFill(c,0.85,hk&&st.y>=SUB_FOT+1);g=lmFinish(c);g.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=true;}});LMK.built[key]=g;scene.add(g);}if(g){lmPlace(g,st);g.visible=true;}}
-  const shin=!hk&&(SECB<=7||SECB>=22);for(const o of LMK.shv)o.visible=shin;SK.enabled=shin;if(!shin)SK.active=false;}   // 新幹線高架只係山手線有
+// 新幹線（はやぶさ／こまち）用站名做 key（東京→盛岡兩條綫共用一套）；東京都市圈以外嘅城市站補矮啲嘅大廈
+function refreshLandmarkSets(){for(const k in LMK.built)LMK.built[k].visible=false;const hk=LINE.id==='eal',sh=!!LINE.shin,B=hk?LMB_EAL:sh?LMB_SH:LMB,NF=hk?LMNOFILL_EAL:sh?LMNOFILL_SH:LMNOFILL;
+  for(const st of ST){const id=sh?st.ja:st.y,key=(sh?'sh':LINE.id)+':'+id;let g=LMK.built[key];if(!g&&B[id]){const c=lmNew();B[id](c);if(!NF.includes(id))lmFill(c,0.85,(hk&&st.y>=SUB_FOT+1)||(sh&&!SH_URB.includes(st.ja)));g=lmFinish(c);g.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=true;}});LMK.built[key]=g;scene.add(g);}if(g){lmPlace(g,st);g.visible=true;}}
+  const shin=LINE.id==='jy'&&(SECB<=7||SECB>=22);for(const o of LMK.shv)o.visible=shin;SK.enabled=shin;if(!shin)SK.active=false;}   // 旁邊新幹線高架只係山手線有
 function updLandmarks(t){for(const k in LMK.built){const g=LMK.built[k];if(g.visible&&g.userData.anim)for(const f of g.userData.anim)f(t);}}
 
 
@@ -1551,6 +1606,144 @@ LMB_EAL[13]=c=>{lmGround(c,0xa6a39c);lmBox(c,75,-66,100,3.2,0.25,0x6d7378);for(l
   for(const [x,z,h,k] of [[40,-100,88,2],[118,-94,112,3],[86,-106,124,0],[54,-88,70,4]])lmTower(c,x,z,14,14,h,k);lmSign(c,'深圳','#ffffff','#c62828',54,62,-80.9,14,5,false,0);
   for(const [x,z] of [[30,-20],[30,20],[90,10],[100,40]])lmTree(c,x,z,1.2);};
 
+/* ======================= 沿途景物：東北・北海道新幹線（はやぶさ／こまち） ======================= */
+// 用站名做 key（兩條綫東京→盛岡共用）；東京、上野用返山手線嗰套。座標同山手線一樣：路軌右邊 x 25…125、z −110…90，本地 z＝60 係停車位；
+// 主角盡量放 z ≤ 60−1.5x（停站時喺右前方望到）。遠山（岩手山等）可以放喺範圍外好遠
+const LMB_SH={},LMNOFILL_SH=['上野','木古内','新函館北斗','田沢湖','角館','大曲'];
+LMB_SH['東京']=c=>LMB[0](c);LMB_SH['上野']=c=>LMB[4](c);
+const AUT=[0xc8742c,0xb8452c,0xd6a63a,0xe0b84a,0x9c6a2a,0x6f9a4a];
+const lmAut=(c,x,z,s=1)=>lmTree(c,x,z,s,AUT[Math.floor(Math.random()*AUT.length)]);
+// 火山錐（岩手山、秋田駒ヶ岳）：下綠、中間紅葉／啡、頂灰（snow＝10 月初雪）
+function lmVolcano(c,x,z,R,H,snow){const g=new THREE.CylinderGeometry(R*0.06,R,H,48,8,true),p=g.attributes.position,col=new Float32Array(p.count*3),C=new THREE.Color(),v=new THREE.Vector3();
+  for(let i=0;i<p.count;i++){v.fromBufferAttribute(p,i);const hN=(v.y+H/2)/H,an=Math.atan2(v.z,v.x),n=Math.sin(an*7+1.3)*0.05+Math.sin(an*13)*0.03;p.setXYZ(i,v.x*(1+n),v.y,v.z*(1+n));
+    const q=Math.sin(an*5+hN*9);C.set(hN>0.84&&snow?0xf4f6f8:hN>0.6?0x8a7f6e:hN>0.3?(q>0.5?0xb5652e:q>0.1?0xc79a3a:0x5d7f45):0x4f7a3c);if(snow&&hN>0.7&&hN<=0.84&&Math.sin(an*9)>0.3)C.set(0xe6e9ec);col[i*3]=C.r;col[i*3+1]=C.g;col[i*3+2]=C.b;}
+  g.setAttribute('color',new THREE.BufferAttribute(col,3));g.computeVertexNormals();const m=new THREE.Mesh(g,new THREE.MeshLambertMaterial({vertexColors:true}));m.position.set(x,H/2-2,z);c.g.add(m);return m;}
+// 招牌（兩支柱）
+function lmBoard(c,t,fg,bg,x,z,w,h,y=4){lmSign(c,t,fg,bg,x-0.06,y+h/2,z,w,h);lmBox(c,x+0.05,z,0.1,h+0.2,w+0.2,0x37474f,y-0.1);for(const dz of [-w*0.4,w*0.4])lmCyl(c,x+0.1,0,z+dz,0.1,0.12,y,0x5d6266,8);}
+
+// 大宮：鐵道博物館（白色大館、玻璃正面、弧形屋頂），門口轉車台上面有架 D51 蒸汽火車（慢慢轉），旁邊一架 0 系新幹線
+LMB_SH['大宮']=c=>{lmGround(c,0xb3aea4);lmBox(c,94,-66,40,16,56,0xeef0f2);lmBoxR(c,'glass',73.8,8,-66,0.4,12,50,0x9dbad0);
+  {const s=new THREE.Shape();s.moveTo(-22,0);s.quadraticCurveTo(0,9,22,0);s.lineTo(22,-1);s.quadraticCurveTo(0,8,-22,-1);s.closePath();const g=new THREE.ExtrudeGeometry(s,{depth:60,bevelEnabled:false});g.translate(0,0,-30);c.mg('v').add(g,94,16,-66,0,0,0,1,0xd0d4d8);}
+  lmSign(c,'鉄道博物館','#ffffff','#c62828',73.4,13.5,-66,20,3.4);
+  lmCyl(c,46,0,-28,9.5,9.5,0.45,0x8d8a84,32);lmBox(c,46,-28,1.6,0.08,19,0x5a4a3c,0.45);
+  const sl=lmSL();sl.scale.setScalar(1.25);sl.position.set(46,0.5,-28);c.g.add(sl);c.anim.push(t=>{sl.rotation.y=t*0.12;});
+  lmShinkansen(c,38,-100,2,'0');for(const [x,z] of [[34,20],[60,30],[80,10],[110,20],[120,-30]])lmAut(c,x,z,1.1);lmTower(c,108,44,26,24,46,3);};
+
+// 仙台：青葉山上面伊達政宗騎馬像（月牙頭盔）、AER 大廈、商店街七夕吹き流し
+function lmMasamune(c,x,z,s,y0){const k=0x6b5a3a;lmBox(c,x,z,6*s,4*s,9*s,0x9e9a92,y0);const y=y0+4*s;
+  c.mg('v').add(new THREE.CapsuleGeometry(1.1*s,3.2*s,6,12).rotateX(Math.PI/2),x,y+3.4*s,z,0,0,0,1,k);
+  for(const [dx,dz] of [[-0.6,-1.6],[0.6,-1.6],[-0.6,1.5],[0.6,1.5]])lmCyl(c,x+dx*s,y,z+dz*s,0.28*s,0.24*s,2.7*s,k,8);
+  cyl(c.mg('v'),new THREE.Vector3(x,y+3.8*s,z-1.8*s),new THREE.Vector3(x,y+5.6*s,z-2.8*s),0.55*s,10,k);c.mg('v').add(new THREE.BoxGeometry(0.8*s,0.9*s,1.9*s),x,y+5.6*s,z-3.5*s,0.55,0,0,1,k);
+  cyl(c.mg('v'),new THREE.Vector3(x,y+3.8*s,z+2.6*s),new THREE.Vector3(x,y+2.0*s,z+3.4*s),0.22*s,6,k);
+  lmCyl(c,x,y+4.4*s,z+0.2*s,0.6*s,0.8*s,2.3*s,k,10);lmSph(c,x,y+7.1*s,z+0.2*s,0.5*s,k);
+  c.mg('glass').add(new THREE.TorusGeometry(1.15*s,0.08*s,6,20,Math.PI).rotateZ(Math.PI),x,y+8.2*s,z+0.1*s,0,Math.PI/2,0,1,0xd4a73a);}
+LMB_SH['仙台']=c=>{lmGround(c,0xa9a6a0);lmSph(c,94,-7,-84,28,0x6f9a4a,[1,0.45,1]);for(const [x,z] of [[78,-104],[110,-96],[104,-66],[82,-64],[118,-80]])lmAut(c,x,z,1.2);
+  lmMasamune(c,94,-84,2.4,5.2);lmTower(c,112,34,26,26,128,0);lmBox(c,112,34,22,6,22,0x9fb2c0,128);lmSign(c,'アエル','#ffffff','#1565c0',98.8,120,34,8,2.4);
+  const PC=[0xe91e63,0x1e88e5,0xfdd835,0x43a047,0x8e24aa,0xff7043];for(let i=0;i<10;i++){const x=36+(i%2)*12,z=-44+Math.floor(i/2)*14;lmCyl(c,x,0,z,0.08,0.1,9,0x8d6e63,6);
+    lmSph(c,x,8.6,z,0.75,PC[i%6]);c.mg('v').add(new THREE.CylinderGeometry(0.95,0.75,5,12,1,true),x,5.6,z,0,0,0,1,PC[(i+2)%6]);c.mg('v').add(new THREE.CylinderGeometry(0.75,0.6,2.4,12,1,true),x,2.4,z,0,0,0,1,PC[(i+4)%6]);}
+  lmBoard(c,'仙台七夕','#ffffff','#ad1457',30,-60,10,2.2,5);};
+
+// 盛岡：遠處岩手山（初雪）、盛岡城跡石垣（紅葉）、北上川＋開運橋、わんこそば
+LMB_SH['盛岡']=c=>{lmGround(c,0x9fa58e);lmVolcano(c,1100,-1650,650,520,true);lmWater(c,40,62,-110,90);for(const x of [39,63])lmBoxR(c,'v',x,0.6,-10,1.4,1.2,200,0x9e9a92);
+  lmBox(c,51,-24,26,0.8,8,0xf2f2ee,4.4);for(const zz of [-27.6,-20.4])lmBox(c,51,zz,26,1.1,0.25,0xd9dcdf,5.2);for(const x of [42,60])lmCyl(c,x,0,-24,0.7,0.8,4.4,0xcfd3d6,10);
+  c.mg('v').add(new THREE.TorusGeometry(13,0.45,6,24,Math.PI),51,4.8,-28.2,0,0,0,1,0xffffff);c.mg('v').add(new THREE.TorusGeometry(13,0.45,6,24,Math.PI),51,4.8,-19.8,0,0,0,1,0xffffff);
+  {const g=new THREE.CylinderGeometry(23,27,9,4,1).rotateY(Math.PI/4),m=new THREE.Mesh(g,std({map:texStone,roughness:.9}));m.position.set(94,4.5,-84);c.g.add(m);lmOcc(c,72,116,-106,-62);
+    for(const [x,z] of [[84,-94],[100,-92],[92,-76],[106,-80],[80,-80]])lmAut(c,x,z,1.15);for(const [x,z] of [[86,-90],[102,-78]])lmTree(c,x,z,1.1,0x2e6b35);}
+  lmBox(c,32,30,8,4,10,0xe8dcc8);lmRoof(c,32,4,30,9,11,2.2,0x3e4a52);lmSign(c,'わんこそば','#ffffff','#b71c1c',27.9,3.2,30,7,1.4);
+  for(const [x,z] of [[30,-80],[33,60],[70,40],[100,30],[120,0]])lmAut(c,x,z,1.1);};
+
+// 八戸：漁港（漁船、燈塔）、蕪島（神社、海鷗飛）、八食センター
+function lmFishBoat(c,x,z,col){lmBox(c,x,z,4,1.6,13,0xf4f4f2,0.2);lmBox(c,x,z,4.05,0.35,13,col,1.2);lmBox(c,x,z+2,3,2.4,4,0xffffff,1.8);lmBox(c,x,z+2,3.05,0.6,4.05,0x26313a,3.2);lmCyl(c,x,1.8,z-2.5,0.1,0.12,7,0xdedede,6);
+  const F=[0xe53935,0xfdd835,0x1e88e5,0x43a047];for(let i=0;i<3;i++)lmBoxR(c,'v',x,7.4-i*1.3,z-2.5-1.2,0.05,0.9,2.2,F[(i+Math.floor(x))%4]);}
+LMB_SH['八戸']=c=>{lmGround(c,0xa7a49b);lmWater(c,62,125,-110,90);lmBox(c,61,-10,3,1.4,200,0xa9a59c);
+  lmFishBoat(c,70,-88,0x1e88e5);lmFishBoat(c,70,-64,0xe53935);lmFishBoat(c,78,-30,0x2e7d32);lmFishBoat(c,70,10,0x1e88e5);
+  lmBox(c,108,-70,6,1.5,40,0xa9a59c);for(let i=0;i<6;i++)lmCyl(c,108,1.5+i*2,-90,1.4-i*0.08,1.45-i*0.08,2,i%2?0xffffff:0xd32f2f,16);lmCyl(c,108,13.5,-90,0.9,0.9,1.6,0xfff6d0,12,'lamp');
+  lmSph(c,104,-6,-12,16,0x7aa253,[1,0.6,1]);lmBox(c,104,-12,5,3.2,6,0xc62828,3.4);lmRoof(c,104,6.6,-12,7,8,2.2,0x37474f);
+  const gulls=new THREE.Group();c.g.add(gulls);const gm=new THREE.MeshLambertMaterial({color:0xffffff});for(let i=0;i<9;i++){const b=new THREE.Group();for(const sd of [-1,1]){const w=new THREE.Mesh(new THREE.BoxGeometry(1.6,0.06,0.5),gm);w.position.x=sd*0.8;w.userData.sd=sd;b.add(w);}b.add(new THREE.Mesh(new THREE.SphereGeometry(0.28,8,6),gm));gulls.add(b);}
+  c.anim.push(t=>{gulls.children.forEach((b,i)=>{const a=t*0.4+i*0.7,r=14+(i%3)*6;b.position.set(104+Math.cos(a)*r,16+(i%4)*3+Math.sin(t*1.3+i)*1.2,-12+Math.sin(a)*r);b.rotation.y=-a;for(const w of b.children)if(w.userData.sd)w.rotation.z=w.userData.sd*Math.sin(t*6+i)*0.45;});});
+  lmBox(c,38,-58,18,7,36,0xe8e2d4);lmBox(c,38,-58,19,0.6,37,0xc62828,7);lmSign(c,'八食センター','#ffffff','#c62828',28.8,5,-58,14,2.4);lmTower(c,40,40,22,20,24,2);};
+
+// 新青森：ねぶた（發光大燈籠武者）、蘋果園、ASPAM 三角大廈
+function nebutaFace(){const [cc,x]=cv(256,256);x.fillStyle='#fff3dc';x.fillRect(0,0,256,256);x.lineCap='round';x.lineJoin='round';
+  x.fillStyle='#d32f2f';x.beginPath();x.ellipse(128,150,96,104,0,0,6.2832);x.fill();x.fillStyle='#ffe0b2';x.beginPath();x.ellipse(128,150,80,90,0,0,6.2832);x.fill();
+  x.strokeStyle='#111';x.lineWidth=12;x.beginPath();x.moveTo(52,92);x.lineTo(110,116);x.moveTo(204,92);x.lineTo(146,116);x.stroke();
+  for(const ex of [92,164]){x.fillStyle='#fff';x.beginPath();x.ellipse(ex,138,24,16,0,0,6.2832);x.fill();x.lineWidth=5;x.stroke();x.fillStyle='#111';x.beginPath();x.arc(ex,138,9,0,6.2832);x.fill();}
+  x.fillStyle='#b71c1c';x.beginPath();x.ellipse(128,206,40,22,0,0,6.2832);x.fill();x.fillStyle='#fff';x.fillRect(96,194,64,9);x.lineWidth=7;x.strokeStyle='#111';x.beginPath();x.moveTo(128,150);x.lineTo(116,180);x.lineTo(136,180);x.stroke();
+  x.fillStyle='#1a1a1a';x.beginPath();x.moveTo(30,70);x.quadraticCurveTo(128,-10,226,70);x.lineTo(206,80);x.quadraticCurveTo(128,20,50,80);x.fill();return T(cc);}
+function nebutaBody(){const [cc,x]=cv(256,256),C=['#1565c0','#d32f2f','#f9a825','#2e7d32','#6a1b9a'];x.fillStyle='#fff3dc';x.fillRect(0,0,256,256);
+  for(let i=0;i<14;i++){x.fillStyle=C[i%5];x.beginPath();x.moveTo(Math.random()*256,Math.random()*256);for(let k=0;k<4;k++)x.lineTo(Math.random()*256,Math.random()*256);x.fill();}
+  x.strokeStyle='#111';x.lineWidth=6;for(let i=0;i<8;i++){x.beginPath();x.moveTo(Math.random()*256,Math.random()*256);x.quadraticCurveTo(Math.random()*256,Math.random()*256,Math.random()*256,Math.random()*256);x.stroke();}return T(cc);}
+LMB_SH['新青森']=c=>{lmGround(c,0xa6a49a);
+  // 蘋果園：一行行矮樹掛紅蘋果
+  const ap=c.mg('v');for(let i=0;i<6;i++)for(let j=0;j<7;j++){const x=30+i*3.4,z=-6+j*13;lmTree(c,x,z,0.6,0x4c8a3b);for(let k=0;k<6;k++){const a=k*1.05+i,r=1.3;ap.add(new THREE.IcosahedronGeometry(0.24,0),x+Math.cos(a)*r,2.7+Math.sin(k*2.1)*0.6,z+Math.sin(a)*r,0,0,0,1,0xd32f2f);}}
+  // ねぶた：木車上面發光武者燈籠（面向路軌）
+  const x=62,z=-48;lmBox(c,x,z,7,1.6,13,0x5d4037,0.7);for(const dz of [-4.5,4.5])for(const dx of [-3.4,3.4])c.mg('v').add(new THREE.CylinderGeometry(0.9,0.9,0.4,14).rotateZ(Math.PI/2),x+dx,0.9,z+dz,0,0,0,1,0x3e2723);
+  const bm=new THREE.MeshBasicMaterial({map:nebutaBody(),color:HDR(0xffffff,1.1)}),body=new THREE.Mesh(new THREE.BoxGeometry(5,6,9),bm);body.position.set(x,5.3,z);c.g.add(body);
+  const head=new THREE.Mesh(new THREE.SphereGeometry(3.1,20,16),bm);head.position.set(x+0.4,10.6,z-1.5);c.g.add(head);lmTexPlane(c,nebutaFace(),x-2.9,10.6,z-1.5,5.6,5.6,-Math.PI/2,1.15);
+  for(const [dz,rz] of [[-6.2,0.9],[4.4,-0.5]]){const a=new THREE.Mesh(new THREE.BoxGeometry(1.8,1.8,6),bm);a.position.set(x-0.5,8,z+dz);a.rotation.x=rz;c.g.add(a);}
+  lmBoxR(c,'glass',x-1.2,11,z-9,0.3,0.5,8,0xdfe6ea,0.6,0,0);lmOcc(c,x-4,x+4,z-8,z+7);lmBoard(c,'ねぶた祭','#ffffff','#c62828',36,-84,10,2.2,5);
+  lmCyl(c,108,0,-86,0.3,15,78,0xdfe6ea,3,'glass');lmSign(c,'ASPAM','#ffffff','#1565c0',99,10,-86,8,2);lmTower(c,110,30,24,22,30,2);};
+
+// 木古内：北海道入口——海（津輕海峽）、沙灘紅鳥居（みそぎ浜）、燈塔、彩色屋頂民房、「歡迎嚟北海道」大牌
+LMB_SH['木古内']=c=>{lmGround(c,0x9fb27a);lmWater(c,74,125,-110,90);lmBox(c,66,-10,16,0.14,200,0xe3d3a8,0.04);lmTorii(c,68,-56,0.8,0xd6452f);
+  lmBox(c,112,-40,5,1.4,30,0xa9a59c);for(let i=0;i<5;i++)lmCyl(c,112,1.4+i*2.2,-52,1.2,1.25,2.2,i%2?0xd32f2f:0xffffff,16);lmCyl(c,112,12.4,-52,0.8,0.8,1.4,0xfff6d0,12,'lamp');
+  lmBoard(c,'北海道へようこそ','#ffffff','#1565c0',34,-26,16,3,5);
+  for(const [x,z,rc] of [[34,20,0xc0392b],[48,34,0x2e7d4f],[34,52,0x2f5f9a],[50,66,0xc0392b],[38,82,0x2e7d4f]]){lmBox(c,x,z,9,6,10,0xf3eee2);lmRoof(c,x,6,z,10,11,2.2,rc);}
+  for(const [x,z] of [[30,-90],[44,-100],[56,0],[58,48]])lmTree(c,x,z,1.05,0x4f7a3a);};
+
+// 新函館北斗：五稜郭（星形護城河）＋五稜郭塔、北海道農場（紅屋頂穀倉、圓筒倉）
+function goryoStar(cx,cz,R,r,n=5){const s=new THREE.Shape();for(let i=0;i<n*2;i++){const a=i/(n*2)*Math.PI*2-Math.PI/2,rr0=i%2?r:R,x=cx+Math.cos(a)*rr0,z=cz+Math.sin(a)*rr0;i?s.lineTo(x,-z):s.moveTo(x,-z);}s.closePath();return s;}
+LMB_SH['新函館北斗']=c=>{lmGround(c,0x9fb27a);
+  {const w=new THREE.Mesh(new THREE.ShapeGeometry(goryoStar(92,-78,40,26)),WATER);w.rotation.x=-Math.PI/2;w.position.y=0.3;c.g.add(w);
+    const ld=new THREE.Mesh(new THREE.ShapeGeometry(goryoStar(92,-78,33,20)),std({color:0x6f9a4a,roughness:.95}));ld.rotation.x=-Math.PI/2;ld.position.y=0.9;c.g.add(ld);lmOcc(c,52,125,-118,-38);
+    for(const [dx,dz] of [[0,0],[8,6],[-8,5],[6,-8],[-6,-7]])lmAut(c,92+dx,-78+dz,1.1);lmBox(c,92,-78,10,4,8,0xf3eee2,0.9);lmRoof(c,92,4.9,-78,11,9,2.6,0x37474f);}
+  lmCyl(c,56,0,-104,4.2,4.6,84,0xe8ebee,16);lmCyl(c,56,84,-104,9,9,9,0xdfe6ea,5,'glass');lmCyl(c,56,93,-104,4,9,2,0xcfd6dc,5);lmCyl(c,56,95,-104,0.25,0.3,10,0xbdbdbd,6);lmSign(c,'五稜郭タワー','#ffffff','#2f5f9a',46.5,20,-104,11,2.4);
+  const CR=[0x6f9a42,0x9cbd5e,0x8b6d4c,0xc9b06a];for(let i=0;i<5;i++)lmBox(c,40,-20+i*20,26,0.14,18,CR[i%4],0.05);
+  lmBox(c,40,62,12,7,16,0xc0392b);lmRoof(c,40,7,62,13,17,3.6,0x37474f);lmCyl(c,52,0,70,2.4,2.4,12,0xd8d4c8,16);lmSph(c,52,12,70,2.45,0x8a9196,[1,0.8,1]);lmBoard(c,'函館','#ffffff','#2f5f9a',30,-40,8,2.2,5);};
+
+// 田沢湖：深藍色湖（日本最深）、湖邊金色たつこ像、秋田駒ヶ岳、紅葉
+let LAKEM=null;   // 田沢湖：瑠璃色（比一般水深藍）
+LMB_SH['田沢湖']=c=>{lmGround(c,0x93a46f);{if(!LAKEM){LAKEM=WATER.clone();LAKEM.color.set(0x1d4f8c);}const m=new THREE.Mesh(new THREE.PlaneGeometry(80,186),LAKEM);m.rotation.x=-Math.PI/2;m.position.set(88,0.3,-18);c.g.add(m);lmOcc(c,48,125,-110,74);}
+  lmBox(c,45,-18,6,0.14,186,0xd8c9a0,0.04);lmSph(c,58,0,-46,2.6,0x6d6a63,[1.2,0.6,1]);
+  const G=0xd4a73a;lmCyl(c,58,1.4,-46,0.55,0.9,5.2,G,12,'glass');lmSph(c,58,7.2,-46,0.62,G,1,'glass');lmSph(c,58.2,7.8,-46,0.4,G,1,'glass');cyl(c.mg('glass'),new THREE.Vector3(58,5.8,-46.4),new THREE.Vector3(57.6,7.2,-47.2),0.16,6,G);
+  lmVolcano(c,950,-1400,500,420,false);for(const [x,z] of [[30,-100],[34,-60],[30,-20],[33,20],[30,60],[40,80]])lmAut(c,x,z,1.25);lmBoard(c,'田沢湖','#ffffff','#1d4f8c',30,-80,8,2.2,5);};
+
+// 角館：武家屋敷通（黑板塀、門、深色瓦頂）、しだれ桜（10 月葉轉黃橙）、人力車（會郁）
+function lmWeep(c,x,z,s,col){lmCyl(c,x,0,z,0.35*s,0.5*s,4.5*s,0x5d4037,8);lmSph(c,x,5.4*s,z,3.2*s,col,[1,0.55,1]);
+  for(let i=0;i<14;i++){const a=i/14*Math.PI*2,r=2.6*s;c.mg('v').add(new THREE.ConeGeometry(0.5*s,3.4*s,6).rotateX(Math.PI),x+Math.cos(a)*r,3.6*s,z+Math.sin(a)*r,0,0,0,1,col);}}
+LMB_SH['角館']=c=>{lmGround(c,0xa9a28f);lmBox(c,52,-10,8,0.1,200,0x8d8a84,0.05);
+  for(const x of [46.5,57.5]){lmBox(c,x,-10,0.5,2.3,200,0x2b2622);for(let z=-100;z<=80;z+=36){lmBox(c,x,z,0.9,3.4,4.4,0x3e342c);lmRoof(c,x,3.4,z,1.8,5.2,0.9,0x2f3337);}}
+  for(let z=-96;z<=78;z+=30){lmBox(c,72,z,12,6,16,0xf3eee2);lmRoof(c,72,6,z,15,19,4,0x3d4247);lmBox(c,34,z+12,9,5,12,0xece4d2);lmRoof(c,34,5,z+12,11,14,3,0x3d4247);}
+  for(const [x,z] of [[62,-60],[62,-4],[62,50],[42,-80],[42,-30],[42,30]])lmWeep(c,x,z,1.1,[0xd6a63a,0xc8742c,0xe0b84a][Math.floor(Math.random()*3)]);
+  const rk=lmNew();lmBox(rk,0,0,1.4,1.4,1.8,0x1a1a1a,0.9);lmBox(rk,0,0.6,1.5,0.15,1.2,0xb71c1c,2.3);for(const dx of [-0.85,0.85])rk.mg('v').add(new THREE.TorusGeometry(0.85,0.07,6,18).rotateY(Math.PI/2),dx,0.85,0.2,0,0,0,1,0x222222);
+  for(const dx of [-0.5,0.5])lmBox(rk,dx,-1.8,0.08,0.08,2.6,0x5d4037,0.9);lmCyl(rk,0,0,-3.2,0.22,0.22,1.6,0x263238,8);lmSph(rk,0,1.85,-3.2,0.22,0xffcc80);lmCyl(rk,0,2.05,-3.2,0.32,0.05,0.25,0xd7ccc8,10);
+  const rg=lmFinish(rk);c.g.add(rg);c.anim.push(t=>{const k=(t*0.06)%2,f=k<1?k:2-k;rg.position.set(52,0.05,-95+f*170);rg.rotation.y=k<1?Math.PI:0;});
+  lmBoard(c,'武家屋敷通り','#ffffff','#3e342c',30,-56,12,2.2,5);};
+
+// 大曲：雄物川河邊、天上放花火（日頭都放，一粒粒彩色光點散開再落）
+function lmFireworks(c,n){const grp=new THREE.Group();c.g.add(grp);const B=[],COL=[0xff5252,0xffd740,0x40c4ff,0x69f0ae,0xe040fb,0xff9100,0xffffff];
+  for(let k=0;k<n;k++){const N=90,pos=new Float32Array(N*3),dir=new Float32Array(N*3);for(let i=0;i<N;i++){const u=Math.random()*2-1,a=Math.random()*6.2832,r=Math.sqrt(1-u*u),sp=0.85+Math.random()*0.15;dir[i*3]=r*Math.cos(a)*sp;dir[i*3+1]=u*sp;dir[i*3+2]=r*Math.sin(a)*sp;}
+    const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));const m=new THREE.PointsMaterial({color:COL[k%COL.length],size:4.5,transparent:true,depthWrite:false});
+    const p=new THREE.Points(g,m);p.frustumCulled=false;grp.add(p);B.push({p,dir,off:k*1.7,cyc:-1,cx:0,cy:0,cz:0,R:30});}
+  c.anim.push(t=>{for(const b of B){const T0=(t+b.off)/4.2,cyc=Math.floor(T0),u=T0-cyc;if(cyc!==b.cyc){b.cyc=cyc;b.cx=60+Math.random()*60;b.cy=70+Math.random()*60;b.cz=-110+Math.random()*90;b.R=22+Math.random()*16;b.p.material.color.setHex(COL[Math.floor(Math.random()*COL.length)]);}
+    const e=1-Math.pow(1-Math.min(1,u*1.6),3),R=b.R*e,dy=-14*u*u,a=b.p.geometry.attributes.position.array;for(let i=0;i<a.length;i+=3){a[i]=b.cx+b.dir[i]*R;a[i+1]=b.cy+b.dir[i+1]*R+dy;a[i+2]=b.cz+b.dir[i+2]*R;}
+    b.p.geometry.attributes.position.needsUpdate=true;b.p.material.opacity=u<0.08?u/0.08:Math.max(0,1-(u-0.08)/0.75);}});}
+LMB_SH['大曲']=c=>{lmGround(c,0x93ad6a);lmWater(c,78,118,-110,90);for(const x of [77,119])lmBoxR(c,'v',x,0.5,-10,1.2,1,200,0x9e9a92);
+  const TP=[0x1e88e5,0x43a047,0xfdd835,0xe53935];for(let i=0;i<10;i++)lmBox(c,40+(i%3)*10,-100+i*18,7,0.12,7,TP[i%4],0.06);
+  for(let i=0;i<5;i++)lmBox(c,98,-90+i*30,6,1.2,6,0x5d6266);lmFireworks(c,LOWQ?5:8);lmBoard(c,'大曲の花火','#ffffff','#283593',32,-30,12,2.6,5);};
+
+// 秋田：竿燈（長竹掛滿發光燈籠，會搖）、秋田犬像、港口塔セリオン
+function lmKanto(){const c=lmNew();lmCyl(c,0,0,0,0.11,0.14,13,0xc8b07a,6);for(let r=0;r<8;r++){const y=4.6+r*1.05,w=r<2?3.6:r<6?4.4:3.2;lmBox(c,0,0,0.08,0.08,w,0xc8b07a,y+0.55);
+    for(let k=0;k<5;k++){const z=(k-2)*(w/4.6);c.mg('lamp').add(new THREE.SphereGeometry(0.3,8,6),0,y+0.18,z,0,0,0,[1,1.25,1],k%2?0xfff1c8:0xffb74d);}}
+  lmBox(c,0,0,0.6,0.5,0.6,0xd32f2f,13);return lmFinish(c);}
+LMB_SH['秋田']=c=>{lmGround(c,0xa9a6a0);const K=[];for(const [x,z] of [[40,-70],[46,-48],[40,-26],[48,-10]]){const k=lmKanto();k.position.set(x,0,z);c.g.add(k);K.push(k);lmOcc(c,x-3,x+3,z-3,z+3);}
+  c.anim.push(t=>{K.forEach((k,i)=>{k.rotation.z=Math.sin(t*1.1+i*1.7)*0.06;k.rotation.x=Math.sin(t*0.8+i)*0.05;});});
+  const D=0xf3ead6,x=36,z=22,s=2.2;lmBox(c,x,z,3*s,1.2,3*s,0x9e9a92);c.mg('v').add(new THREE.CapsuleGeometry(0.75*s,1.6*s,6,10).rotateX(Math.PI/2),x,1.2+1.9*s,z,0,0,0,1,D);
+  for(const [dx,dz] of [[-0.45,-1],[0.45,-1],[-0.45,1],[0.45,1]])lmCyl(c,x+dx*s,1.2,z+dz*s,0.22*s,0.2*s,1.4*s,D,8);lmSph(c,x,1.2+3.0*s,z-1.7*s,0.75*s,D);lmSph(c,x,1.2+2.8*s,z-2.35*s,0.35*s,0x8d7b6a);
+  for(const dx of [-0.38,0.38])c.mg('v').add(new THREE.ConeGeometry(0.22*s,0.55*s,6),x+dx*s,1.2+3.7*s,z-1.65*s,0,0,0,1,D);c.mg('v').add(new THREE.TorusGeometry(0.4*s,0.16*s,6,14,Math.PI*1.6),x,1.2+2.8*s,z+1.5*s,0,Math.PI/2,0,1,D);
+  lmBoard(c,'秋田犬','#ffffff','#5d4037',30,34,6,1.8,3.5);lmTower(c,110,-94,22,22,120,0);lmCyl(c,110,120,-94,0.4,9,14,0xbfd4e0,4,'glass');lmSign(c,'セリオン','#ffffff','#1565c0',98.8,40,-94,8,2);
+  lmBoard(c,'竿燈まつり','#ffffff','#ef6c00',30,-90,12,2.4,5);};
+
 
 /* ======================= 隧道＋地底站（東鐵綫） ======================= */
 // 東鐵綫（照真實走綫，遊戲距離按比例縮）：金鐘、會展、紅磡係地底站（會展→紅磡過維港沉管隧道）；紅磡以北約 0.5 公里出返地面，
@@ -1565,7 +1758,14 @@ const TUNM={wall:std({map:texConcrete,color:0x7d7c77,roughness:.95,side:THREE.Do
 const UG_B=135,UG_F=30;   // 地底站外殼：停車位前 135m 至後 30m
 const TPROF=[[-3.4,6.9],[-3.4,13.5],[-2.6,14.3],[6.6,14.3],[7.4,13.5],[7.4,6.9]];
 // 呢一段邊度係隧道、邊個站喺地底
-function tunnelPlan(){const P={key:LINE.id+':'+SECB,ug:[false,false,false],tubes:[],portals:[],hills:[],podiums:[],hoods:[]};if(LINE.id!=='eal')return P;
+function tunnelPlan(){const P={key:LINE.id+':'+SECB,ug:[false,false,false],tubes:[],portals:[],hills:[],podiums:[],hoods:[]};
+  // 新幹線（10-02）：盛岡以北好多長山岳隧道；新青森→木古內係青函海底隧道。隧道口嵌入山（hills），兩頭隧道口有名牌
+  if(LINE.shin){const sg=(y,f)=>{for(let i=0;i<2;i++)if(ST[i].y===y&&ST[i+1].y===y+1)f(ST[i].stop,ST[i+1].stop);},
+      tun=(s0,s1,name,H=150,W=230)=>{H=Math.min(H,0.8*(s1-s0));W=Math.min(W,1.6*(s1-s0));P.tubes.push([s0,s1]);P.portals.push({s:s0,kind:'hill',name},{s:s1,kind:'hill',name});P.hills.push([s0,s1,H,W]);};
+    if(LINE.id==='haya'){sg(4,(a,b)=>tun(a+300,b-230,'岩手一戸トンネル'));sg(5,(a,b)=>tun(a+300,b-240,'八甲田トンネル'));sg(6,(a,b)=>tun(a+220,b-170,'青函トンネル',120,260));}
+    if(LINE.id==='koma')sg(4,(a,b)=>tun(a+300,b-220,'仙岩トンネル'));
+    P.shellR=[];return P;}
+  if(LINE.id!=='eal')return P;
   P.ug=ST.map(q=>q.y<=2);const shells=[];ST.forEach((q,i)=>{if(P.ug[i])shells.push([q.stop-UG_B,q.stop+UG_F]);});
   if(P.ug[0]){const last=P.ug.lastIndexOf(true),end=last===2?L:ST[last].stop+150;let s=0;for(const [a,b] of shells){if(a>s)P.tubes.push([s,a]);s=b;}if(end>s)P.tubes.push([s,end]);
     if(end<L){P.portals.push({s:end,dir:-1,kind:'city'});P.podiums.push([end-70,end]);}}
@@ -1754,8 +1954,9 @@ function subCross(s,l,cf,side){const TN=cf.TN;if(!TN)return 0;const d=Math.abs(l
   const dd=s<TN[0]?TN[0]-s:s-TN[1],al=1-ssf(0,75,dd);if(al<=0)return 0;const fl=5.5*al,top=26*al,Cf=C*al;
   return d<10?fl:d<15.4?fl+(top-fl)*ssf(10,15.4,d):top+(Cf-top)*ssf(15.4,30,d);}
 // 世界地形高度（遠處嘅山；近路軌嘅樹林山同隧道山由 buildSuburb 嘅細網格負責，呢度嗰範圍壓落地底）
-function subH(s,l,x,z,cf){const d=Math.abs(l-2),n1=wN(x,z),n2=wN(z*1.3+500,x*1.1-300),onAt=q=>cf.on[cityZone(q)]?1:0,w=(onAt(s-70)+2*onAt(s)+onAt(s+70))/4;
-  let h=w*(ssf(150,330,d)*(52+38*n1)+ssf(330,620,d)*(40+30*n2));
+// cf.far：山由幾遠開始起（東鐵綫 150 米；新幹線 280 米，前面係稻田）
+function subH(s,l,x,z,cf){const d=Math.abs(l-2),n1=wN(x,z),n2=wN(z*1.3+500,x*1.1-300),onAt=q=>cf.on[cityZone(q)]?1:0,w=(onAt(s-70)+2*onAt(s)+onAt(s+70))/4,f0=cf.far||150;
+  let h=w*(ssf(f0,f0+180,d)*(52+38*n1)+ssf(f0+180,f0+470,d)*(40+30*n2))*(cf.hm||1);
   if(cf.seaZ>0){const R=subSeaRange(cf.seaZ);
     if(l>0&&s>R.b0-30&&s<R.s1+40)h=ssf(470,660,l)*(95+45*n1);   // 海：對岸先有山
     if(l<0&&s>R.f0-40&&s<R.f1+40){if(-l<250)return -1;h=Math.max(h,subRidge(s,l,cf));}
@@ -1768,24 +1969,34 @@ function terrMesh(cf){let x0=1e9,x1=-1e9,z0=1e9,z1=-1e9;for(let i=0;i<TPTS.lengt
     let bi=0,bd=1e18;for(let q=0;q<np;q+=10){const dx=x-TPTS[q*2],dz=z-TPTS[q*2+1],dd=dx*dx+dz*dz;if(dd<bd){bd=dd;bi=q;}}
     for(let q=Math.max(0,bi-12);q<Math.min(np,bi+13);q++){const dx=x-TPTS[q*2],dz=z-TPTS[q*2+1],dd=dx*dx+dz*dz;if(dd<bd){bd=dd;bi=q;}}
     const s=bi*4;posAt(s,P);dirAt(s,F);const l=(x-P.x)*(-F.z)+(z-P.z)*F.x,h=subH(s,l,x,z,cf);H[k]=h;pos[k*3]=x;pos[k*3+1]=h;pos[k*3+2]=z;
-    const r=wN(x*2.3+90,z*2.1-40);C.set(h>105&&r>0.35?0x8f927f:h>60?(r>0.6?0x8f927f:0x4f7e3f):r>0.1?0x5f8f4c:0x4b7d3e);col[k*3]=C.r;col[k*3+1]=C.g;col[k*3+2]=C.b;}
+    const r=wN(x*2.3+90,z*2.1-40);
+    // 顏色：香港四季綠；東北 10 月山坡有紅葉（橙、紅、黃）；北海道高處有初雪
+    if(cf.pal==='th'){const q=wN(x*3.1-70,z*2.7+30);C.set(h>110&&r>0.3?0x9a8f78:h>18&&q>0.5?0xb5652e:h>18&&q>0.28?0xc79a3a:h>18&&q<-0.45?0x9c3f2a:r>0.1?0x5f8a46:0x4f7a3c);}
+    else if(cf.pal==='hk'){C.set(h>100?(r>-0.2?0xf2f4f6:0xd2d7dc):h>60&&r>0.4?0x8a8f80:r>0.1?0x5f8a46:0x4a7a40);}
+    else C.set(h>105&&r>0.35?0x8f927f:h>60?(r>0.6?0x8f927f:0x4f7e3f):r>0.1?0x5f8f4c:0x4b7d3e);col[k*3]=C.r;col[k*3+1]=C.g;col[k*3+2]=C.b;}
   const idx=[];for(let j=0;j<nz-1;j++)for(let i=0;i<nx-1;i++){const a=j*nx+i,b=a+1,c=a+nx,d=c+1;if(Math.max(H[a],H[b],H[c],H[d])>0.15)idx.push(a,c,b,b,c,d);}
   if(!idx.length)return null;const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));g.setAttribute('color',new THREE.BufferAttribute(col,3));g.setIndex(idx);g.computeVertexNormals();
   const m=new THREE.Mesh(g,TUNM.hill);m.receiveShadow=true;scene.add(m);return m;}
 // 換段：邊幾段係郊區、海喺邊段，重新排 InstancedMesh；城市大廈嗰幾段收埋；遠景大廈矮化
-function refreshSuburb(){const hk=LINE.id==='eal';for(let z=0;z<4;z++)SUB.on[z]=hk&&SECB+z-1>=SUB_FOT;
+function refreshSuburb(){const hk=LINE.id==='eal',sh=!!LINE.shin;for(let z=0;z<4;z++)SUB.on[z]=hk?SECB+z-1>=SUB_FOT:sh?shRuralZone(z):false;
+  if(sh)for(const o of FAR_JP)o.visible=ST.every(q=>SH_URB.includes(q.ja));   // 東京遠景（大廈、東京鐵塔）：新幹線淨係東京→大宮嗰段先見到
   const any=SUB.on.some(Boolean),nOn=SUB.on.filter(Boolean).length;for(let z=0;z<4;z++)for(const o of CITYZ[z])o.visible=!SUB.on[z];
   SUB.seaZ=-1;if(hk)ST.forEach((q,i)=>{if(q.y===SUB_UNI&&SUB.on[i+1])SUB.seaZ=i+1;});
   MC.ground.map=nOn>=2?texLawn:texGround;   // 郊區段：成塊地面變草地（之前跟路軌打橫拉嘅草地會喺彎位摺埋閃）
   houseZones();farLow(nOn>=2);
-  if(any&&!SUB.built)buildSuburb();if(!SUB.built)return;
+  rurRefresh();
+  if(hk&&any&&!SUB.built)buildSuburb();
+  const key=LINE.id+':'+SECB;for(const k in SUB.terr)if(SUB.terr[k])SUB.terr[k].visible=false;
+  if(sh){for(const k in SUB.T)subPack(SUB.T[k],()=>false);for(let z=0;z<4;z++)if(SUB.sea[z])SUB.sea[z].visible=false;
+    if(any){if(!(key in SUB.terr))SUB.terr[key]=terrMesh({on:SUB.on.slice(),seaZ:-1,TN:null,far:280,pal:ST.some(q=>SH_HOK.includes(q.ja))?'hk':'th',hm:1.25});if(SUB.terr[key])SUB.terr[key].visible=true;}return;}
+  if(!SUB.built)return;
   const R=SUB.seaZ>0?subSeaRange(SUB.seaZ):null,hills=TUN.hills||[];
   const ok=it=>{if(!SUB.on[it.z])return false;if(it.fz>=0)return it.fz===SUB.seaZ;
     if(R&&it.z===SUB.seaZ&&((it.side>0&&it.lat>22&&it.s>R.b0&&it.s<R.s1+30)||(it.side<0&&it.lat>12&&it.s>R.f0-10&&it.s<R.f1+10)))return false;   // 海／樹林山坡嗰度唔放屋
     return !hills.some(([a,b,H,W])=>it.s>a-12&&it.s<b+12&&it.lat<W+14);};   // 隧道個山入面唔放
   for(const k in SUB.T)subPack(SUB.T[k],ok);
   for(let z=0;z<4;z++)if(SUB.sea[z])SUB.sea[z].visible=z===SUB.seaZ;
-  const key=SECB;for(const k in SUB.terr)if(SUB.terr[k])SUB.terr[k].visible=false;if(!any)return;
+  if(!any)return;
   if(!(key in SUB.terr))SUB.terr[key]=terrMesh(subCfg(SUB.seaZ,SUB.on.slice()));if(SUB.terr[key])SUB.terr[key].visible=true;}
 // 城市民房（日式斜頂，city.js 嘅 houseCluster）：郊區段收埋（零縮放）
 function houseZones(){const H=HOUSEIM;if(!H)return;const Z=new THREE.Matrix4().makeScale(0,0,0),M=new THREE.Matrix4();
@@ -1797,8 +2008,96 @@ function farSL(){const U=FARB.userData;if(U.sl)return U.sl;const sl=new Float32A
     posAt(bs,Q);dirAt(bs,Fd);sl[i*2]=bs;sl[i*2+1]=(x-Q.x)*-Fd.z+(z-Q.z)*Fd.x;}return U.sl=sl;}
 // 遠景大廈（buildFar）：郊區段兩旁 540 米內（有山）同海面上唔畫，其餘壓矮（新界遠處多數係矮樓同山）
 function farLow(low){if(!FARB)return;const m0=FARB.userData.m0,M=new THREE.Matrix4(),S=new THREE.Matrix4().makeScale(1,0.3,1),Z=new THREE.Matrix4().makeScale(0,0,0),sl=farSL(),R=SUB.seaZ>0?subSeaRange(SUB.seaZ):null;
-  for(let i=0;i<FARB.count;i++){const s=sl[i*2],l=sl[i*2+1];let hide=SUB.on[cityZone(s)]&&Math.abs(l)<540;if(R&&l>0&&s>R.b0-450&&s<R.s1+450)hide=true;
+  for(let i=0;i<FARB.count;i++){const s=sl[i*2],l=sl[i*2+1];let hide=SUB.on[cityZone(s)]&&(LINE.shin||Math.abs(l)<540);   // 新幹線鄉郊段：遠景大廈全部收埋if(R&&l>0&&s>R.b0-450&&s<R.s1+450)hide=true;
     M.fromArray(m0,i*16);if(low)M.multiply(S);FARB.setMatrixAt(i,hide?Z:M);}FARB.instanceMatrix.needsUpdate=true;}
+
+/* ======================= 東北／北海道沿途鄉郊（はやぶさ／こまち） ======================= */
+// 10-02：兩條新幹線過咗大宮之後沿途係鄉郊。用 suburb.js 嘅分段（SUB.on）、世界座標地形（terrMesh）同草地地面，
+// 另外砌一套日本鄉郊景物：
+//   東北（10 月）：一格格稻田（金黃、收割咗、少少綠）、晾稻架、農舍（彩色鐵皮切妻屋頂）＋屋後杉樹防風林、紅葉樹
+//   城市站（仙台、盛岡、秋田等）附近：唔係稻田，係矮樓同民房（越近個站越密）
+//   北海道（木古内、新函館北斗）：大塊牧草地／薯仔田、紅綠藍屋頂、圓筒倉
+// 稻田跟世界座標方格排（唔會喺彎位重疊）；全部 InstancedMesh，第一次去到先砌，換段時按段重新排（rurRefresh）
+const RUR={built:false,T:{}};
+const SH_URB=['東京','上野','大宮'],SH_HOK=['木古内','新函館北斗'];
+// 城市／市鎮站：站附近係市鎮（數值＝密度：1＝城市，0.3＝細鎮）
+const SH_TOWN={'仙台':1,'盛岡':0.9,'八戸':0.75,'新青森':0.7,'秋田':0.9,'大曲':0.45,'角館':0.45,'田沢湖':0.3,'木古内':0.3,'新函館北斗':0.4};
+// 段 z（0＝站位 0 之前、1＝0→1、2＝1→2、3＝站位 2 之後）：兩頭都係東京都市圈先係城市，其餘係鄉郊
+function shRuralZone(z){const a=ST[Math.max(0,z-1)].ja,b=ST[Math.min(2,z)].ja;return !(SH_URB.includes(a)&&SH_URB.includes(b));}
+const shHokZone=z=>SH_HOK.includes(ST[Math.min(2,z)].ja);
+// 世界座標點 → 最近路軌位置 s、打橫距離 l（右正左負）
+const _rp=new THREE.Vector3(),_rf=new THREE.Vector3();
+function nearSL(x,z){const np=TPTS.length/2;let bi=0,bd=1e18;for(let q=0;q<np;q+=10){const dx=x-TPTS[q*2],dz=z-TPTS[q*2+1],dd=dx*dx+dz*dz;if(dd<bd){bd=dd;bi=q;}}
+  for(let q=Math.max(0,bi-12);q<Math.min(np,bi+13);q++){const dx=x-TPTS[q*2],dz=z-TPTS[q*2+1],dd=dx*dx+dz*dz;if(dd<bd){bd=dd;bi=q;}}
+  let s=bi*4;posAt(s,_rp);dirAt(s,_rf);s+=(x-_rp.x)*_rf.x+(z-_rp.z)*_rf.z;posAt(s,_rp);dirAt(s,_rf);return [s,(x-_rp.x)*(-_rf.z)+(z-_rp.z)*_rf.x];}
+// 稻田：一行行稻（白底，顏色用 instance 調）
+const texPaddy=(()=>{const [c,x]=cv(64,64);x.fillStyle='#ffffff';x.fillRect(0,0,64,64);for(let i=0;i<64;i+=4){x.fillStyle='rgba(0,0,0,.14)';x.fillRect(0,i,64,1.6);}
+  speck(x,64,64,140,['rgba(0,0,0,.25)','rgba(255,255,255,.5)'],0.4,1.1);return T(c,1);})();
+// 農舍外牆：兩層、每層三隻窗（灰色玻璃、深色窗框），地下有門口
+const texFarm=(()=>{const [c,x]=cv(128,64);x.fillStyle='#ffffff';x.fillRect(0,0,128,64);x.fillStyle='rgba(0,0,0,.06)';for(let i=0;i<128;i+=6)x.fillRect(i,0,1,64);
+  for(let f=0;f<2;f++){const Y=f*30+6;for(let i=0;i<3;i++){const X=10+i*40;if(f===0&&i===1){x.fillStyle='#5a4535';x.fillRect(X+4,Y,22,26);continue;}x.fillStyle='#3e352d';x.fillRect(X-2,Y-2,30,20);const g=x.createLinearGradient(0,Y,0,Y+16);g.addColorStop(0,'#b7c8d3');g.addColorStop(1,'#56697a');x.fillStyle=g;x.fillRect(X,Y,26,16);x.fillStyle='rgba(60,50,40,.8)';x.fillRect(X+12,Y,2,16);}}
+  x.fillStyle='rgba(0,0,0,.18)';x.fillRect(0,58,128,6);return T(c);})();
+// 切妻屋頂：底闊 1、高 1、長 1（沿 z）
+function gableGeo(){const s=new THREE.Shape();s.moveTo(-0.5,0);s.lineTo(0.5,0);s.lineTo(0,1);s.closePath();const g=new THREE.ExtrudeGeometry(s,{depth:1,bevelEnabled:false});g.translate(0,0,-0.5);return g;}
+function rurType(key,geo,mat,cast){return RUR.T[key]={geo,mat,cast,items:[],im:null};}
+const RC={gold:['#d9b84f','#cfae45','#e2c35e','#d4b04a'],cut:['#b59b66','#a98f5c','#bba270'],green:['#8fb24e','#7fa846'],
+  hok:['#86b052','#6f9a42','#5f8a3a','#c9b06a','#8b6d4c','#9cbd5e'],roof:['#8f3a2c','#3f5f8a','#5a6b4a','#4b4e53','#6b4a36','#7a2e2a'],roofH:['#c0392b','#2e7d4f','#2f5f9a','#b8312a','#6d8f9a'],
+  wall:['#f3eee2','#ece4d2','#e6dccb','#f6f3ec','#d9cdb6','#c9b79c'],town:['#e8e2d4','#d9d4c8','#efe9dc','#cfd6dc','#e2dbcc','#f1ece3'],
+  cedar:['#2f5a35','#2a5230','#36633a'],cedarH:['#4f7a3a','#5b8443','#46703a'],aut:['#c8742c','#b8452c','#d6a63a','#9c6a2a','#6f8f3a','#c25a2a','#e0b84a']};
+function buildRural(){if(RUR.built)return;RUR.built=true;const col=(a)=>new THREE.Color(spick(a));
+  const pad=rurType('pad',new THREE.BoxGeometry(1,1,1).translate(0,0.5,0),std({map:texPaddy,roughness:.95}),false);
+  const rack=rurType('rack',new THREE.BoxGeometry(1,1,1).translate(0,0.5,0),std({color:0xffffff,roughness:.95}),true);
+  const hw=rurType('hw',new THREE.BoxGeometry(1,1,1).translate(0,0.5,0),std({map:texFarm,roughness:.85}),true);
+  const hr=rurType('hr',gableGeo(),std({color:0xffffff,roughness:.55,metalness:.25}),true);
+  const bw=rurType('bw',new THREE.BoxGeometry(1,1,1).translate(0,0.5,0),std({map:texBlock,roughness:.85}),true);
+  const br=rurType('br',new THREE.BoxGeometry(1,1,1).translate(0,0.5,0),std({color:0xffffff,roughness:.8}),false);
+  const cone=rurType('cone',new THREE.ConeGeometry(1,1,7).translate(0,0.5,0),std({color:0xffffff,roughness:.9,flatShading:true}),true);
+  const trunk=rurType('trunk',new THREE.CylinderGeometry(0.16,0.26,1,6).translate(0,0.5,0),std({color:0x5a4030,roughness:.9}),true);
+  const crown=rurType('crown',new THREE.IcosahedronGeometry(1,LOWQ?0:1),std({color:0xffffff,roughness:.9,flatShading:true}),true);
+  const silo=rurType('silo',new THREE.CylinderGeometry(1,1,1,14).translate(0,0.5,0),std({color:0xffffff,roughness:.6}),true);
+  const dome=rurType('dome',new THREE.SphereGeometry(1,14,8,0,Math.PI*2,0,Math.PI/2),std({color:0xffffff,roughness:.45,metalness:.35}),true);
+  // 一間農舍（牆＋切妻屋頂，屋頂兩邊出檐）；reg：'t'＝淨係東北、'h'＝淨係北海道、冇＝兩邊都有（北海道用 c2 顏色）
+  const house=(x,z,ang,info,big)=>{const w=sr(7,10)*(big?1.25:1),d=sr(8,11)*(big?1.2:1),h=sr(5.2,6.6),wc=col(RC.wall);
+    subPut(hw,x,0,z,ang,w,h,d,wc,info);subPut(hr,x,h,z,ang,w*1.18,sr(2.4,3.4),d*1.1,col(RC.roof),{...info,c2:col(RC.roofH)});};
+  const cedar=(x,z,sc,info)=>{const h=sr(9,15)*sc;subPut(trunk,x,0,z,0,sc,h*0.25,sc,null,info);subPut(cone,x,h*0.18,z,srand()*6,sr(2.2,3.2)*sc,h,sr(2.2,3.2)*sc,col(RC.cedar),{...info,c2:col(RC.cedarH)});};
+  const leafy=(x,z,sc,info)=>{const h=2.6*sc;subPut(trunk,x,0,z,0,sc,h,sc,null,info);subPut(crown,x,h+1.8*sc,z,srand()*6,2.6*sc,2.1*sc,2.6*sc,col(RC.aut),info);};
+  // 世界座標方格（每格 26×34 米）：格中心最近路軌點 → s、l；四角都要離開路軌兩邊條街
+  let x0=1e9,x1=-1e9,z0=1e9,z1=-1e9;for(let i=0;i<TPTS.length;i+=2){x0=Math.min(x0,TPTS[i]);x1=Math.max(x1,TPTS[i]);z0=Math.min(z0,TPTS[i+1]);z1=Math.max(z1,TPTS[i+1]);}
+  const M=300,CX=26,CZ=34;x0-=M;x1+=M;z0-=M;z1+=M;
+  const away=(s,l)=>l<0?-l>17:l>27,lmArea=(s,l)=>ST.some(q=>(l>0&&l<136&&s>q.stop-42&&s<q.stop+182)||(l<0&&l>-34&&s>q.stop-142&&s<q.stop+26));
+  for(let gz=z0;gz<z1;gz+=CZ)for(let gx=x0;gx<x1;gx+=CX){const cx=gx+CX/2,cz=gz+CZ/2,[s,l]=nearSL(cx,cz),a=Math.abs(l);
+    if(s<-50||s>L+50||a>292)continue;if(Math.abs(s-RIVER_S)<34||Math.abs(s-ROAD_S)<15)continue;
+    let ok=true;for(const [dx,dz] of [[-1,-1],[1,-1],[1,1],[-1,1]]){const [s2,l2]=nearSL(cx+dx*CX/2,cz+dz*CZ/2);if(!away(s2,l2)||Math.sign(l2)!==Math.sign(l)||lmArea(s2,l2)){ok=false;break;}}if(!ok)continue;
+    // 邊個站位附近（市鎮範圍）：d＝0（站中心）～1（邊）
+    let slot=-1,d=9;ST.forEach((q,i)=>{const dd=Math.max(Math.abs(s-q.stop)/270,a/150);if(dd<d){d=dd;slot=i;}});if(d>=1)slot=-1;
+    const info={z:cityZone(s),s,a,slot,d};
+    // 市鎮：近站中心係三至八層矮樓，出啲係民房
+    if(slot>=0){const T={...info,k:'town'};if(d<0.5&&srand()<0.85){const bw0=sr(13,20),bd0=sr(12,18),bh=sr(9,26)*(1.1-d);subPut(bw,cx+sr(-3,3),0,cz+sr(-4,4),srand()<.5?0:Math.PI/2,bw0,bh,bd0,col(RC.town),T);subPut(br,cx,bh,cz,0,bw0*0.98,0.6,bd0*0.98,new THREE.Color('#bdb8ae'),T);}
+      else{const n=randi(2,3);for(let i=0;i<n;i++)house(cx+sr(-7,7),cz+(i-(n-1)/2)*11,srand()<.5?0:Math.PI/2,T,false);if(srand()<.5)leafy(cx+sr(-10,10),cz+sr(-12,12),sr(.8,1.1),T);}}
+    const r=srand();
+    // 村落：兩至四間農舍，屋後（離路軌嗰邊）一排杉樹防風林；北海道多個圓筒倉
+    if(r<0.05){const n=randi(2,4),sd=Math.sign(l),ang=srand()<.5?0:Math.PI/2;for(let i=0;i<n;i++)house(cx+sr(-8,8),cz+(i-(n-1)/2)*10,ang+(srand()<.3?Math.PI/2:0),info,i===0);
+      posAt(s,_rp);dirAt(s,_rf);const ox=-_rf.z*sd,oz=_rf.x*sd;for(let i=0;i<7;i++){const t=(i-3)*4.6;cedar(cx+ox*13+_rf.x*t+sr(-1,1),cz+oz*13+_rf.z*t+sr(-1,1),sr(.9,1.2),{...info,reg:'t'});}
+      const sx=cx+sr(-9,9),sz=cz+sr(-12,12);subPut(silo,sx,0,sz,0,2.2,sr(9,12),2.2,new THREE.Color('#d8d4c8'),{...info,reg:'h'});subPut(dome,sx,0,sz,0,2.25,1.8,2.25,new THREE.Color('#8a9196'),{...info,reg:'h'});
+      for(let i=0;i<3;i++)leafy(cx+sr(-11,11),cz+sr(-15,15),sr(.9,1.3),info);continue;}
+    // 近山（遠過 200 米）有杉樹林同紅葉林
+    if(a>200&&r<0.35){const n=randi(5,9);for(let i=0;i<n;i++){const px=cx+sr(-12,12),pz=cz+sr(-16,16);if(srand()<.6)cedar(px,pz,sr(.9,1.3),info);else leafy(px,pz,sr(1,1.5),info);}continue;}
+    // 稻田（田基 1.8 米）：東北金黃／收割咗／綠；北海道牧草、薯仔田、麥田
+    const k=srand(),c=k<.58?col(RC.gold):k<.86?col(RC.cut):col(RC.green);subPut(pad,cx,0.02+srand()*0.05,cz,0,CX-1.8,0.1,CZ-1.8,c,{...info,c2:col(RC.hok)});
+    if(k>=.58&&k<.86&&srand()<.45){const n=randi(1,2);for(let i=0;i<n;i++)subPut(rack,cx+sr(-6,6),0.1,cz+(i?8:-6),0,0.45,1.7,sr(9,14),new THREE.Color('#b8964f'),{...info,reg:'t'});}
+    if(srand()<.06)leafy(cx+CX/2-1,cz+sr(-CZ/2,CZ/2),sr(.8,1.2),info);}
+  // 圓頂要擺喺圓筒倉頂：subPut 時 y＝0，呢度按倉高補返
+  for(const it of dome.items){const si=silo.items.find(q=>q.s===it.s&&Math.abs(q.m.elements[12]-it.m.elements[12])<0.01&&Math.abs(q.m.elements[14]-it.m.elements[14])<0.01);if(si)it.m.elements[13]=si.m.elements[5];}
+  for(const k in RUR.T)subFinish(RUR.T[k]);}
+function rurPack(t,ok,isH){const im=t.im;if(!im)return;let n=0;for(const it of t.items){if(!ok(it))continue;im.setMatrixAt(n,it.m);if(im.instanceColor)im.setColorAt(n,(isH(it)&&it.c2)||it.c||WHITE);n++;}
+  im.count=n;im.visible=n>0;im.instanceMatrix.needsUpdate=true;if(im.instanceColor)im.instanceColor.needsUpdate=true;im.boundingBox=im.boundingSphere=null;}   // 外框要重計（遠處細件 LOD 用）
+// 換段：新幹線綫嘅鄉郊段先顯示；市鎮站附近收埋稻田、放市鎮；隧道個山入面唔放
+function rurRefresh(){const sh=!!LINE.shin;if(!RUR.built){if(!sh||!SUB.on.some(Boolean))return;buildRural();}
+  const dens=ST.map(q=>sh?(SH_TOWN[q.ja]||0):0),hok=[0,1,2,3].map(z=>sh&&shHokZone(z)),hills=TUN.hills||[];
+  const ok=it=>{if(!sh||!SUB.on[it.z])return false;if(hills.some(([a,b,H,W])=>it.s>a-14&&it.s<b+14&&it.a<W+16))return false;
+    const town=it.slot>=0&&it.d<dens[it.slot];if(it.k==='town')return town;if(town)return false;
+    if(it.reg==='t'&&hok[it.z])return false;if(it.reg==='h'&&!hok[it.z])return false;return true;};
+  for(const k in RUR.T)rurPack(RUR.T[k],ok,it=>hok[it.z]);}
 
 
 /* ======================= 車站：貼圖 ======================= */
@@ -1813,7 +2112,15 @@ function signTexHK(st,flip){const [c,x]=cv(1024,320),col=LINE.color;x.fillStyle=
   x.fillStyle=col;x.fillRect(0,252,1024,68);x.fillStyle='#fff';x.font=`bold 32px ${JPF}`;const A=flip?st.next:st.prev,B=flip?st.prev:st.next;
   const tri=(X,dir)=>{x.beginPath();x.moveTo(X+dir*16,286);x.lineTo(X-dir*6,274);x.lineTo(X-dir*6,298);x.closePath();x.fill();};
   if(A){tri(34,-1);x.textAlign='left';x.fillText(A.ja+'  '+A.en,54,298,440);}if(B){tri(990,1);x.textAlign='right';x.fillText(B.ja+'  '+B.en,970,298,440);}return T(c);}
-function signTex(st,flip){if(LINE.id==='eal')return signTexHK(st,flip);const [c,x]=cv(1024,320);const col=ROUTE.color;x.fillStyle='#fbfbf8';x.fillRect(0,0,1024,320);
+// 新幹線站名牌：白底、左邊線色框寫「新幹線」、假名＋大字站名＋英文，下面線色帶寫前後站
+function signTexShin(st,flip){const [c,x]=cv(1024,320),col=LINE.color;x.fillStyle='#fbfbf8';x.fillRect(0,0,1024,320);
+  x.lineWidth=10;x.strokeStyle=col;rr(x,34,62,196,128,16);x.stroke();x.fillStyle=col;x.textAlign='center';x.textBaseline='middle';x.font=`900 48px ${JPF}`;x.fillText('新幹線',132,110);x.font='bold 24px Helvetica,Arial,sans-serif';x.fillText('SHINKANSEN',132,156,172);
+  x.textBaseline='alphabetic';x.fillStyle='#333';x.font=`600 36px ${JPF}`;x.fillText(st.kana,624,56,700);x.fillStyle='#111';x.font=`bold 120px ${JPF}`;x.fillText(st.ja,624,176,700);
+  x.fillStyle='#333';x.font='bold 40px Helvetica,Arial,sans-serif';x.fillText(st.en,624,232,700);
+  x.fillStyle=col;x.fillRect(0,252,1024,68);x.fillStyle='#fff';x.font=`bold 32px ${JPF}`;const A=flip?st.next:st.prev,B=flip?st.prev:st.next;
+  const tri=(X,dir)=>{x.beginPath();x.moveTo(X+dir*16,286);x.lineTo(X-dir*6,274);x.lineTo(X-dir*6,298);x.closePath();x.fill();};
+  if(A){tri(34,-1);x.textAlign='left';x.fillText(A.ja+'  '+A.en,54,298,440);}if(B){tri(990,1);x.textAlign='right';x.fillText(B.ja+'  '+B.en,970,298,440);}return T(c);}
+function signTex(st,flip){if(LINE.id==='eal')return signTexHK(st,flip);if(LINE.shin)return signTexShin(st,flip);const [c,x]=cv(1024,320);const col=ROUTE.color;x.fillStyle='#fbfbf8';x.fillRect(0,0,1024,320);
   x.lineWidth=10;x.strokeStyle=col;rr(x,120,64,120,120,14);x.stroke();x.fillStyle='#222';x.textAlign='center';x.textBaseline='alphabetic';
   x.font='bold 42px Helvetica,Arial,sans-serif';x.fillText('JY',180,114);x.font='bold 58px Helvetica,Arial,sans-serif';x.fillText(st.code.slice(2),180,170);
   x.fillStyle='#333';x.font=`600 36px ${JPF}`;x.fillText(st.kana,560,56);x.fillStyle='#111';x.font=`bold 120px ${JPF}`;x.fillText(st.ja,560,176);
@@ -1836,7 +2143,12 @@ function psdLeafTexHK2(){const [c,x]=cv(128,256);x.fillStyle='#aeb5bb';x.fillRec
   x.fillStyle='#d8dcdf';x.fillRect(8,134,112,114);x.fillStyle='#5d656c';for(let yy=138;yy<246;yy+=6)for(let xx=12;xx<118;xx+=6)x.fillRect(xx,yy,3,3);return T(c);}
 const texDoorMarkHK=(()=>{const [c,x]=cv(160,128);x.clearRect(0,0,160,128);x.fillStyle='#1f3f7a';x.fillRect(8,8,144,112);x.fillStyle='#ffffff';
   for(const ox of [48,112]){x.beginPath();x.moveTo(ox,24);x.lineTo(ox+20,56);x.lineTo(ox+8,56);x.lineTo(ox+8,104);x.lineTo(ox-8,104);x.lineTo(ox-8,56);x.lineTo(ox-20,56);x.closePath();x.fill();}return T(c);})();
-function ledBoardTex(dir){if(LINE.id==='eal'){const [c,x]=cv(512,140);x.fillStyle='#060606';x.fillRect(0,0,512,140);x.textBaseline='middle';
+// 新幹線發車標：列車名（盛岡之前係はやぶさ・こまち連結）＋終點；第二行時間、車卡數、盛岡切り離し
+function ledBoardTexShin(dir){const [c,x]=cv(512,140),cp=ST[0].y<MORIOKA;x.fillStyle='#060606';x.fillRect(0,0,512,140);x.textBaseline='middle';x.textAlign='left';
+  x.fillStyle=LINE.id==='koma'?'#ff6b6b':'#4fe39a';x.font=`bold 34px ${JPF}`;x.fillText(cp?'はやぶさ・こまち':LINE.name,16,36,300);x.fillStyle='#ffffff';x.textAlign='right';x.fillText(dir,496,36,190);
+  x.textAlign='left';x.fillStyle='#63ff8a';x.fillText('17:35',16,96);x.fillStyle='#ffa53a';x.fillText(cp?'盛岡で切り離し':(LINE.id==='koma'?'2両':'3両'),150,96,340);
+  x.fillStyle='rgba(0,0,0,.45)';for(let i=0;i<512;i+=3)x.fillRect(i,0,1,140);for(let j=0;j<140;j+=3)x.fillRect(0,j,512,1);return T(c);}
+function ledBoardTex(dir){if(LINE.shin)return ledBoardTexShin(dir);if(LINE.id==='eal'){const [c,x]=cv(512,140);x.fillStyle='#060606';x.fillRect(0,0,512,140);x.textBaseline='middle';
     for(const [y,m] of [[36,'1'],[98,'6']]){x.fillStyle='#ffffff';x.font=`bold 36px ${JPF}`;x.textAlign='left';x.fillText(dir,18,y);x.font='bold 26px Helvetica,Arial,sans-serif';x.fillText('Lo Wu',108,y+2);x.fillStyle='#ffb13b';x.textAlign='right';x.font=`bold 34px ${JPF}`;x.fillText(m+' 分鐘',494,y);}
     x.fillStyle='rgba(0,0,0,.45)';for(let i=0;i<512;i+=3)x.fillRect(i,0,1,140);for(let j=0;j<140;j+=3)x.fillRect(0,j,512,1);return T(c);}
   const [c,x]=cv(512,140);x.fillStyle='#060606';x.fillRect(0,0,512,140);x.textBaseline='middle';
@@ -1906,7 +2218,7 @@ function buildStation(st){
   const ln=new THREE.Mesh(new THREE.PlaneGeometry(0.1,PL).rotateX(-Math.PI/2),MS.white);ln.position.set(-1.78,top+0.004,0);g.add(ln);
   const tg=planeUV(0.3,PL,0.3,0.3).rotateX(-Math.PI/2),tm=new THREE.Mesh(tg,MS.tact);tm.position.set(-2.8,top+0.004,0);tm.receiveShadow=true;g.add(tm);
   // 乘車位置標記
-  const ds=doorsOf(st),mk=new THREE.InstancedMesh(new THREE.PlaneGeometry(1.3,1.0).rotateX(-Math.PI/2).rotateY(-Math.PI/2),MS.mark,ds.length);
+  const ds=doorsOf(st),mk=new THREE.InstancedMesh(new THREE.PlaneGeometry(1.3,1.0).rotateX(-Math.PI/2).rotateY(-Math.PI/2),MS.mark,ds.length);st.mk=mk;
   ds.forEach((s,i)=>{DUMMY.position.set(-3.15,top+0.006,-(s-sMid));DUMMY.rotation.set(0,0,0);DUMMY.scale.set(1,1,1);DUMMY.updateMatrix();mk.setMatrixAt(i,DUMMY.matrix);});g.add(mk);
   // 樓梯
   for(let i=0;i<16;i++)dm.add(new THREE.BoxGeometry(3.2,0.2,0.75),-7.7,top-0.1-(i+1)*0.2,h0+0.375+i*0.75);
@@ -1927,9 +2239,11 @@ function buildStation(st){
     const hw=new THREE.Group(),wn=new Merger(),wp=new Merger(),WL=12,WH=3.7;
     for(let k=0,z=-PL/2+1.5;z+WL<=PL/2-0.5;k++,z+=WL)(k%3===1?wn:wp).add(new THREE.PlaneGeometry(WL,WH),-9.9,top+WH/2+0.02,z+WL/2,0,Math.PI/2,0);
     st.wallNameMat=hkMat(hkTiny());st.wallMat=hkMat(hkTiny());hw.add(wn.mesh(st.wallNameMat,false,true),wp.mesh(st.wallMat,false,true));g.add(hw);st.hkWall=hw;hw.visible=false;hw.userData.tag='hkWall';st.tags.hkWall=hw;}
+  // JR 款上蓋（弧形頂、橫樑、燈帶、細發車標）：新幹線綫收埋，換 stations_sh.js 嘅大頂棚
+  const jt=new THREE.Group();jt.userData.tag='jrTop';st.tags.jrTop=jt;g.add(jt);const lm2=new Merger();
   for(const x of [-8.6,-5.8,-3.0])cm.add(new THREE.BoxGeometry(0.22,0.28,PL-6),x,top+3.95,0);
   {const sh=new THREE.Shape();sh.moveTo(-10.4,3.95);sh.quadraticCurveTo(-5.8,5.15,-1.25,4.05);sh.lineTo(-1.25,3.85);sh.quadraticCurveTo(-5.8,4.95,-10.4,3.75);sh.closePath();
-    const rg=new THREE.ExtrudeGeometry(sh,{depth:PL-4,bevelEnabled:false,curveSegments:16});rg.translate(0,top,-(PL-4)/2);const r=new THREE.Mesh(rg,MS.roof);r.castShadow=true;r.receiveShadow=true;g.add(r);}
+    const rg=new THREE.ExtrudeGeometry(sh,{depth:PL-4,bevelEnabled:false,curveSegments:16});rg.translate(0,top,-(PL-4)/2);const r=new THREE.Mesh(rg,MS.roof);r.castShadow=true;r.receiveShadow=true;jt.add(r);}
   for(const x of [-7.4,-4.2])lm.add(new THREE.PlaneGeometry(0.22,PL-12).rotateX(Math.PI/2),x,top+4.18,0);
   // 站名牌（吊牌＋企牌）
   const smF=std({map:signTex(st,false),roughness:.5}),smB=std({map:signTex(st,true),roughness:.5});smF.emissive=smB.emissive=new THREE.Color(0xffffff);smF.emissiveMap=smF.map;smB.emissiveMap=smB.map;smF.emissiveIntensity=smB.emissiveIntensity=0.35;st.signMat=[smF,smB];
@@ -1939,8 +2253,8 @@ function buildStation(st){
   for(const z of [-30,22]){const x=-3.4,bg=new THREE.PlaneGeometry(3.2,1.0);const a=new THREE.Mesh(bg,smF);a.rotation.y=Math.PI/2;a.position.set(x+0.03,top+1.6,z);g.add(a);const b=new THREE.Mesh(bg,smB);b.rotation.y=-Math.PI/2;b.position.set(x-0.03,top+1.6,z);g.add(b);
     sm.add(new THREE.BoxGeometry(0.05,1.1,3.3),x,top+1.6,z);for(const dz of [-1.5,1.5])sm.add(new THREE.CylinderGeometry(0.05,0.05,2.1,8),x,top+1.05,z+dz);}
   // LED 發車標、出口牌、時鐘
-  {const lz=h0-2.5;sm.add(new THREE.BoxGeometry(2.7,0.75,0.2),-6.2,top+3.1,lz);for(const sg of [1,-1]){const p=new THREE.Mesh(new THREE.PlaneGeometry(2.55,0.66),MS.led);p.position.set(-6.2,top+3.1,lz+sg*0.105);if(sg<0)p.rotation.y=Math.PI;g.add(p);}
-    for(const dx of [-1.1,1.1])sm.add(new THREE.CylinderGeometry(0.02,0.02,0.6,6),-6.2+dx,top+3.7,lz);
+  {const lz=h0-2.5;lm2.add(new THREE.BoxGeometry(2.7,0.75,0.2),-6.2,top+3.1,lz);for(const sg of [1,-1]){const p=new THREE.Mesh(new THREE.PlaneGeometry(2.55,0.66),MS.led);p.position.set(-6.2,top+3.1,lz+sg*0.105);if(sg<0)p.rotation.y=Math.PI;jt.add(p);}
+    for(const dx of [-1.1,1.1])lm2.add(new THREE.CylinderGeometry(0.02,0.02,0.6,6),-6.2+dx,top+3.7,lz);
     for(const sg of [1,-1]){const e=new THREE.Mesh(new THREE.PlaneGeometry(1.6,0.45),MS.exit);e.position.set(-7.7,top+2.7,h0-0.5+sg*0.03);if(sg<0)e.rotation.y=Math.PI;g.add(e);}
     sm.add(new THREE.CylinderGeometry(0.34,0.34,0.08,24),-5.8,top+2.95,12,Math.PI/2,0,0);for(const sg of [1,-1]){const ck=new THREE.Mesh(new THREE.CircleGeometry(0.31,24),MS.clock);ck.position.set(-5.8,top+2.95,12+sg*0.045);if(sg<0)ck.rotation.y=Math.PI;g.add(ck);}}
   // 長椅、販賣機、垃圾桶
@@ -1962,8 +2276,9 @@ function buildStation(st){
     const im=new THREE.InstancedMesh(new RoundedBoxGeometry(0.06,1.12,0.98,2,0.02),MS.psdLeaf,gz.length*2),imH=new THREE.InstancedMesh(new RoundedBoxGeometry(0.05,1.45,0.98,2,0.02),MS.psdLeafHK,gz.length*2);
     im.castShadow=imH.castShadow=true;jr.add(im);hk.add(imH);g.add(jr,hk);hk.visible=false;jr.userData.tag='psdJR';hk.userData.tag='psdHK';st.tags.psdJR=jr;st.tags.psdHK=hk;
     st.psd={ims:[[im,0.6],[imH,0.78]],gz,X:X+0.12,top,open:0,last:-1};setPSD(st.psd);}
-  for(const [m,mat,c] of [[dm,MS.wall,true],[cm,MS.steel,true],[wm,MS.wood,true],[sm,MS.dark,true],[rm,MS.rail,false],[gm,MS.glass,false]]){const o=m.mesh(mat,c,true);if(o)g.add(o);}
-  const lo=lm.mesh(MS.lamp,false,false);if(lo)g.add(lo);
+  for(const [m,mat,c] of [[dm,MS.wall,true],[cm,MS.steel,true],[wm,MS.wood,true],[sm,MS.dark,true],[rm,MS.rail,false],[gm,MS.glass,false],[lm2,MS.dark,true]]){const o=m.mesh(mat,c,true);if(o)(m===cm||m===lm2?jt:g).add(o);}
+  const lo=lm.mesh(MS.lamp,false,false);if(lo)jt.add(lo);
+  st.signZ=[-45,-18,18,45];   // 吊牌位置（新幹線大頂棚要加長吊杆）
   // 東鐵綫兩邊月台、中間兩條路軌（用戶指出，以九龍塘為例）：對面月台＝成個月台沿兩條路軌中線（lat 2）鏡像複製，有字嘅牌 UV 左右反返轉
   {const mg=g.clone(true);mg.position.set(P.x-F.z*4,P.y,P.z+F.x*4);mg.scale.x=-1;mg.visible=false;scene.add(mg);st.mirror=mg;st.mP=P.clone();st.mF=F.clone();
     const txt=new Set([smF,smB,MS.led,MS.exit,MS.clock,MS.psdHK,st.wallNameMat,st.colSignMat,st.firstMat,...st.posters.map(q=>q[0])]);st.mTag={};
@@ -1979,8 +2294,11 @@ function refreshStationSigns(){if(LINE.id==='eal')for(const st of ST)refreshHKSt
 // 換綫：廣告、月台閘門顏色（站名牌同發車標由 refreshStationSigns 處理）
 function restyleStations(){const hk=LINE.id==='eal',col=new THREE.Color(hk?0x5eb6e4:0x7dbf3f);MS.psdTop.color.copy(col);MS.psdTop.emissive.copy(col).multiplyScalar(0.35);
   MS.psdPost.color.set(hk?0x2f97d8:0xe6e9ec);MS.roof.color.set(hk?0x9ba2a9:0xc9ced3);MS.mark.map=hk?texDoorMarkHK:texDoorMark;MS.mark.needsUpdate=true;
-  const vis={jrCol:!hk,hkCol:hk,hkWall:hk,psdJR:!hk,psdHK:hk};for(const st of ST){for(const [k,v] of Object.entries(vis))for(const T of [st.tags,st.mTag])if(T&&T[k])T[k].visible=v;if(st.mirror)st.mirror.visible=hk;}
+  const vis={jrCol:!hk&&!LINE.shin,hkCol:hk,hkWall:hk,psdJR:!hk&&!LINE.shin,psdHK:hk,jrTop:!LINE.shin};for(const st of ST){for(const [k,v] of Object.entries(vis))for(const T of [st.tags,st.mTag])if(T&&T[k])T[k].visible=v;if(st.mirror)st.mirror.visible=hk;}
   for(const st of ST)for(const [pm,i] of st.posters||[]){const o=pm.map;pm.map=posterTex(i);pm.needsUpdate=true;if(o)o.dispose();}}
+// 乘車位置標記：跟住條綫嘅列車車門（新幹線車門喺車卡兩頭，同 E235／R-train 唔同）
+function refreshDoorMarks(){for(const st of ST){const mk=st.mk;if(!mk)continue;const ds=doorsOf(st),n=Math.min(ds.length,mk.instanceMatrix.count);
+  for(let i=0;i<n;i++){DUMMY.position.set(-3.15,PT+0.006,-(ds[i]-st.sMid));DUMMY.rotation.set(0,0,0);DUMMY.scale.set(1,1,1);DUMMY.updateMatrix();mk.setMatrixAt(i,DUMMY.matrix);}mk.count=n;mk.instanceMatrix.needsUpdate=true;}}
 function setPSD(P){const o=P.open;for(const [im,y] of P.ims){P.gz.forEach((z,i)=>{for(const [k,sg] of [[0,-1],[1,1]]){DUMMY.position.set(P.X,P.top+y,z+sg*(0.5+0.95*o));DUMMY.rotation.set(0,0,0);DUMMY.scale.set(1,1,1);DUMMY.updateMatrix();im.setMatrixAt(i*2+k,DUMMY.matrix);}});im.instanceMatrix.needsUpdate=true;}P.last=o;}
 function updPSD(dt){for(const st of ST){const P=st.side>0?st.psdM:st.psd;if(!P)continue;const tgt=Math.abs(G.s-st.stop)<0.6&&G.state!=='drive'?G.doors:0;P.open+=(tgt-P.open)*Math.min(1,dt*6);if(Math.abs(P.open-P.last)>0.002)setPSD(P);}}
 
@@ -1993,6 +2311,87 @@ function refreshIslands(){for(let i=0;i<ST.length;i++){const st=ST[i],isl=!!ISL.
     for(const o of ISL.deck[i]||[])if(o)o.visible=!isl;if(ISL.deckI[i])ISL.deckI[i].visible=isl;if(ISL.pier[i])ISL.pier[i].visible=isl;
     if(ISL.wire[i])ISL.wire[i].visible=!isl;if(ISL.wireI[i])ISL.wireI[i].visible=isl;if(ISL.mast[i])ISL.mast[i].visible=isl;
     if(st.stopMk){const s=st.stop+0.8,P=frame(s,sd*2.05,PT);st.stopMk.position.copy(P);}}}
+
+/* ======================= 新幹線車站（10-02 用戶相：盛岡、仙台） ======================= */
+// JR 款弧形上蓋收埋（jrTop），換做覆蓋月台同路軌嘅大頂棚＋白色方柱；
+//   盛岡：深色鋼頂棚、中間一條天窗、吊住嘅光管、月台邊不銹鋼柱＋紅帶圍欄（車門位留空）、對面都有月台（鏡像月台＋圍欄＋白柱）
+//   仙台：淺灰鋼頂棚、大型雙面發車標（中間有鐘）、月台中間 KIOSK、右邊成排玻璃窗牆
+//   其他站：淺灰頂棚＋發車標
+// 座標同 buildStation 一樣（車站組本地座標：x 橫向、左負；z 沿路軌、負＝前面；y 世界高度）
+const SHS={built:{},fence:[null,null,null],board:null};
+const SHSM={ceilD:std({color:0x2b3036,roughness:.85}),ceilL:std({color:0xc4c8cc,roughness:.8}),beamD:std({color:0x1d2126,roughness:.6,metalness:.35}),beamL:std({color:0xa9aeb3,roughness:.5,metalness:.4}),
+  col:std({color:0xf2f2ee,roughness:.55}),sky:new THREE.MeshBasicMaterial({color:HDR(0xdde9f1,1.25)}),tube:new THREE.MeshBasicMaterial({color:HDR(0xffffff,2.1)}),
+  post:std({color:0xcfd4d8,metalness:.75,roughness:.28}),belt:std({color:0xd3232b,roughness:.6}),red:std({color:0xd3262f,roughness:.6}),dark:std({color:0x2b3036,roughness:.5}),mull:std({color:0x8f979e,metalness:.5,roughness:.4})};
+const shStKind=st=>st.ja==='盛岡'?'mori':st.ja==='仙台'?'sendai':'std';
+// 發車標貼圖（LED 字）：右＝玩家條綫（北行），左＝對面（南行）；換段時喺同一張畫布重畫
+function shBoardDraw(x,W,H,track,rows){x.fillStyle='#262b31';x.fillRect(0,0,W,H);x.fillStyle='#3a4048';x.fillRect(0,0,W,62);x.fillStyle='#fff';x.textBaseline='middle';x.textAlign='left';
+  x.font=`bold 38px ${JPF}`;x.fillText(track+'番線　今度の電車',20,33);x.font='bold 18px Helvetica,Arial,sans-serif';x.textAlign='right';x.fillText('Next Departure',W-18,34);
+  x.fillStyle='#9aa3ab';x.font=`bold 15px ${JPF}`;x.textAlign='left';[['時刻',22],['列車名',120],['号',330],['行先',400],['記事',600]].forEach(([t,X])=>x.fillText(t,X,82));
+  rows.forEach((r,i)=>{const y=126+i*112;x.fillStyle='#0b0d10';x.fillRect(10,y-30,W-20,96);x.font=`bold 34px ${JPF}`;x.fillStyle='#ffffff';x.fillText(r[0],22,y);x.fillStyle='#ffa53a';x.fillText(r[1],120,y,200);
+    x.fillStyle='#5cff7c';x.fillText(r[2],330,y);x.fillStyle='#ffffff';x.fillText(r[3],400,y,190);x.font=`bold 26px ${JPF}`;x.fillText(r[4],600,y,150);
+    x.font=`bold 24px ${JPF}`;x.fillStyle='#ff6a4a';x.fillText('停車駅',22,y+44);x.fillStyle='#ffffff';x.fillText(r[5],120,y+44,620);});
+  x.fillStyle='rgba(0,0,0,.35)';for(let i=0;i<W;i+=3)x.fillRect(i,62,1,H-62);}
+function shBoards(){if(!SHS.board){const mk=()=>{const [c,x]=cv(768,360);return {c,x,t:T(c)};};SHS.board=[mk(),mk()];SHS.boardM=SHS.board.map(b=>new THREE.MeshBasicMaterial({map:b.t,color:HDR(0xffffff,1.15)}));}
+  const cp=ST[0].y<MORIOKA,nm=cp?'はやぶさ・こまち':LINE.name,dest=cp?'新函館北斗・秋田':LINE.id==='koma'?'秋田':'新函館北斗',stops=LINE.st.slice(Math.min(ST[0].y+1,LINE.st.length-1)).map(r=>r[0]).slice(0,5).join('・');
+  shBoardDraw(SHS.board[1].x,768,360,14,[['17:35',nm,'9号',dest,'全車指定席',stops],['17:52','やまびこ','57号','盛岡','自由席1～5号車','途中各駅']]);
+  shBoardDraw(SHS.board[0].x,768,360,13,[['17:41','はやぶさ','24号','東京','全車指定席','大宮・上野・東京'],['18:03','やまびこ','60号','東京','自由席1～5号車','途中各駅']]);
+  for(const b of SHS.board)b.t.needsUpdate=true;}
+// 月台號碼吊牌（綠色號碼方塊＋方向）
+function shPlatTex(){const [c,x]=cv(512,96);x.fillStyle='#2d3238';x.fillRect(0,0,512,96);x.fillStyle='#1d9b5b';rr(x,10,10,76,76,10);x.fill();x.fillStyle='#fff';x.textAlign='center';x.textBaseline='middle';x.font='bold 46px Helvetica,Arial,sans-serif';x.fillText('14',48,50);
+  x.textAlign='left';x.font=`bold 30px ${JPF}`;x.fillText('はやぶさ・こまち',104,32,390);x.font=`bold 22px ${JPF}`;x.fillStyle='#d9dde0';x.fillText('新青森・秋田方面',104,70,390);return T(c);}
+// KIOSK（小賣店）：綠色招牌、貨架擺滿嘢
+function shKioskTex(){const [c,x]=cv(256,256);x.fillStyle='#e9ecee';x.fillRect(0,0,256,256);x.fillStyle='#7cc142';x.fillRect(0,0,256,56);x.fillStyle='#1d5a2a';x.font='bold 40px Helvetica,Arial,sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText('KIOSK',128,24);
+  x.font=`bold 15px ${JPF}`;x.fillStyle='#fff';x.fillText('売店',128,47);for(let r=0;r<4;r++)for(let k=0;k<9;k++){x.fillStyle=['#e53935','#fdd835','#1e88e5','#43a047','#fb8c00','#8e24aa','#ffffff','#6d4c41'][(r*3+k)%8];x.fillRect(14+k*26,70+r*36,20,26);}
+  x.fillStyle='#b0b7bd';x.fillRect(0,214,256,42);return T(c);}
+function shStation(st,kind){const g=new THREE.Group();g.position.copy(st.group.position);g.rotation.copy(st.group.rotation);scene.add(g);
+  const top=PT,PL=PB+PF,CY=top+7.2,mori=kind==='mori',x0=-10.6,x1=mori?14.6:7.4,M={c:new Merger(),b:new Merger(),k:new Merger(),t:new Merger(),r:new Merger(),d:new Merger(),m:new Merger()};
+  // 頂棚（盛岡中間留天窗）＋橫樑＋縱樑
+  if(mori){M.c.add(new THREE.BoxGeometry(0.6-x0,0.3,PL),(x0+0.6)/2,CY+0.15,0);M.c.add(new THREE.BoxGeometry(x1-3.4,0.3,PL),(x1+3.4)/2,CY+0.15,0);
+    const sk=new THREE.Mesh(new THREE.PlaneGeometry(2.8,PL).rotateX(Math.PI/2),SHSM.sky);sk.position.set(2,CY+0.55,0);g.add(sk);for(const x of [0.6,3.4])M.b.add(new THREE.BoxGeometry(0.2,0.6,PL),x,CY+0.3,0);
+    for(let z=-PL/2;z<=PL/2;z+=1.6)M.b.add(new THREE.BoxGeometry(2.8,0.08,0.08),2,CY+0.5,z);}
+  else M.c.add(new THREE.BoxGeometry(x1-x0,0.3,PL),(x0+x1)/2,CY+0.15,0);
+  for(let z=-PL/2+2;z<PL/2;z+=8.5)M.b.add(new THREE.BoxGeometry(x1-x0,0.75,0.3),(x0+x1)/2,CY-0.37,z);
+  const colX=mori?[-6.4,10.4]:[-6.4];for(const x of colX)M.b.add(new THREE.BoxGeometry(0.4,0.6,PL),x,CY-0.3,0);
+  // 白色方柱（避開樓梯口）
+  for(const x of colX)for(let z=-PL/2+6;z<PL/2-2;z+=17){if(z>-9.5&&z<6.5)continue;M.k.add(new THREE.BoxGeometry(0.75,CY-top,0.75),x,(top+CY)/2,z);M.k.add(new THREE.BoxGeometry(1.0,0.4,1.0),x,CY-0.2,z);}
+  // 光管（月台上面一行行）
+  const tubeX=mori?[-8.2,-4.6,8.6,12.2]:[-8.2,-4.6];for(const x of tubeX)for(let z=-PL/2+2;z<PL/2-3;z+=4.2)M.t.add(new THREE.BoxGeometry(0.14,0.06,3.0),x,CY-0.85,z+1.5);
+  // 站名吊牌嘅吊杆加長到頂棚
+  for(const z of st.signZ||[])for(const dz of [-1.1,1.1])M.m.add(new THREE.CylinderGeometry(0.02,0.02,CY-top-3.5,6),-3.92,(top+3.5+CY)/2,z+dz);
+  // 月台邊紅線
+  M.r.add(new THREE.PlaneGeometry(0.07,PL).rotateX(-Math.PI/2),-1.69,top+0.006,0);if(mori)M.r.add(new THREE.PlaneGeometry(0.07,PL).rotateX(-Math.PI/2),5.69,top+0.006,0);
+  if(mori){const pm=std({map:shPlatTex(),roughness:.6,emissive:0xffffff,emissiveIntensity:.25});pm.emissiveMap=pm.map;
+    for(const [x,z] of [[-5,-34],[-5,30],[9,-34],[9,30]]){for(const ry of [0,Math.PI]){const p=new THREE.Mesh(new THREE.PlaneGeometry(2.6,0.49),pm);p.position.set(x,top+3.1,z+(ry?-0.03:0.03));p.rotation.y=ry;g.add(p);}
+      M.d.add(new THREE.BoxGeometry(2.7,0.56,0.05),x,top+3.1,z);for(const dx of [-1.1,1.1])M.m.add(new THREE.CylinderGeometry(0.02,0.02,CY-top-3.4,6),x+dx,(top+3.4+CY)/2,z);}}
+  else{// 發車標（雙面、中間鐘）：喺月台中間吊住，面向月台兩頭
+    shBoards();const bz=-20,by=top+3.55,c=SHSM.dark;M.d.add(new THREE.BoxGeometry(7.2,1.75,0.22),-5.9,by,bz);
+    for(const [side,ry,dz] of [[1,Math.PI,-0.115],[-1,0,0.115]]){for(const [k,cx] of [[1,-3.9],[0,-7.9]]){const xx=cx;const p=new THREE.Mesh(new THREE.PlaneGeometry(3.2,1.5),SHS.boardM[k]);p.position.set(xx,by,bz+dz);p.rotation.y=ry;g.add(p);}
+      const ck=new THREE.Mesh(new THREE.CircleGeometry(0.42,24),MS.clock);ck.position.set(-5.9,by+0.15,bz+dz*1.02);ck.rotation.y=ry;g.add(ck);}
+    for(const dx of [-3,3])M.m.add(new THREE.CylinderGeometry(0.03,0.03,CY-by-0.85,6),-5.9+dx,(by+0.85+CY)/2,bz);}
+  if(kind==='sendai'){// KIOSK（月台中間）
+    const kt=shKioskTex(),km=std({map:kt,roughness:.6,emissive:0xffffff,emissiveMap:kt,emissiveIntensity:.25}),kz=-25.5,k=new THREE.Mesh(new THREE.BoxGeometry(2.6,2.7,3.2),[std({color:0xdfe3e6}),std({color:0xdfe3e6}),std({color:0x9fb0a0}),std({color:0xdfe3e6}),km,km]);
+    k.position.set(-6.7,top+1.35,kz);k.castShadow=true;g.add(k);st.kz=[st.sMid-kz-2,st.sMid-kz+2];
+    // 右邊玻璃窗牆（對面路軌外面）
+    const H0=DECK,wh=CY-H0;for(let z=-PL/2;z<=PL/2;z+=2.6)M.m.add(new THREE.BoxGeometry(0.12,wh,0.14),7.15,H0+wh/2,z);for(const y of [H0+1.4,H0+4.2,H0+7.0])M.m.add(new THREE.BoxGeometry(0.14,0.12,PL),7.15,y,0);
+    M.k.add(new THREE.BoxGeometry(0.25,1.4,PL),7.2,H0+0.7,0);const gl=new THREE.Mesh(new THREE.PlaneGeometry(PL,wh-1.4).rotateY(-Math.PI/2),MS.glass);gl.position.set(7.1,H0+1.4+(wh-1.4)/2,0);g.add(gl);}
+  else st.kz=null;
+  const out=[[M.c,mori?SHSM.ceilD:SHSM.ceilL,true],[M.b,mori?SHSM.beamD:SHSM.beamL,false],[M.k,SHSM.col,true],[M.t,SHSM.tube,false],[M.r,SHSM.red,false],[M.d,SHSM.dark,false],[M.m,SHSM.mull,false]];
+  for(const [m,mat,c] of out){const o=m.mesh(mat,c,true);if(o)g.add(o);}
+  g.traverse(o=>{if(o.isMesh&&!o.castShadow)o.receiveShadow=true;});return g;}
+// 盛岡月台邊圍欄：不銹鋼柱＋兩條紅帶，車門位留空（跟住條綫嘅車門位，換段重砌）；對面月台照樣（鏡像）
+function shFence(i,st){if(SHS.fence[i]){scene.remove(SHS.fence[i]);SHS.fence[i].traverse(o=>{if(o.geometry)o.geometry.dispose();});SHS.fence[i]=null;}
+  if(!(shinOn()&&shStKind(st)==='mori'))return;const g=new THREE.Group();g.position.copy(st.group.position);g.rotation.copy(st.group.rotation);scene.add(g);SHS.fence[i]=g;
+  const top=PT,PL=PB+PF,dz=doorsOf(st).map(s=>st.sMid-s),pm=new Merger(),bm=new Merger(),gap=z=>dz.some(d=>Math.abs(z-d)<0.95);
+  for(const x of [-2.05,6.05]){let prev=null;for(let z=-PL/2+1.2;z<=PL/2-1.2;z+=2.4){if(gap(z)){prev=null;continue;}
+    pm.add(new THREE.CylinderGeometry(0.055,0.065,1.12,10),x,top+0.56,z);pm.add(new THREE.SphereGeometry(0.075,10,8),x,top+1.13,z);
+    if(prev!==null&&!gap((prev+z)/2))for(const y of [0.7,1.02])bm.add(new THREE.BoxGeometry(0.03,0.06,z-prev),x,top+y,(prev+z)/2);prev=z;}}
+  const a=pm.mesh(SHSM.post,true,true),b=bm.mesh(SHSM.belt,false,true);if(a)g.add(a);if(b)g.add(b);}
+// 換段：每個站位揀返啱嘅款（lazy 建、快取）；盛岡顯示對面月台
+function refreshShinStations(){const sh=shinOn();for(const k in SHS.built)SHS.built[k].visible=false;
+  ST.forEach((st,i)=>{if(!st.group)return;if(sh){const kind=shStKind(st),key=i+':'+kind;let g=SHS.built[key];if(!g)g=SHS.built[key]=shStation(st,kind);g.visible=true;
+      if(kind!=='sendai')st.kz=null;else if(!st.kz)st.kz=[st.sMid+23.5,st.sMid+27.5];if(st.mirror)st.mirror.visible=kind==='mori';}
+    else st.kz=null;shFence(i,st);});
+  if(sh&&SHS.board)shBoards();}
 
 
 /* ======================= 乘客 v4（有關節、多款衣著髮型、步行動畫、腳底陰影） ======================= */
@@ -2087,18 +2486,18 @@ function updPeople(dt){if(!PP.ims.torso)return;const I=PP.ims,N=PP.n;for(const k
     const a=im.instanceMatrix;a.clearUpdateRanges();a.addUpdateRange(0,n*16);a.needsUpdate=true;
     if(im.instanceColor){const b=im.instanceColor;b.clearUpdateRanges();b.addUpdateRange(0,n*3);b.needsUpdate=true;}}}
 function faceR(s){const F=dirAt(s);return Math.atan2(-F.z,F.x);}
-function camDoor(st){const D=doorsOf(st),t=st.stop-HEAD+2.47;return D.reduce((a,d)=>Math.abs(d-t)<Math.abs(a-t)?d:a);}
+function camDoor(st){const D=doorsOf(st),t=doorCamS(st);return D.reduce((a,d)=>Math.abs(d-t)<Math.abs(a-t)?d:a);}
 // 島式月台（st.side=+1）：所有人喺路軌右邊（打橫位置正負調轉、面向調轉）
 const sdOf=st=>st.side||-1,faceTo=(s,sd)=>faceR(s)+(sd>0?Math.PI:0);
 function populateStation(st){const sd=sdOf(st);
   const D=doorsOf(st),F=camDoor(st);// 開門鏡頭影住嗰道門一定有人排隊
   for(const ds of [F,...shuffle(D.filter(d=>d!==F)).slice(0,st.idx===0?10:8)]){const rows=ds===F?randi(2,3):randi(1,3);
     for(let r=0;r<rows;r++)for(const off of [-0.42,0.42]){if(Math.random()<(ds===F?.12:.3))continue;const P=frame(ds+off+rand(-0.06,0.06),sd*(2.75+r*0.72),PT),p=ppAdd({x:P.x,z:P.z,h:faceTo(ds,sd),kid:Math.random()<.14,tag:'q'+st.idx});if(p){p.door=ds;p.row=r;}}}
-  for(let i=0;i<9;i++){let s;do{s=rand(st.stop-PB+8,st.stop-6);}while(s<st.stairTopS+2&&s>st.stairBotS-2);const P=frame(s,sd*rand(4.2,8.6),PT);ppAdd({x:P.x,z:P.z,h:rand(0,6.28),tag:'i'+st.idx});}
+  for(let i=0;i<9;i++){let s;do{s=rand(st.stop-PB+8,st.stop-6);}while((s<st.stairTopS+2&&s>st.stairBotS-2)||(st.kz&&s>st.kz[0]&&s<st.kz[1]));const P=frame(s,sd*rand(4.2,8.6),PT);ppAdd({x:P.x,z:P.z,h:rand(0,6.28),tag:'i'+st.idx});}
   // 車頭附近（鏡頭影到嘅位）多幾個等車嘅人
   for(let i=0;i<7;i++){let l;do{l=rand(3.5,7.8);}while(l>5.2&&l<6.4);const s=rand(st.stop-28,st.stop-11),P=frame(s,sd*l,PT);ppAdd({x:P.x,z:P.z,h:Math.random()<.5?faceTo(s,sd):rand(0,6.28),tag:'i'+st.idx});}
   // 東鐵綫對面月台（往金鐘）都有人等車（避開樓梯口）
-  if(LINE.id==='eal'&&st.y>2&&sd<0)for(let i=0;i<12;i++){const s=rand(st.stop-PB+8,st.stop-4),l=rand(6.7,9.6),P=frame(s,l,PT);ppAdd({x:P.x,z:P.z,h:Math.random()<.6?faceR(s)+Math.PI:rand(0,6.28),tag:'o'+st.idx});}}
+  if(((LINE.id==='eal'&&st.y>2)||(LINE.shin&&st.ja==='盛岡'))&&sd<0)for(let i=0;i<12;i++){const s=rand(st.stop-PB+8,st.stop-4),l=rand(6.7,9.6),P=frame(s,l,PT);ppAdd({x:P.x,z:P.z,h:Math.random()<.6?faceR(s)+Math.PI:rand(0,6.28),tag:'o'+st.idx});}}
 function startBoarding(st,d0=0){const sd=sdOf(st);for(const p of PP.list){if(!p.on||p.tag!=='q'+st.idx)continue;const a=frame(p.door+(Math.random()-.5)*0.3,sd*1.95,PT),b=frame(p.door+(Math.random()-.5)*0.4,sd*0.7,PT+0.02);ppGo(p,[a,b],q=>{q.on=false;},d0+p.row*1.4+Math.random()*2.2);}}
 function startAlighting(st){let k=0;const sd=sdOf(st);
   const D=doorsOf(st),F=camDoor(st);
@@ -2151,7 +2550,7 @@ function noseGeo(O,z0,len,{sx=0.9,sy=0.94,rake=0.25,S=12,yb=1.0,yt=3.7,uvMode='f
   for(let j=0;j<S;j++)for(let i=0;i<n;i++){const a=j*W+i,b=a+1,c=a+W,d=c+1;idx.push(a,c,b,b,c,d);}
   const side=new THREE.BufferGeometry();side.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));side.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));side.setIndex(idx);side.computeVertexNormals();
   const cp=[],cu=[],ci=[],kx=KX(1),ky=KY(1),zF=z0-len,cont=[];
-  for(let i=0;i<n;i++){const p=O[i],x=p.x*kx,y=yb+(p.y-yb)*ky;cont.push(new THREE.Vector2(x,y));cp.push(x,y,zF+rake*ZF((y-yb)/(yt-yb)));cu.push(uvMode==='front'?(x+1.7)/3.4:0.5,uvMode==='front'?(y-yb)/(yt-yb):1);}
+  for(let i=0;i<n;i++){const p=O[i],x=p.x*kx,y=yb+(p.y-yb)*ky;cont.push(new THREE.Vector2(x,y));cp.push(x,y,zF+rake*ZF((y-yb)/(yt-yb)));cu.push(uvMode==='front'?(x+1.7)/3.4:arcs[i]/tot,uvMode==='front'?(y-yb)/(yt-yb):1);}
   for(const [i,j,k] of THREE.ShapeUtils.triangulateShape(cont,[])){const cr=(cont[j].x-cont[i].x)*(cont[k].y-cont[i].y)-(cont[j].y-cont[i].y)*(cont[k].x-cont[i].x);if(cr>0)ci.push(i,k,j);else ci.push(i,j,k);}
   const cap=new THREE.BufferGeometry();cap.setAttribute('position',new THREE.Float32BufferAttribute(cp,3));cap.setAttribute('uv',new THREE.Float32BufferAttribute(cu,2));cap.setIndex(ci);cap.computeVertexNormals();
   return {side,cap,zF,kx,ky,ZF};}
@@ -2349,7 +2748,7 @@ function buildCar(o){const g=new THREE.Group(),mg={},leaves=[];for(const k of ['
 const _lm=new THREE.Matrix4(),_lr=new THREE.Matrix4(),_ls=new THREE.Matrix4(),_lt=new THREE.Matrix4();
 // 車門開關：openL／openR＝0（閂）～1（開）；冇變就唔寫
 function setLeaves(T0,openL,openR){for(const li of T0.leaves)for(const [sd,o] of [[-1,openL],[1,openR]]){const im=li[sd];if(!im)continue;const k=Math.round(o*200);if(im.userData.k===k)continue;im.userData.k=k;const sx=Math.max(0.03,1-o*0.97);
-  im.userData.L.forEach((q,i)=>{_lm.makeTranslation(q.x,2.1,q.az).multiply(_lr.makeRotationY(q.ry)).multiply(_ls.makeScale(sx,1,1)).multiply(_lt.makeTranslation(q.ls,0,0));im.setMatrixAt(i,_lm);});im.instanceMatrix.needsUpdate=true;}}
+  im.userData.L.forEach((q,i)=>{_lm.makeTranslation(q.x,q.y??2.1,q.az).multiply(_lr.makeRotationY(q.ry)).multiply(_ls.makeScale(sx,1,1)).multiply(_lt.makeTranslation(q.ls,0,0));im.setMatrixAt(i,_lm);});im.instanceMatrix.needsUpdate=true;}}
 TM.sideLed=new THREE.MeshBasicMaterial({map:ledTex('山手線　'+dirJa(0)),color:HDR(0xffffff,1.5)});
 function refreshParallelLine(){if(!TB||!TB.stripe)return;if(LINE.id==='eal'){const old=TB.led.map;TB.led.map=ledTex('金鐘　Admiralty','#ff5a3a');TB.led.needsUpdate=true;if(old)old.dispose();return;}const west=SECB>=8&&SECB<=21;TB.stripe.color.set(west?0x00ac9a:0x00a7e1);const old=TB.led.map;TB.led.map=ledTex(west?'埼京線　大宮':(SECB>=22?'京浜東北線　大宮':'京浜東北線　大船'));TB.led.needsUpdate=true;if(old)old.dispose();}
 function refreshTrainLED(){const hk=LINE.id==='eal',d=dirJa(ST[0].y);for(const [m,t] of [[TA&&TA.led,hk?'羅湖　Lo Wu':'山手線　'+d+' 方面'],[TM.sideLed,hk?'東鐵綫　往羅湖':'山手線　'+d]]){if(!m)continue;const old=m.map;m.map=hk?ledTex(t,'#ff5a3a'):ledTex(t);m.needsUpdate=true;if(old)old.dispose();}}
@@ -2436,7 +2835,7 @@ function buildShinViaduct(){
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pts,3));const ln=new THREE.LineSegments(g,MT.wire);ln.frustumCulled=false;scene.add(ln);}
 let TE=null;const SK={active:false,s:0,v:44,woosh:false,timer:12};
 function spawnE5(){SK.active=true;SK.s=Math.max(30,G.s-240);SK.v=44;SK.woosh=false;}
-function updE5(dt){if(!TE)return;
+function updE5(dt){if(!TE||LINE.shin)return;   // 新幹線綫：TE 做對面嚟嘅車（updOnc）
   if(!SK.active){for(const c of TE.cars)c.visible=false;if(SK.enabled!==false&&(G.state==='title'||G.state==='drive')){SK.timer-=dt;if(SK.timer<=0){SK.timer=G.state==='title'?26:999;spawnE5();}}return;}
   SK.s+=SK.v*dt;if(SK.s-13.5-150>L){SK.active=false;return;}placeE5(TE,SK.s,SHL[0]);
   if(!SK.woosh&&SK.s>G.s){SK.woosh=true;if(G.cam==='cab'||G.cam==='title')whoosh();}}
@@ -2445,7 +2844,7 @@ function updE5(dt){if(!TE)return;
 /* ======================= 駕駛室 v5（E235 系真車布局＋RUNNING TRAIN 式全景駕駛室） ======================= */
 // 座標＝頭卡車身座標：x 橫向（左負右正）、y 高度（路軌面＝0）、z 車長方向（車頭 ≈ -10）
 const EYE=new THREE.Vector3(-0.62,2.60,-8.74);
-const CAB={group:null,handle:null,ang:0,lastDraw:0,t1:0,keys:['','',''],scr:[],pilot:null,atsLamp:null,tascLamp:null,lampOn:{},lampOff:null,film:null};
+const CAB={off:new THREE.Vector3(),group:null,handle:null,ang:0,lastDraw:0,t1:0,keys:['','',''],scr:[],pilot:null,atsLamp:null,tascLamp:null,lampOn:{},lampOff:null,film:null};
 function cabWallTex(){const [c,x]=cv(512,512);x.fillStyle='#eceeef';x.fillRect(0,0,512,512);
   x.fillStyle='rgba(0,0,0,.035)';for(let i=0;i<260;i++)x.fillRect(Math.random()*512,Math.random()*512,1+Math.random()*2,1);
   x.fillStyle='rgba(0,0,0,.10)';x.fillRect(0,254,512,2);x.fillRect(254,0,2,512);x.fillStyle='rgba(255,255,255,.6)';x.fillRect(0,256,512,1);x.fillRect(256,0,1,512);
@@ -2601,13 +3000,14 @@ const NOTCH_ORDER=[3,2,1,0,-1,-2,-3,-4],NCOL=n=>n>0?'#46a8ff':n===0?'#ffffff':n=
 function lcdHead(x,w,t,sub){const g=x.createLinearGradient(0,0,0,46);g.addColorStop(0,'#1d4f86');g.addColorStop(1,'#123a66');x.fillStyle=g;x.fillRect(0,0,w,46);x.fillStyle='#fff';x.font=`bold 26px ${JPF}`;x.textBaseline='middle';x.textAlign='left';x.fillText(t,14,24);
   if(sub){x.textAlign='right';x.font='bold 24px Helvetica,Arial,sans-serif';x.fillStyle='#cfe6ff';x.fillText(sub,w-14,24);x.textAlign='left';}}
 function drawSpeedLCD(s,kmh){const {x,w,h}=s;x.fillStyle='#04070b';x.fillRect(0,0,w,h);
-  const cx=160,cy=150,R=128,A=v=>(135+v/120*270)*Math.PI/180;
-  x.lineCap='butt';x.strokeStyle='#15202c';x.lineWidth=18;x.beginPath();x.arc(cx,cy,R-8,A(0),A(120));x.stroke();
-  const gg=x.createLinearGradient(cx-R,0,cx+R,0);gg.addColorStop(0,'#25d0ff');gg.addColorStop(1,'#4dffa8');x.strokeStyle=gg;if(kmh>0){x.beginPath();x.arc(cx,cy,R-8,A(0),A(Math.min(120,kmh)));x.stroke();}
-  x.strokeStyle='#ff4d4d';x.lineWidth=6;x.beginPath();x.arc(cx,cy,R+4,A(80),A(120));x.stroke();
-  x.fillStyle='#dfe8f0';x.font='bold 20px Helvetica,Arial,sans-serif';x.textAlign='center';x.textBaseline='middle';
-  for(let v=0;v<=120;v+=10){const a=A(v),r0=v%20?R-26:R-32;x.strokeStyle='#dfe8f0';x.lineWidth=v%20?2:4;x.beginPath();x.moveTo(cx+Math.cos(a)*r0,cy+Math.sin(a)*r0);x.lineTo(cx+Math.cos(a)*(R-18),cy+Math.sin(a)*(R-18));x.stroke();if(v%20===0)x.fillText(v,cx+Math.cos(a)*(R-50),cy+Math.sin(a)*(R-50));}
-  const a=A(Math.min(125,kmh));x.strokeStyle='#ff9a2e';x.lineWidth=6;x.lineCap='round';x.beginPath();x.moveTo(cx-Math.cos(a)*14,cy-Math.sin(a)*14);x.lineTo(cx+Math.cos(a)*(R-30),cy+Math.sin(a)*(R-30));x.stroke();
+  // 刻度：普通列車 0–120（每 10 一格）；新幹線 0–360（每 20 一格），紅色＝超過最高速度
+  const gm=GMAX(),stp=gm>200?20:10,km=LINE.kmax||80,cx=160,cy=150,R=128,A=v=>(135+v/gm*270)*Math.PI/180;
+  x.lineCap='butt';x.strokeStyle='#15202c';x.lineWidth=18;x.beginPath();x.arc(cx,cy,R-8,A(0),A(gm));x.stroke();
+  const gg=x.createLinearGradient(cx-R,0,cx+R,0);gg.addColorStop(0,'#25d0ff');gg.addColorStop(1,'#4dffa8');x.strokeStyle=gg;if(kmh>0){x.beginPath();x.arc(cx,cy,R-8,A(0),A(Math.min(gm,kmh)));x.stroke();}
+  x.strokeStyle='#ff4d4d';x.lineWidth=6;x.beginPath();x.arc(cx,cy,R+4,A(km),A(gm));x.stroke();
+  x.fillStyle='#dfe8f0';x.font=`bold ${gm>200?18:20}px Helvetica,Arial,sans-serif`;x.textAlign='center';x.textBaseline='middle';
+  for(let v=0;v<=gm;v+=stp){const a=A(v),big=v%(stp*2)===0,r0=big?R-32:R-26;x.strokeStyle='#dfe8f0';x.lineWidth=big?4:2;x.beginPath();x.moveTo(cx+Math.cos(a)*r0,cy+Math.sin(a)*r0);x.lineTo(cx+Math.cos(a)*(R-18),cy+Math.sin(a)*(R-18));x.stroke();if(big)x.fillText(v,cx+Math.cos(a)*(R-50),cy+Math.sin(a)*(R-50));}
+  const a=A(Math.min(gm*1.04,kmh));x.strokeStyle='#ff9a2e';x.lineWidth=6;x.lineCap='round';x.beginPath();x.moveTo(cx-Math.cos(a)*14,cy-Math.sin(a)*14);x.lineTo(cx+Math.cos(a)*(R-30),cy+Math.sin(a)*(R-30));x.stroke();
   x.fillStyle='#2a3440';x.beginPath();x.arc(cx,cy,12,0,6.2832);x.fill();
   x.fillStyle='#ffffff';x.font='bold 62px Helvetica,Arial,sans-serif';x.fillText(kmh,cx,cy+78);x.font='bold 18px Helvetica,Arial,sans-serif';x.fillStyle='#8fb3c9';x.fillText('km/h',cx,cy+116);
   NOTCH_ORDER.forEach((n,i)=>{const on=G.notch===n,lit=n!==0&&Math.sign(n)===Math.sign(G.notch)&&Math.abs(n)<Math.abs(G.notch),y=18+i*34;x.fillStyle=on?NCOL(n):lit?(n>0?'#1d4f86':'#6b3b10'):'#121a24';rr(x,338,y,86,28,6);x.fill();
@@ -2626,14 +3026,15 @@ function drawInfoLCD(s,st,rem,drive){const {x,w}=s;x.fillStyle='#06101c';x.fillR
   ST.forEach((q,i)=>{const px=L+i*((R-L)/(ST.length-1));x.fillStyle=i<=G.reached?LC:'#06101c';x.beginPath();x.arc(px,Y,12,0,6.2832);x.fill();x.strokeStyle=LC;x.lineWidth=5;x.stroke();x.fillStyle='#cfe0ee';x.font=`bold 20px ${JPF}`;x.textAlign='center';x.fillText(q.ja,px,Y+32);});
   const a=ST[Math.max(0,G.next-1)],b=ST[Math.min(G.next,ST.length-1)],f=b===a?0:clamp((G.s-a.stop)/(b.stop-a.stop),0,1),tx=L+((Math.max(0,G.next-1))+f)*((R-L)/(ST.length-1));
   x.fillStyle='#ff9a2e';x.beginPath();x.moveTo(tx-11,Y-30);x.lineTo(tx+11,Y-30);x.lineTo(tx,Y-15);x.fill();s.t.needsUpdate=true;}
-function drawCarsLCD(s){const {x,w}=s;x.fillStyle='#06101c';x.fillRect(0,0,w,s.h);lcdHead(x,w,LINE.id==='jy'?'車両状態':'車卡狀態',LINE.id==='jy'?'5両':'5 卡');x.textBaseline='middle';
-  const n=5,cw=102,gap=10,x0=(w-(n*cw+(n-1)*gap))/2,y0=86,ch=58,open=G.doors>0.02;
+// 新幹線：連結中 5 両（E5 3＋E6 2），分開之後得自己嗰組
+function drawCarsLCD(s){const {x,w}=s,n=playerCars();x.fillStyle='#06101c';x.fillRect(0,0,w,s.h);lcdHead(x,w,LINE.jp?'車両状態':'車卡狀態',LINE.jp?n+'両':n+' 卡');x.textBaseline='middle';
+  const cw=102,gap=10,x0=(w-(n*cw+(n-1)*gap))/2,y0=86,ch=58,open=G.doors>0.02;
   for(let i=0;i<n;i++){const X=x0+i*(cw+gap);x.fillStyle='#1b2a3a';rr(x,X,y0,cw,ch,i===0?16:6);x.fill();x.strokeStyle=LINE.color;x.lineWidth=3;x.stroke();
     for(let k=0;k<4;k++){x.fillStyle=open?'#ff5a4d':'#2bd96b';x.fillRect(X+12+k*22,y0+ch-12,14,6);x.fillRect(X+12+k*22,y0+6,14,6);}
     x.fillStyle='#cfe0ee';x.font='bold 20px Helvetica,Arial,sans-serif';x.textAlign='center';x.fillText(i+1,X+cw/2,y0+ch/2+1);}
   x.textAlign='left';x.font=`bold 24px ${JPF}`;x.fillStyle=open?'#ff8a80':'#7CFFB2';x.fillText(open?LINE.tx.doorOpen:LINE.tx.doorShut,x0,192);x.fillStyle='#9fb3c4';x.textAlign='right';x.fillText(LINE.tx.ac,w-x0,192);s.t.needsUpdate=true;}
-function drawLCD(){const drive=G.state==='drive'||G.state==='stopped'||G.state==='closing',nx=ST[Math.min(G.next,ST.length-1)],st=drive?nx:ST[G.reached||0],kmh=Math.round(G.v*3.6),rem=Math.max(0,Math.round(nx.stop-G.s)),sec=new Date().getSeconds();
-  const k0=kmh+'|'+G.notch+'|'+G.tasc+'|'+G.ats+'|'+(G.doors<0.02),k1=st.ja+'|'+rem+'|'+G.next+'|'+G.reached+'|'+sec+'|'+drive,k2=String(G.doors>0.02);
+function drawLCD(){const drive=G.state==='drive'||G.state==='stopped'||G.state==='closing',nx=ST[Math.min(G.next,ST.length-1)],st=drive?nx:ST[G.reached||0],kmh=KMH(G.v),rem=Math.max(0,Math.round(tgtS(nx)-G.s)),sec=new Date().getSeconds();
+  const k0=kmh+'|'+G.notch+'|'+G.tasc+'|'+G.ats+'|'+(G.doors<0.02),k1=st.ja+'|'+rem+'|'+G.next+'|'+G.reached+'|'+sec+'|'+drive,k2=String(G.doors>0.02)+playerCars();
   if(k0!==CAB.keys[0]){CAB.keys[0]=k0;drawSpeedLCD(CAB.scr[0],kmh);}if(k1!==CAB.keys[1]&&(G.time-CAB.t1>0.5||!CAB.keys[1])){CAB.keys[1]=k1;CAB.t1=G.time;drawInfoLCD(CAB.scr[1],st,rem,drive);}if(k2!==CAB.keys[2]){CAB.keys[2]=k2;drawCarsLCD(CAB.scr[2]);}}
 function restyleCab(){if(!CAB.plateMat)return;const o=CAB.plateMat.map;CAB.plateMat.map=plateTex(LINE.tx.plate);CAB.plateMat.needsUpdate=true;if(o)o.dispose();CAB.keys=['','',''];}
 function refreshCabPaper(){if(!CAB.paper)return;const old=CAB.paper.map;CAB.paper.map=paperTex();CAB.paper.needsUpdate=true;if(old)old.dispose();CAB.keys=['','',''];}
@@ -2641,6 +3042,229 @@ function updCab(dt){if(!CAB.group||!CAB.group.visible)return;const tgt=G.notch*0
   CAB.pilot.material=G.doors<0.02?CAB.lampOn.pilot:CAB.lampOff;CAB.atsLamp.material=G.ats?CAB.lampOn.ats:CAB.lampOff;CAB.tascLamp.material=G.tasc?CAB.lampOn.tasc:CAB.lampOff;
   // 螢幕每次重畫都要成張貼圖重新上載：速度表 iPad 每 0.2 秒、次站資訊最快每 0.5 秒先畫一次
   if(G.time-CAB.lastDraw>(LOWQ?0.2:0.1)){CAB.lastDraw=G.time;drawLCD();}}
+
+/* ======================= 新幹線（玩家列車）：E5 はやぶさ（3 卡）＋E6 こまち（2 卡） ======================= */
+// 10-02 用戶：東京開用 E5 連 E6（E5 喺前、E6 喺後，兩個車鼻對住連結）；列車入盛岡站後先有畫面顯示 E5、E6 分離，之後先開門；
+//   はやぶさ：答完題撳發車，玩家繼續揸 E5 去新函館北斗（E6 留喺盛岡）；
+//   こまち：撳發車後畫面顯示 E5 自己開走，玩家轉揸 E6 去秋田
+// 車卡（米）：E5 頭／尾卡 25.75（車鼻 12.5）、中間卡 24.5；E6 頭／尾卡 20.5（車鼻 10）；卡與卡之間 0.5；連結器兩邊各伸出 0.4
+// 車卡本身座標同其他列車一樣：車頭向 −z；尾卡（flip）轉 180°
+const CGAP=0.8,SGAP=3.5;   // 連結時兩個車鼻之間嘅距離；盛岡分離時 E5 向前行幾多米（10-02 用戶：E5 走前少少，唔係 E6 退後）
+const E6H=E5H.map(([x,y,s])=>[x*0.875,y,s]),E6O=outlineFromHalf(E6H),E6ARC=outlineArcs(E6O),E6TOT=E6ARC[E6O.length];
+function shYofV(O,A,TT,v){const a=v*TT;for(let i=1;i<=O.length;i++){if(A[i]>=a){const p=O[i-1],q=O[i%O.length],t=(a-A[i-1])/Math.max(1e-6,A[i]-A[i-1]);return p.y+(q.y-p.y)*t;}}return O[0].y;}
+// 塗裝（10-02 用戶參考相）：E5＝常盤綠（上）、つつじ粉紅線、飛雲白（下）；E6＝茜紅車頂、銀色車身、窗下深色細線
+const SHC={g:'#27bd99',p:'#e0217a',w:'#eef1f1',r:'#cf1f3d',s:'#c3c8cd',d:'#3a4046',gl:'#15202a'};
+const e5BandY=y=>y>2.24?SHC.g:y>2.14?SHC.p:SHC.w;
+const e6BandY=y=>y>3.22?SHC.r:(y>2.06&&y<2.13)?SHC.d:SHC.s;
+// 車身貼圖：u＝z÷24.5（循環）、v＝輪廓弧長；wins＝每隻窗中心嘅 z
+function shinBodyTex(O,A,TT,band,wins){const W=1024,H=256,[c,x]=cv(W,H),yo=v=>shYofV(O,A,TT,v);
+  for(let r=0;r<H;r++){x.fillStyle=band(yo(1-(r+0.5)/H));x.fillRect(0,r,W,1);}
+  const g=x.createLinearGradient(0,0,0,H);g.addColorStop(0,'rgba(255,255,255,.06)');g.addColorStop(1,'rgba(0,0,0,.06)');x.fillStyle=g;x.fillRect(0,0,W,H);
+  const rows=[];for(let r=0;r<H;r++){const y=yo(1-(r+0.5)/H);if(y>2.34&&y<2.78)rows.push(r);}
+  const bands=[];let st=null;for(let i=0;i<rows.length;i++){if(st===null)st=rows[i];if(i===rows.length-1||rows[i+1]!==rows[i]+1){bands.push([st,rows[i]]);st=null;}}
+  const px=z=>(((z/24.5)%1)+1)%1*W,ww=0.6/24.5*W;
+  x.fillStyle='#16222b';for(const z of wins){const u=px(z);for(const o of [0,-W,W])for(const [r0,r1] of bands){rr(x,u-ww/2+o,r0,ww,r1-r0+1,4);x.fill();}}
+  return T(c,1);}
+const shWins=(a,b)=>{const o=[];for(let z=a;z<=b+0.01;z+=1.02)o.push(z);return o;};
+// ===== 車鼻（10-02 用戶參考相重畫）=====
+// 由車身輪廓逐步變做扁闊嘅超橢圓（E5 好長好扁嘅鴨嘴、E6 短啲），最尾一段（rt 之後）收成圓頭；
+// SHN：len 長、z0 車身同車鼻交界、yt/yb 頂底高度、w 半闊、n 方度（越大越方），t＝0 車身端、1 車鼻尖
+const SHN={e5:{len:15,z0:1.5,hw:1.68,rt:0.86,yt:t=>3.81-2.1*(1-Math.pow(1-t,1.5)),yb:t=>0.95-0.25*t*t,w:t=>1.68*(1-0.36*Math.pow(t,1.4)),n:t=>2.9-0.4*t},
+  e6:{len:11,z0:0,hw:1.47,rt:0.86,yt:t=>3.81-1.95*(1-Math.pow(1-t,1.25)),yb:t=>0.95-0.2*t*t,w:t=>1.47*(1-0.22*Math.pow(t,1.3)),n:t=>2.9-0.3*t}};
+// 環沿車鼻點分佈：前 70% 平均、圓頭部分越近鼻尖越密
+const shTip=(D,u)=>u<0.7?D.rt*u/0.7:D.rt+(1-D.rt)*Math.sin((u-0.7)/0.3*Math.PI/2);
+// 車身輪廓按弧長取 N 點（同車身接口一樣），ph＝相對車身中心嘅角度（由底中間逆時針，展開成連續）
+function shBase(O,N,hw){const A=outlineArcs(O),TT=A[O.length],out=[];let prev=null;
+  for(let k=0;k<N;k++){const a=k/N*TT;let i=1;while(i<O.length&&A[i]<a)i++;const p=O[i-1],q=O[i%O.length],f=(a-A[i-1])/Math.max(1e-6,A[i]-A[i-1]),x=p.x+(q.x-p.x)*f,y=p.y+(q.y-p.y)*f;
+    let ph=Math.atan2((y-2.38)/1.43,x/hw);if(prev!==null)while(ph<prev-0.01)ph+=Math.PI*2;prev=ph;out.push({x,y,ph});}
+  out.push({...out[0],ph:out[0].ph+Math.PI*2});return out;}
+// 環上一點：g＝相對高度（0 底 1 頂；圓頭部分照用未收細嘅形狀計，方便畫唇）、sx＝橫向（0 中間 1 兩邊）
+function shRing(D,b,t,o){const tt=Math.min(t,D.rt),u=t>D.rt?(t-D.rt)/(1-D.rt):0,s=Math.sqrt(Math.max(0,1-u*u)),yt=D.yt(tt),yb=D.yb(tt),W=D.w(tt),n=D.n(tt),yc=(yt+yb)/2,H=(yt-yb)/2,c=Math.cos(b.ph),sn=Math.sin(b.ph);
+  const x0=W*Math.sign(c)*Math.pow(Math.abs(c),2/n),y0=yc+H*Math.sign(sn)*Math.pow(Math.abs(sn),2/n),bl=ssf(0,0.12,t),X=b.x+(x0-b.x)*bl,Y=b.y+(y0-b.y)*bl;
+  o.x=X*s;o.y=yc+(Y-yc)*s;o.g=(Y-yb)/Math.max(1e-6,yt-yb);o.sx=Math.min(1,Math.abs(X)/W);return o;}
+function shNoseGeo(D,base,N=56,S=46){const W=N+1,pos=[],uv=[],idx=[],p={};
+  for(let j=0;j<=S;j++){const t=shTip(D,j/S),z=D.z0-D.len*t;for(let i=0;i<=N;i++){shRing(D,base[i],t,p);pos.push(p.x,p.y,z);uv.push(i/N,t);}}
+  for(let j=0;j<S;j++)for(let i=0;i<N;i++){const a=j*W+i,b=a+1,c=a+W,d=c+1;idx.push(a,c,b,b,c,d);}
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();return g;}
+// 車鼻顏色（t, g, sx）→ [顏色, 燈（null／true）]
+function e5NoseCol(D,t,g,sx){const gb=0.45+0.05*t;let col=g>gb?SHC.g:SHC.w,lit=false;
+  if(t<0.36){const gp=0.4325-1.0*t,h=0.0175*(1-t/0.36);if(Math.abs(g-gp)<h)col=SHC.p;}   // 粉紅線喺車鼻側面向下彎、收尖
+  if(t>0.56&&t<0.8&&sx>0.72&&g<gb-0.03&&g>gb-0.075){col='#f2efe2';lit=true;}   // 頭燈：綠白交界下面一條細長燈
+  if(t>=D.rt-0.008){col=g>0.5?SHC.g:SHC.w;if(Math.abs(g-0.5)<0.012||(t<D.rt&&g>0.5))col='#21312d';}   // 鴨嘴：上唇綠、下唇白，深色邊
+  return [col,lit];}
+function e6NoseCol(D,t,g,sx){const gr=0.79-0.35*ssf(0.04,0.5,t);let col=g>gr?SHC.r:SHC.s,lit=false;
+  if(Math.abs(g-gr)<0.007&&t<D.rt)col=SHC.d;   // 紅銀交界深色細線
+  if(t>0.2&&t<0.47&&g>0.7&&sx<0.62)col=(t<0.212||t>0.458||sx>0.6||g<0.715)?'#55606a':SHC.gl;   // 大擋風玻璃（淺色窗框）
+  if(t>0.4&&t<0.55&&sx>0.78&&g>0.6&&g<0.77){col='#f4f2ea';lit=true;}   // 直身頭燈
+  if(t>=D.rt-0.008){col=g>0.5?SHC.r:SHC.s;if(Math.abs(g-0.5)<0.012||(t<D.rt&&g>0.5))col=SHC.d;}   // 圓唇：上紅下銀，深色邊
+  return [col,lit];}
+// 車鼻貼圖（u＝環上位置、v＝t）＋發光貼圖（白＝車頭燈、紅＝車尾燈）
+function shNoseTex(k,D,base){const W=LOWQ?512:768,H=LOWQ?320:512,N=base.length-1,[c,x]=cv(W,H),[cw,xw]=cv(W,H),[cr,xr]=cv(W,H),im=x.createImageData(W,H),iw=xw.createImageData(W,H),ir=xr.createImageData(W,H),C=new THREE.Color(),p={},b={x:0,y:0,ph:0},fn=k==='e5'?e5NoseCol:e6NoseCol;
+  const at=(qq,rr0)=>{const t=1-rr0/H,f=qq/W*N,i=Math.min(N-1,Math.max(0,Math.floor(f))),a=f-i,A0=base[i],A1=base[i+1];b.x=A0.x+(A1.x-A0.x)*a;b.y=A0.y+(A1.y-A0.y)*a;b.ph=A0.ph+(A1.ph-A0.ph)*a;shRing(D,b,t,p);return fn(D,t,p.g,p.sx);};
+  const prev=new Array(W).fill(''),acc=new THREE.Color();
+  for(let r=0;r<H;r++){let left='';for(let q=0;q<W;q++){let [col,lit]=at(q+0.5,r+0.5);const o=(r*W+q)*4;C.set(col);
+    if((q&&col!==left)||(r&&col!==prev[q])){acc.setRGB(0,0,0);let nl=0;for(const [dq,dr] of [[0.25,0.25],[0.75,0.25],[0.25,0.75],[0.75,0.75]]){const [c2,l2]=at(q+dq,r+dr);acc.add(C.set(c2));if(l2)nl++;}C.copy(acc).multiplyScalar(0.25);lit=nl>=2;}
+    left=col;prev[q]=col;im.data[o]=C.r*255;im.data[o+1]=C.g*255;im.data[o+2]=C.b*255;im.data[o+3]=255;
+    iw.data[o]=iw.data[o+1]=lit?255:0;iw.data[o+2]=lit?235:0;iw.data[o+3]=255;ir.data[o]=lit?255:0;ir.data[o+1]=lit?40:0;ir.data[o+2]=lit?24:0;ir.data[o+3]=255;}}
+  x.putImageData(im,0,0);xw.putImageData(iw,0,0);xr.putImageData(ir,0,0);
+  // 發光貼圖（淨係幾舊燈位）縮細到 1/4 先上載，慳 iPad 顯示記憶體
+  const small=src=>{const [c2,x2]=cv(W>>2,H>>2);x2.drawImage(src,0,0,W>>2,H>>2);return T(c2);};return [T(c),small(cw),small(cr)];}
+// 車門：單扇（0.9×1.75 米），顏色跟車身色帶；開門＝門扇縮入門袋（同 E235 一樣用 setLeaves）
+function shinDoorTex(band){const [c,x]=cv(64,128);for(let r=0;r<128;r++){const y=SHDY0+(1-(r+0.5)/128)*(SHDY1-SHDY0);x.fillStyle=band(y);x.fillRect(0,r,64,1);}
+  x.fillStyle='#16222b';rr(x,16,10,32,30,5);x.fill();x.strokeStyle='rgba(0,0,0,.45)';x.lineWidth=3;x.strokeRect(1.5,1.5,61,125);return T(c);}
+const SHDW=0.9,SHDY0=1.25,SHDY1=3.0;
+// 車門跟車身弧度（底窄頂闊）：門嘅座標＝x 沿車身、y 高度、z 向外（以車身最闊位 hw 做 0）；setLeaves 會轉 90° 貼上車身
+function hwAt(H,y){for(let i=1;i<H.length;i++){const a=H[i-1],b=H[i];if(y<=b[1]){const t=(y-a[1])/Math.max(1e-6,b[1]-a[1]);return a[0]+(b[0]-a[0])*Math.min(1,Math.max(0,t));}}return H[H.length-1][0];}
+function doorStrip(H,hw,w,off,n=10){const pos=[],uv=[],idx=[];for(let j=0;j<=n;j++){const y=SHDY0+(SHDY1-SHDY0)*j/n,z=hwAt(H,y)-hw+off;for(const i of [0,1]){pos.push((i-0.5)*w,y,z);uv.push(i,j/n);}}
+  for(let j=0;j<n;j++){const a=j*2;idx.push(a,a+1,a+2,a+1,a+3,a+2);}
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();return g;}
+// 開門見到嘅車門口（新幹線出入口：灰色牆、深色地板、天花燈、扶手），暗啲先似個窿
+const texShinWay=(()=>{const [c,x]=cv(64,128),g=x.createLinearGradient(0,0,0,128);g.addColorStop(0,'#c9ccc8');g.addColorStop(.12,'#8d9294');g.addColorStop(.75,'#5b6165');g.addColorStop(1,'#2c3034');x.fillStyle=g;x.fillRect(0,0,64,128);
+  x.fillStyle='#fff8e8';x.fillRect(8,3,48,5);x.fillStyle='rgba(0,0,0,.35)';x.fillRect(0,0,6,128);x.fillRect(58,0,6,128);x.fillStyle='#b8bcbd';x.fillRect(48,34,4,60);x.fillStyle='#3b3631';x.fillRect(0,110,64,18);return T(c);})();
+const SHM2={dark:std({color:0x2a2f33,roughness:.6}),coup:std({color:0x3a3f45,metalness:.6,roughness:.4}),doorway:std({map:texShinWay,roughness:.8,emissive:0xffffff,emissiveMap:texShinWay,emissiveIntensity:.18}),
+  skirt:std({color:0xc5c9cc,roughness:.45,metalness:.25}),gang:std({color:0x50565c,roughness:.7}),
+  glass:new THREE.MeshPhysicalMaterial({color:0x1b2731,metalness:.25,roughness:.06,clearcoat:1,clearcoatRoughness:.03}),frame:std({color:0xd8dcdf,metalness:.45,roughness:.3}),wiper:std({color:0x15181b,roughness:.5})};
+// 一款車（E5／E6）嘅幾何同物料：lead＝車頭卡（車身 z0→車鼻交界、車鼻）、mid＝中間卡；noseM 三款：on＝白頭燈、off＝紅尾燈、dark＝唔著燈
+function shinKind(k){const e5=k==='e5',H=e5?E5H:E6H,O=e5?E5O:E6O,A=e5?E5ARC:E6ARC,TT=e5?E5TOT:E6TOT,band=e5?e5BandY:e6BandY,hw=e5?1.68:1.47,z0=e5?12.25:9.5,dz=e5?10.9:8.6,D=SHN[k],base=shBase(O,56,hw);
+  const physical=(map)=>new THREE.MeshPhysicalMaterial({map,roughness:.25,metalness:.1,clearcoat:1,clearcoatRoughness:.08});
+  const [nt,nw,nr]=shNoseTex(k,D,base),nm=(em,on)=>new THREE.MeshPhysicalMaterial({map:nt,roughness:.22,metalness:.1,clearcoat:1,clearcoatRoughness:.06,emissive:0xffffff,emissiveMap:em,emissiveIntensity:on?1:0});
+  return {k,H,O,D,hw,z0,dz,len:D.len,tip:D.z0-D.len,leafG:doorStrip(H,hw,SHDW,0.012),wayG:doorStrip(H,hw,SHDW+0.06,0.005),
+    leadG:prismGeo(O,z0,D.z0,{capF:false,uS:24.5,vS:TT}),midG:e5?prismGeo(O,12.25,-12.25,{uS:24.5,vS:TT}):null,nose:shNoseGeo(D,base),
+    leadM:physical(shinBodyTex(O,A,TT,band,shWins(D.z0+1.2,z0-2.6))),midM:e5?physical(shinBodyTex(O,A,TT,band,shWins(-9.4,9.4))):null,
+    noseM:{on:nm(nw,true),off:nm(nr,true),dark:nm(nw,false)},doorM:std({map:shinDoorTex(band),roughness:.35,metalness:.1})};}
+const SHK={};
+// E5 擋風玻璃：車鼻上面一個深色氣泡（淺色框、雨刷），跟車鼻斜度
+function e5Canopy(K){const D=K.D,tc=0.3,z=D.z0-D.len*tc,y=D.yt(tc),dy=(D.yt(tc+0.02)-D.yt(tc-0.02))/(0.04*D.len),ang=Math.atan(dy),g=new THREE.Group();g.position.set(0,y-0.07,z);g.rotation.x=ang;
+  const gl=new THREE.Mesh(new THREE.SphereGeometry(1,28,14,0,Math.PI*2,0,Math.PI*0.5),SHM2.glass);gl.scale.set(0.84,0.46,1.75);g.add(gl);
+  const fr=new THREE.Mesh(new THREE.TorusGeometry(1,0.06,6,40),SHM2.frame);fr.rotation.x=Math.PI/2;fr.scale.set(0.88,1.8,1);fr.position.y=0.09;g.add(fr);
+  return g;}
+// 砌一卡：kind＝'lead'（車頭卡；flip＝轉 180° 做尾卡）或 'mid'；doors＝車門 z（每邊一道）
+function shinCarBuild(K,kind,flip){const g=new THREE.Group(),lead=kind==='lead';
+  const b=new THREE.Mesh(lead?K.leadG:K.midG,lead?K.leadM:K.midM);b.castShadow=true;b.receiveShadow=true;g.add(b);
+  let front=null,coup=null,noseMesh=null;
+  if(lead){front=new THREE.Group();noseMesh=new THREE.Mesh(K.nose,flip?K.noseM.off:K.noseM.on);noseMesh.castShadow=true;front.add(noseMesh);if(K.k==='e5')front.add(e5Canopy(K));
+    g.add(front);
+    // 連結器（車鼻尖伸出 0.4 米）：連結時先顯示
+    coup=new THREE.Group();const bar=new THREE.Mesh(new THREE.CylinderGeometry(0.09,0.11,0.42,12).rotateX(Math.PI/2),SHM2.coup);bar.position.z=-0.21;coup.add(bar);
+    const hd=new THREE.Mesh(new THREE.BoxGeometry(0.34,0.3,0.08),SHM2.coup);hd.position.z=-0.4;coup.add(hd);coup.position.set(0,K.D.yb(K.D.rt)+(K.D.yt(K.D.rt)-K.D.yb(K.D.rt))*0.42,K.tip+0.05);coup.visible=false;g.add(coup);}
+  // 車底：淺灰裙板，轉向架位深色；車卡之間有風擋（只喺冇轉向嘅卡嘅車尾加，唔會兩卡重疊）
+  const z0=lead?K.z0:12.25,z1=lead?K.D.z0:-12.25,ul=z0-z1-0.6,um=(z0+z1)/2;
+  const under=new THREE.Mesh(new THREE.BoxGeometry(K.hw*1.55,0.5,ul),SHM2.skirt);under.position.set(0,0.75,um);g.add(under);
+  for(const bz of [z0-2.6,z1+(lead?2.2:2.6)]){const bg=new THREE.Mesh(new THREE.BoxGeometry(K.hw*1.56,0.36,2.8),SHM2.dark);bg.position.set(0,0.66,bz);g.add(bg);}
+  if(!flip){const gw=new THREE.Mesh(new THREE.BoxGeometry(K.hw*1.7,2.5,0.56),SHM2.gang);gw.position.set(0,2.3,z0+0.27);g.add(gw);}
+  // 車門：車頭卡近車尾一道、中間卡兩頭各一道；門扇喺車身外面 1 厘米，後面有門口（開門先見到）
+  const doors=lead?[K.dz]:[K.dz,-K.dz],ent=[],dw=new Merger();
+  for(const sd of [-1,1])for(const dzz of doors){const ry=sd*Math.PI/2,dd=dzz>0?-1:1;
+    dw.add(K.wayG,sd*K.hw,0,dzz,0,ry,0);
+    ent.push({sd,x:sd*K.hw,y:0,az:dzz-dd*SHDW/2,ry,ls:-sd*dd*SHDW/2});}
+  const dwm=dw.mesh(SHM2.doorway,false,false);if(dwm)g.add(dwm);
+  const li={};for(const sd of [-1,1]){const L=ent.filter(q=>q.sd===sd),im=new THREE.InstancedMesh(K.leafG,K.doorM,L.length);im.userData.L=L;im.userData.k=-1;im.castShadow=false;g.add(im);li[sd]=im;}
+  // 集電弓（E5 中間卡、E6 尾卡）
+  if(kind==='mid'||(K.k==='e6'&&flip)){const mg={dark:new Merger(),wheel:new Merger()};pantoInto(mg,kind==='mid'?-5:3);g.add(mg.dark.mesh(TM.dark,true,false),mg.wheel.mesh(TM.wheel,false,false));}
+  if(flip)g.rotation.order='YXZ';g.userData.flip=!!flip;scene.add(g);
+  const doorS=doors.map(z=>flip?z:-z);   // 車門喺車卡原點前面幾多米（沿路軌）
+  return {g,front,coup,noseMesh,leaves:li,doorS};}
+// 一組車（unit）：cars＝車卡、off＝車頭（車鼻尖）到每卡原點嘅距離、len＝全長；nMid＝中間卡數（E5 玩家車 1、山手線背景車 4）
+function shinUnit(k,nMid=1){const K=SHK[k]||(SHK[k]=shinKind(k)),e5=k==='e5',specs=[['lead',false]];if(e5)for(let i=0;i<nMid;i++)specs.push(['mid',false]);specs.push(['lead',true]);
+  const U={k,K,cars:[],off:[],leaves:[],doorS:[],front:null,rear:null,rearCoup:null,frontCoup:null,len:0};let o=-K.tip;   // 頭卡原點離車鼻尖
+  specs.forEach(([kind,flip],i)=>{const C=shinCarBuild(K,kind,flip);if(i>0){const prevBack=specs[i-1][0]==='lead'&&!specs[i-1][1]?K.z0:12.25,front=kind==='lead'&&flip?K.z0:12.25;o+=prevBack+0.5+front;}
+    U.cars.push(C.g);U.off.push(o);U.leaves.push(C.leaves);for(const d of C.doorS)U.doorS.push(o-d);
+    if(i===0){U.front=C.front;U.frontCoup=C.coup;U.frontNose=C.noseMesh;}if(i===specs.length-1){U.rear=C.front;U.rearCoup=C.coup;U.rearNose=C.noseMesh;}});
+  U.len=o-K.tip;setLeaves(U,0,0);return U;}
+// 車頭燈：'on' 白、'off' 紅、'dark' 唔著
+function noseLit(U,front,mode){const m=front?U.frontNose:U.rearNose;if(m)m.material=(front&&U.nm?U.nm:U.K.noseM)[mode];}
+// 玩家車車頭：複製車鼻物料（共用貼圖），駕駛室鏡頭時加裁切平面 CABCLIP
+function unitMats(U){const m=U.K.noseM;U.nm={on:m.on.clone(),off:m.off.clone(),dark:m.dark.clone()};}
+const CABCLIP=new THREE.Plane(),_ccN=new THREE.Vector3(),_ccP=new THREE.Vector3();
+// 擺一組車：head＝車頭（車鼻尖）沿路軌位置；rev＝向 s 減少方向行（對面嚟嘅車）；lat 可以係函數
+function placeUnit(U,head,lat,rev,y=RT,vis=true){U.cars.forEach((c,i)=>{const o=rev?head+U.off[i]:head-U.off[i],sp=9;
+  if(!vis||o<sp+1||o>L-sp-1){c.visible=false;return;}c.visible=true;const sa=rev?o-sp:o+sp,sb=rev?o+sp:o-sp,la=typeof lat==='function'?lat(sa):lat,lb=typeof lat==='function'?lat(sb):lat;
+  posAt(sa,_ta);dirAt(sa,_tfa);_ta.x+=-_tfa.z*la;_ta.z+=_tfa.x*la;posAt(sb,_tb);dirAt(sb,_tfb);_tb.x+=-_tfb.z*lb;_tb.z+=_tfb.x*lb;
+  c.position.set((_ta.x+_tb.x)/2,y,(_ta.z+_tb.z)/2);c.rotation.y=Math.atan2(-(_ta.x-_tb.x),-(_ta.z-_tb.z))+(c.userData.flip?Math.PI:0);});}
+// 山手線旁邊新幹線高架嘅背景 E5（6 卡，新樣）：placeE5 照用（每卡相隔 25 米、車頭卡原點離車鼻尖 13.5 米）
+function shinTE(){const U=shinUnit('e5',4);for(const c of U.cars)c.visible=false;return {cars:U.cars,U};}
+// 對面嚟嘅新幹線（10-02）：盛岡或之前＝南行こまち＋はやぶさ連結（E6 喺前）；之後はやぶさ綫＝E5、こまち綫＝E6
+let TSO=null;
+function placeOnc(s){const u5=TSO.u5,u6=TSO.u6,y=ST[Math.min(2,G.next)].y,cp=y<=MORIOKA,e6=cp||LINE.id==='koma',e5=cp||LINE.id==='haya';
+  if(e6){placeUnit(u6,s,lat1,true);noseLit(u6,true,'on');noseLit(u6,false,cp?'dark':'off');}else for(const c of u6.cars)c.visible=false;
+  if(e5){const h=e6?s+u6.len+CGAP+u5.len:s+u5.len;placeUnit(u5,h,lat1,false);noseLit(u5,false,cp?'dark':'on');noseLit(u5,true,'off');}else for(const c of u5.cars)c.visible=false;}
+function hideOnc(){if(TSO)for(const c of TSO.u5.cars.concat(TSO.u6.cars))c.visible=false;}
+
+/* ---- 玩家新幹線嘅狀態 ---- */
+// c＝連結緊；drive＝玩家揸緊邊組（'e5'／'e6'）；o5／o6＝冇連結嗰陣另一組車頭離盛岡停車位幾多米（null＝唔顯示）
+let TS=null;
+const TSH={c:true,drive:'e5',o5:null,o6:null,coup:1,run5:false,v5:0};
+const shinOn=()=>!!(LINE.shin&&TS);
+function buildShinTrain(){renderer.localClippingEnabled=true;TS={u5:shinUnit('e5'),u6:shinUnit('e6')};unitMats(TS.u5);unitMats(TS.u6);TSO={u5:shinUnit('e5'),u6:shinUnit('e6')};hideOnc();TS.cars=TS.u5.cars.concat(TS.u6.cars);for(const c of TS.cars)c.visible=false;
+  if(LOWQ)for(const c of TS.cars)c.traverse(o=>{if(o.isMesh&&o.castShadow&&!o.isInstancedMesh&&o.material!==SHK.e5.leadM&&o.material!==SHK.e5.midM&&o.material!==SHK.e6.leadM)o.castShadow=false;});}
+// 盛岡喺而家三個站位邊個（冇就 −1）
+const moriIdx=()=>LINE.shin?ST.findIndex(q=>q.y===MORIOKA):-1;
+// 行程開始：盛岡或之前上車＝連結；盛岡之後：はやぶさ淨係 E5、こまち淨係 E6
+function shinReset(y0){TSH.c=y0<=MORIOKA;TSH.drive=LINE.id==='koma'&&y0>MORIOKA?'e6':'e5';TSH.o5=TSH.o6=null;TSH.coup=1;TSH.run5=false;TSH.v5=0;}
+// 每格擺車：連結＝E5 喺前、E6 跟尾；分離咗就按 o5／o6 擺另一組
+function placeShin(){const u5=TS.u5,u6=TS.u6,mi=moriIdx(),sM=mi>=0?ST[mi].stop:null;let s5=null,s6=null;
+  if(TSH.c){s5=G.s;s6=G.s-u5.len-CGAP;}
+  else if(TSH.drive==='e5'){s5=G.s;if(sM!==null&&TSH.o6!==null)s6=sM+TSH.o6;}
+  else{s6=G.s;if(sM!==null&&TSH.o5!==null)s5=sM+TSH.o5;}
+  placeUnit(u5,s5??0,0,false,RT,s5!==null);placeUnit(u6,s6??0,0,false,RT,s6!==null);
+  noseLit(u5,true,'on');noseLit(u5,false,TSH.c?'dark':'off');noseLit(u6,true,TSH.drive==='e6'?'on':'dark');noseLit(u6,false,'off');updCabClip();
+  // 連結器：連結中（或者分離緊）先見到；coup＝伸出比例
+  const cv5=u5.rearCoup,cv6=u6.frontCoup,k=TSH.coup;for(const cp of [cv5,cv6]){cp.visible=k>0.02&&(TSH.c||TSH.o6!==null);cp.scale.set(1,1,Math.max(0.02,k));}
+  // 車門：玩家嗰組（連結中兩組都係）跟 G.doors；停喺盛岡嗰陣另一組都跟（兩組一齊上落客）
+  const atM=sM!==null&&Math.abs(G.s-sM)<1.5,dL=G.doorR?0:G.doors,dR=G.doorR?G.doors:0;
+  for(const [u,me] of [[u5,TSH.c||TSH.drive==='e5'],[u6,TSH.c||TSH.drive==='e6']]){const on=me||atM;setLeaves(u,on?dL:0,on?dR:0);}}
+function hideShin(){if(!TS)return;for(const c of TS.cars)c.visible=false;}
+// 玩家嗰組車
+const shinMine=()=>TSH.drive==='e6'?TS.u6:TS.u5;
+// 駕駛室（同 E235 共用一個）：搬入玩家嗰組車嘅頭卡；off＝駕駛室喺車卡入面嘅位移（新幹線車鼻長，司機位喺車鼻後半、高啲）
+const CABOFF={e5:new THREE.Vector3(0,0.85,4.3),e6:new THREE.Vector3(0,0.75,4.95)};
+function cabCar(){return shinOn()?shinMine().cars[0]:TA.cars[0];}
+function cabFront(){return shinOn()?shinMine().front:TA.front;}
+function moveCab(){if(!CAB.group)return;const car=cabCar(),off=shinOn()?CABOFF[TSH.drive]:new THREE.Vector3();if(CAB.group.parent!==car)car.add(CAB.group);CAB.group.position.copy(off);CAB.off.copy(off);
+  if(HEADL){const tip=shinOn()?shinMine().K.tip:-CH-1.0;if(HEADL.parent!==car){car.add(HEADL);car.add(HEADL.target);}HEADL.position.set(0,shinOn()?1.35:1.9,tip-0.4);HEADL.target.position.set(0,0.8,tip-60);}
+  fronts();}
+// 車鼻：駕駛室鏡頭收埋自己嗰個（鏡頭喺車鼻入面），其他照顯示
+function fronts(){const cf=G.cam==='cab'?cabFront():null,sh=shinOn();for(const f of [TA&&TA.front,TS&&TS.u5.front,TS&&TS.u6.front])if(f)f.visible=f!==cf||sh;
+  if(!TS)return;for(const U of [TS.u5,TS.u6]){const clip=sh&&cf===U.front;for(const k in U.nm){const m=U.nm[k],want=clip?1:0;if((m.clippingPlanes||[]).length!==want){m.clippingPlanes=clip?[CABCLIP]:[];m.needsUpdate=true;}}
+    const cn=U.front.children.find(o=>o.isGroup);if(cn)cn.visible=!clip;}}
+// 每格更新裁切平面：駕駛室擋風玻璃位（車卡座標 z＝−9.95＋駕駛室位移）前面先畫
+function updCabClip(){if(!shinOn()||G.cam!=='cab')return;const car=shinMine().cars[0];car.updateMatrixWorld();_ccN.set(0,0,-1).applyQuaternion(car.quaternion);_ccP.set(0,0,-9.95+CAB.off.z).applyMatrix4(car.matrixWorld);CABCLIP.setFromNormalAndCoplanarPoint(_ccN,_ccP);}
+// 玩家而家有幾多卡（駕駛室車卡狀態螢幕）
+function playerCars(){return !shinOn()?5:TSH.c?TS.u5.cars.length+TS.u6.cars.length:shinMine().cars.length;}
+// 車門（沿路軌位置）：盛岡或之前＝連結（E5 車頭喺停車位）；盛岡之後＝玩家嗰組
+function shinDoorsAt(st){const u5=TS.u5,u6=TS.u6,h=st.stop;if(st.y<=MORIOKA){const h6=h-u5.len-CGAP-(st.y===MORIOKA?SGAP:0);return u5.doorS.map(d=>h-d).concat(u6.doorS.map(d=>h6-d));}
+  const u=LINE.id==='koma'?u6:u5;return u.doorS.map(d=>h-d);}
+// 開門特寫影邊道門
+function doorCamS(st){return shinOn()?shinDoorsAt(st)[0]:st.stop-HEAD+2.47;}
+// 每格擺玩家列車：新幹線綫用 TS（E5＋E6），其他綫用 TA
+function placePlayer(){if(shinOn()){if(!TS.shown){for(const c of TA.cars)c.visible=false;TS.shown=true;}placeShin();}
+  else{placeTrain(TA,G.s,0,false);setLeaves(TA,G.doorR?0:G.doors,G.doorR?G.doors:0);if(TS&&TS.shown){hideShin();TS.shown=false;}}}
+// こまち：盛岡開出嘅 E5 自己加速離開（過場完咗都繼續行，行遠咗先收埋）
+function updShin(dt){if(!TS||!TSH.run5)return;TSH.v5=Math.min(VMAX,TSH.v5+1.3*dt);TSH.o5+=TSH.v5*dt;const mi=moriIdx();
+  const h5=mi<0?0:ST[mi].stop+TSH.o5;if(mi<0||h5>G.s+450||h5>ST[Math.min(2,G.next)].stop+250||h5-TS.u5.len>L){TSH.run5=false;TSH.o5=null;}}   // 行到前面 450 米外（細到睇唔清）就收埋
+function clunkSfx(){if(AC&&!G.muted){const t=AC.currentTime+0.02;clack(t,0.7);clack(t+0.09,0.45);}}
+function tween(ms,fn,gen){return new Promise(res=>{const t0=performance.now(),step=()=>{if(gen!==G.gen)return res(false);const f=Math.min(1,(performance.now()-t0)/ms);fn(f);if(f<1)requestAnimationFrame(step);else res(true);};requestAnimationFrame(step);});}
+// 盛岡（10-02 用戶）：列車入站停定之後、開門之前，鏡頭影住兩個車鼻嘅連結位：連結器鬆開 → E5 慢慢向前行 → 連結器收返入車鼻
+const needSplit=st=>shinOn()&&TSH.c&&st.y===MORIOKA;
+// 列車要停喺邊：盛岡連結入站停喺停車位後面 SGAP 米（分離時 E5 先向前行到停車位）
+const tgtS=st=>needSplit(st)?st.stop-SGAP:st.stop;
+async function splitScene(gen){const ok=()=>gen===G.gen,st=ST[G.reached],u5=TS.u5,sJ=G.s-u5.len-CGAP/2,m=-(st.side||-1);
+  CAM.splitS=sJ;clearView(frame(sJ-6.2,-3.3*m,PT),frame(sJ,-1.2*m,PT),1.8);setCam('split');$('#banner').classList.add('hidden');
+  guide(`盛岡站！はやぶさ（綠色 E5）同こまち（紅色 E6）要喺度分開喇，睇住！`);
+  const annP=annSplit();await sleep(2000);if(!ok())return;
+  const s0=G.s;TSH.c=false;TSH.o6=s0-u5.len-CGAP-st.stop;TSH.drive='e5';TSH.coup=1;clunkSfx();airSfx(0.9,0.3);
+  await sleep(600);if(!ok())return;
+  if(!await tween(3600,f=>{G.s=s0+SGAP*(0.5-0.5*Math.cos(Math.PI*f));G.prevS=G.s;},gen))return;G.s=st.stop;
+  airSfx(0.5,0.18);if(!await tween(1000,f=>{TSH.coup=1-f;},gen))return;
+  guide(`分開咗喇！開門，等乘客上落車。`);await Promise.race([annP,sleep(3000)]);if(!ok())return;await sleep(400);if(!ok())return;
+  setCam('platform',st.stop);showBanner(st);await sleep(500);}
+// こまち喺盛岡撳發車（10-02 用戶）：關門後 E5 自己開走（月台鏡頭），之後玩家轉去 E6 駕駛室
+async function e5Leaves(gen){const ok=()=>gen===G.gen,st=ST[G.reached],sM=st.stop;
+  TSH.o5=G.s-sM;TSH.drive='e6';G.s=sM+TSH.o6;G.prevS=G.s;moveCab();CAM.leaveS=G.s;{const m=-(st.side||-1);clearView(frame(G.s-3,-2.6*m,PT),frame(G.s+30,-1.5*m,PT),1.6);}setCam('leave');$('#banner').classList.add('hidden');
+  guide(`はやぶさ（E5）先出發去新函館北斗！之後輪到你駕駛こまち（E6）去秋田！`);
+  const annP=annE5Go();await sleep(1600);if(!ok())return;
+  airSfx(1.0,0.22);TSH.v5=0;TSH.run5=true;
+  await sleep(7200);if(!ok())return;await Promise.race([annP,sleep(2000)]);}
 
 /* ======================= 聲音（全部即時合成，唔使下載） ======================= */
 let AC=null,BUS,SFX,VOXN=null,TDUCK=null,NOISE,BROWN,rumG,rumF,hisG,motG,motO1,motO2,motF,sndT=0,audStuck=0,kickT=0,audChk=0,audCT=-1;
@@ -2799,7 +3423,23 @@ const ealEnd=st=>st.y===LINES.eal.st.length-1;
 const ANN_EAL={welcome:st=>{const p=ealParts('pa');return [p[0],()=>arrRetime(['p_pa','e_pa']),p[1],p[2]];},depart:()=>ealParts('close'),onboard:()=>[],
   approach:st=>ealParts('next_'+st.y),gap:()=>ealParts('gap'),arrive:st=>ealEnd(st)?ealParts('thanks','exit'):[],
   close:()=>ealParts('close'),finish:()=>ealEnd(ST[G.reached])?[]:ealParts('thanks')};
-const annSet=()=>LINE.id==='eal'?ANN_EAL:ANN_JY,annChime=()=>{if(LINE.id!=='eal')announceChime();},annLead=()=>LINE.id==='eal'?350:1400;
+// 東北新幹線（はやぶさ／こまち）：照 JR 東日本新幹線自動廣播風格，先日文後英文（網頁語音讀）；盛岡之前兩列車連結，會講連結同分離
+const shJa=()=>LINE.id==='koma'?'こまち号、秋田':'はやぶさ号、新函館北斗',shEn=()=>LINE.id==='koma'?'Komachi bound for Akita':'Hayabusa bound for Shin-Hakodate-Hokuto';
+const shCpl=()=>TSH.c?['この電車は、盛岡まで、はやぶさ号と、こまち号を、連結して運転します。','The Hayabusa and the Komachi are coupled together as far as Morioka.']:['',''];
+const ANN_SHIN={
+  welcome:st=>[[`まもなく、${shJa()}行きが、到着いたします。黄色い線の内側まで、お下がりください。${shCpl()[0]}`,'ja-JP'],[`Attention please. The ${shEn()} is now arriving. ${shCpl()[1]}`,'en-US']],
+  depart:st=>[[`${shJa()}行きが、まもなく、発車いたします。`,'ja-JP'],[`The ${shEn()} will soon depart.`,'en-US']],
+  onboard:(st,from)=>[[`今日も、新幹線をご利用くださいまして、ありがとうございます。この電車は、${shJa()}行きです。${shCpl()[0]}次は、${st.ja}です。`,'ja-JP'],
+    [`Welcome to the Shinkansen. This is the ${shEn()}. ${shCpl()[1]} The next station is ${st.en}.`,'en-US']],
+  approach:st=>[[`まもなく、${st.ja}です。${st.y===MORIOKA&&TSH.c?'盛岡で、はやぶさ号と、こまち号を、切り離します。':''}`,'ja-JP'],[`We will soon make a brief stop at ${st.en}.${st.y===MORIOKA&&TSH.c?' At Morioka, the Hayabusa and the Komachi will be uncoupled.':''}`,'en-US']],
+  arrive:st=>[[`${st.ja}です。ご乗車、ありがとうございました。`,'ja-JP'],[`This is ${st.en}. Thank you for riding.`,'en-US']],
+  close:()=>[['ドアが閉まります。ご注意ください。','ja-JP'],['The doors are closing. Please be careful.','en-US']],
+  finish:()=>[['ご乗車、ありがとうございました。','ja-JP'],['Thank you for traveling on the Shinkansen. See you again!','en-US']],
+  split:()=>[['ただいまから、はやぶさ号と、こまち号の、切り離しを、行います。','ja-JP'],['We are now uncoupling the Hayabusa and the Komachi.','en-US']],
+  e5go:()=>[['はやぶさ号、新函館北斗行きが、発車します。こまち号、秋田行きは、このあと、発車します。','ja-JP'],['The Hayabusa is now departing. The Komachi bound for Akita will depart next.','en-US']]};
+function annSplit(){return sayAll(ANN_SHIN.split());}
+function annE5Go(){return sayAll(ANN_SHIN.e5go());}
+const annSet=()=>LINE.id==='eal'?ANN_EAL:LINE.shin?ANN_SHIN:ANN_JY,annChime=()=>{if(LINE.id!=='eal')announceChime();},annLead=()=>LINE.id==='eal'?350:1400;
 function annWelcome(st){return sayAll(annSet().welcome(st));}
 async function annDepart(st){annChime();const g=SPG;await sleep(annLead());if(g!==SPG)return;await sayAll(annSet().depart(st));}
 // 冇嘢講（東鐵綫開車後唔再自動講，改由靠站廣播掣講）就乜都唔做，唔好截停緊講緊嘅廣播
@@ -3275,7 +3915,6 @@ const REBUS=[
   {p:['cow','cup'],a:'milk',d:['honey','egg'],s:'牛，加一杯，係咩嘢飲品呀？',n:'牛奶'}];
 const SIL=[['elephant','大象'],['giraffe','長頸鹿'],['rabbit','兔子'],['turtle','烏龜'],['butterfly','蝴蝶'],['fish','魚'],['bike','單車'],['plane','飛機'],['banana','香蕉'],['pear','梨'],['loco','火車'],['snail','蝸牛'],['penguin','企鵝'],['mushroom','蘑菇'],['star','星星'],['umbrella','雨傘'],['cat','貓'],['duck','鴨仔'],['key','鎖匙'],['moon','月亮'],['apple','蘋果'],['car','汽車'],['house','屋'],['whale','鯨魚'],['rocket','火箭'],['teddy','公仔熊'],['cherry','車厘子'],['bee','蜜蜂']];
 const GROUPS=[{n:'水果',e:['apple','banana','grapes','orange','strawberry','watermelon','pear','peach','cherry','pineapple']},{n:'動物',e:['dog','cat','rabbit','bear','panda','tiger','cow','pig','frog','monkey','lion']},{n:'交通工具',e:['train','bus','car','plane','ship','bike','rocket','taxi']},{n:'天空',e:['sun','moon','star','rainbow','rain']},{n:'食物',e:['cake','icecream','egg','friedegg','milk','mooncake']}];
-const COLORS=[['紅色','#e53935'],['藍色','#1e88e5'],['黃色','#fdd835'],['綠色','#43a047'],['橙色','#fb8c00'],['紫色','#8e24aa'],['粉紅色','#f06292'],['黑色','#333333']];
 const SHP=[['circle','圓形'],['triangle','三角形'],['square','正方形'],['star','星形'],['heart','心形'],['rect','長方形'],['oval','橢圓形']];
 const PATI=['apple','banana','ball_red','ball_blue','star','moon','dog','cat','train','bus','ball_yellow','ball_green','sakura','chick'];
 const FINDF=['apple','banana','grapes','orange','strawberry','pear','peach','cherry','lemon','pineapple','kiwi','watermelon'];
@@ -3312,11 +3951,11 @@ function genMore(l){const [e]=pick(COUNTS),mx=[6,9,12][l-1]||12,gap=l===1?2:1;le
   const grp=n=>`<div class="optgrp">${`<span>${ico(e)}</span>`.repeat(n)}</div>`;
   return {prompt:'邊一邊多啲？',speech:['邊一邊多啲呀？撳多啲嗰邊！'],vis:`<div class="hint">${IC('left')} 邊邊多啲？ ${IC('right')}</div>`,opts:[O(grp(a),a>b),O(grp(b),b>a)]};}
 function genEnWord(l){const pool=l<=1?EN[0]:l===2?EN[0].concat(EN[1]):EN[1].concat(EN[2]);const [t,d1,d2]=shuffle(pool).slice(0,3),w=k=>IT[k][1];
-  return {prompt:'呢個英文係咩？',speech:[{t:'What is this?',lang:'en-US'}],vis:`<div class="pic">${ico(t)}</div>`,opts:shuffle([t,d1,d2]).map(k=>O(`<span class="word">${w(k)}</span>`,k===t)),spell:w(t)};}
+  return {prompt:'呢個英文係咩？',speech:[{t:'What is this?',lang:'en-US'}],vis:`<div class="pic">${ico(t)}</div>`,opts:shuffle([t,d1,d2]).map(k=>O(`<span class="word">${w(k)}</span>`,k===t)),spell:w(t),ansSay:[{t:w(t).toLowerCase(),lang:'en-US'}]};}
 function genEnSpell(l){const pool=(l<=1?EN[0]:l===2?EN[1].filter(w=>w.length<=5):EN[1].concat(EN[2])).filter(k=>!IT[k][1].includes(' '));const k=pick(pool),W=IT[k][1];const i=randi(0,W.length-1),c=W[i];
   const ds=shuffle([...'ABCDEFGHIJKLMNOPRSTUVWY'].filter(x=>x!==c)).slice(0,2);
   const tiles=[...W].map((ch,j)=>j===i?'<span class="tile blank">?</span>':`<span class="tile">${ch}</span>`).join('');
-  return {prompt:'漏咗邊個字母？',speech:[{t:'Which letter is missing?',lang:'en-US'},{t:W.toLowerCase(),lang:'en-US'}],vis:`<div class="pic sm">${ico(k)}</div><div class="tiles" style="--n:${W.length}">${tiles}</div>`,opts:shuffle([c,...ds]).map(x=>O(`<span class="word">${x}</span>`,x===c)),spell:W,fill:c};}
+  return {prompt:'漏咗邊個字母？',speech:[{t:'Which letter is missing?',lang:'en-US'},{t:W.toLowerCase(),lang:'en-US'}],vis:`<div class="pic sm">${ico(k)}</div><div class="tiles" style="--n:${W.length}">${tiles}</div>`,opts:shuffle([c,...ds]).map(x=>O(`<span class="word">${x}</span>`,x===c)),spell:W,fill:c,ansSay:[{t:c.toLowerCase(),lang:'en-US'},{t:W.toLowerCase(),lang:'en-US'}]};}
 function genZhWord(l){const pool=l<=1?ZHK1:ZHK2;const [t,d1,d2]=shuffle(pool).slice(0,3),z=k=>IT[k][0];
   return {prompt:'呢個係咩？',speech:['呢個係咩呀？揀啱個中文字！'],vis:`<div class="pic">${ico(t)}</div>`,opts:shuffle([t,d1,d2]).map(k=>O(`<span class="zh">${z(k)}</span>`,k===t)),after:[z(t)]};}
 function genZhFill(l){const pool=(l<=1?ZHK1:ZHK2).filter(k=>[...IT[k][0]].length===2);const k=pick(pool),w=[...IT[k][0]],i=l<=1?1:randi(0,1),c=w[i];
@@ -3334,8 +3973,6 @@ function genPattern(l){const [A,B,C,D]=shuffle(PATI);let unit;if(l<=1)unit=[A,B]
   return {prompt:'下一個係咩？',speech:['睇下個規律，下一個應該係邊個呀？'],vis:`<div class="seq">${seq.slice(0,-1).map(e=>`<span>${ico(e)}</span>`).join('')}<span class="q">?</span></div>`,opts:shuffle([...opts]).map(e=>O(E(e),e===ans))};}
 function genOdd(){const [g1,g2]=shuffle(GROUPS);const same=shuffle(g1.e).slice(0,3),odd=pick(g2.e);
   return {prompt:'邊個唔同類？',speech:['邊一個同其他唔同類呀？'],vis:`<div class="hint">邊個唔同類？</div>`,opts:shuffle([...same.map(e=>O(E(e),false)),O(E(odd),true)]),after:[`其他都係${g1.n}，佢係${g2.n}！`]};}
-function genColor(l){const pool=l<=1?COLORS.slice(0,4):COLORS;const [t,d1,d2]=shuffle(pool).slice(0,3);
-  return {prompt:`邊架火車係${t[0]}？`,speech:[`邊架火車係${t[0]}呀？`],vis:`<div class="bigword"><span class="swatch" style="background:${t[1]}"></span>${t[0]}</div>`,opts:shuffle([t,d1,d2]).map(c=>O(E('train:'+c[1].slice(1)),c===t)),after:[`係${t[0]}！`]};}
 function genShape(l){const pool=SHP.slice(0,l<=1?3:l===2?5:7);const [t,d1,d2]=shuffle(pool).slice(0,3),cols=shuffle(['#ff6b6b','#4dabf7','#ffd43b','#69db7c','#b197fc','#ffa94d']);
   return {prompt:`邊個係${t[1]}？`,speech:[`邊個係${t[1]}呀？`],vis:`<div class="bigword">${t[1]}</div>`,opts:shuffle([t,d1,d2]).map((s,i)=>O(shapeSVG(s[0],cols[i]),s===t)),after:[`係${t[1]}！`]};}
 function genSize(l){const e=pick(SIZEI),big=l<=1?true:Math.random()<.5,tgt=big?1.1:0.45;
@@ -3344,10 +3981,102 @@ function genFind(l){const tk=l<=1?'apple':pick(FINDF),tn=Math.min(3,l),n=[12,16,
   const others=FINDF.filter(k=>k!==tk&&!(tk==='apple'&&k==='cherry')&&!(tk==='cherry'&&k==='apple'));const cells=[];for(let i=0;i<tn;i++)cells.push([tk,1]);while(cells.length<n)cells.push([pick(others),0]);
   const html=shuffle(cells).map(([e,ok])=>`<button class="fcell" data-ok="${ok}" style="transform:rotate(${randi(-18,18)}deg)">${ico(e)}</button>`).join('');const nm=IT[tk][0];
   return {find:tn,prompt:tn===1?`搵出${nm}！`:`搵出 ${tn} 個${nm}！`,speech:[tn===1?`幫我搵出${nm}！`:`幫我搵出${tn}個${nm}！`],vis:`<div class="findgrid" style="grid-template-columns:repeat(${cols},minmax(0,1fr))">${html}</div>`,opts:[],after:[]};}
+
+/* ======================= 10-02 新題型（中、英、數、推理各加幾款） ======================= */
+// ---- 中文 ----
+// 睇字揀圖
+function genZhPic(l){const pool=l<=1?ZHK1:ZHK2;const [t,d1,d2]=shuffle(pool).slice(0,3);
+  return {prompt:'呢個字係邊個圖？',speech:['睇下呢個字，揀啱個圖！'],vis:`<div class="bigword zhbig">${IT[t][0]}</div>`,opts:shuffle([t,d1,d2]).map(k=>O(E(k),k===t)),after:[IT[t][0]]};}
+// 量詞（ok＝所有講得通嘅量詞，干擾項唔可以喺入面）
+const QUANT=[['train','架',['架','列']],['bus','架',['架','部','輛']],['car','架',['架','部','輛']],['plane','架',['架']],['bike','架',['架','部','輛']],['taxi','架',['架','部','輛']],
+  ['chick','隻',['隻']],['cat','隻',['隻']],['duck','隻',['隻']],['pig','隻',['隻','頭']],['snail','隻',['隻']],['fish','條',['條','尾']],['apple','個',['個']],['orange','個',['個']],['balloon','個',['個']],
+  ['clock','個',['個']],['star','粒',['粒','顆']],['flower','朵',['朵','枝']],['tree','棵',['棵','樖']],['book','本',['本']],['umbrella','把',['把']],['pen','枝',['枝','支']],['hat','頂',['頂']],
+  ['house','間',['間','座']],['grapes','串',['串']],['cup','隻',['隻','個']],['egg','隻',['隻','個']]];
+const QW=['架','隻','條','個','本','朵','棵','枝','把','頂','間','粒','串'];
+function genZhQuant(l){const pool=l<=1?QUANT.filter(q=>['train','bus','car','cat','duck','fish','apple','book','flower','ball'].includes(q[0])):QUANT;const [k,w,okw]=pick(pool);
+  const ds=shuffle(QW.filter(x=>!okw.includes(x))).slice(0,2);
+  return {prompt:`一 ＿ ${IT[k][0]}？`,speech:[`一乜嘢${IT[k][0]}呀？`],vis:`<div class="pic sm">${ico(k)}</div><div class="tiles"><span class="tile zh">一</span><span class="tile zh blank">?</span><span class="tile zh qw">${IT[k][0]}</span></div>`,
+    opts:shuffle([w,...ds]).map(x=>O(`<span class="zh">${x}</span>`,x===w)),after:[`一${w}${IT[k][0]}`],fill:w};}
+// 相反詞
+const OPP=[['大','細'],['上','下'],['多','少'],['高','矮'],['長','短'],['快','慢'],['開','關'],['冷','熱'],['左','右'],['前','後'],['出','入'],['黑','白'],['早','晚'],['肥','瘦'],['哭','笑'],['來','去'],['新','舊'],['輕','重']];
+function genZhOpp(l){const pool=l<=1?OPP.slice(0,8):OPP,pr=pick(pool),f=Math.random()<.5,[a,b]=f?pr:[pr[1],pr[0]];
+  const ds=shuffle(pool.filter(p=>p!==pr).flat()).slice(0,2);
+  return {prompt:`「${a}」嘅相反係？`,speech:[`${a}，嘅相反係乜嘢字呀？`],vis:`<div class="opp"><span class="tile zh">${a}</span><b>↔</b><span class="tile zh blank">?</span></div>`,
+    opts:shuffle([b,...ds]).map(x=>O(`<span class="zh">${x}</span>`,x===b)),after:[`${a}同${b}`],fill:b};}
+// 中文數字
+const ZNUM=['一','二','三','四','五','六','七','八','九','十'];
+function genZhNum(l){const mx=[5,8,10][l-1]||10,n=randi(1,mx),s=new Set([n]);for(const m of shuffle([n-1,n+1,n-2,n+2,n+3].filter(m=>m>=1&&m<=10)))if(s.size<3)s.add(m);
+  return {prompt:'呢個中文數字係幾多？',speech:['呢個中文字係邊個數字呀？'],vis:`<div class="bigword zhbig">${ZNUM[n-1]}</div>`,opts:shuffle([...s]).map(m=>O(`<span class="num">${m}</span>`,m===n)),after:[`${ZNUM[n-1]}，係${n}`]};}
+// 方位：箱嘅上面／下面／左邊／右邊（左右以畫面為準）
+const POSN={top:'上面',bottom:'下面',left:'左邊',right:'右邊'},POSI=['cat','dog','rabbit','duck','chick','ball','apple','panda','frog'];
+function genZhPos(l){const items=shuffle(POSI).slice(0,3),slots=shuffle(l<=1?['top','bottom','left']:['top','bottom','left','right']).slice(0,3),ask=l<=1?pick(slots.filter(x=>x==='top'||x==='bottom')):pick(slots),ti=slots.indexOf(ask),cell=p=>items[slots.indexOf(p)];
+  const box=p=>slots.includes(p)?`<span class="pp ${p}">${ico(cell(p))}</span>`:'';
+  return {prompt:`邊個喺箱嘅${POSN[ask]}？`,speech:[`邊個喺箱嘅${POSN[ask]}呀？`],vis:`<div class="posgrid">${box('top')}${box('left')}<span class="pp mid">${ico('box')}</span>${box('right')}${box('bottom')}</div>`,
+    opts:shuffle(items).map(k=>O(E(k),k===items[ti])),after:[`係${IT[items[ti]][0]}！`]};}
+// ---- 英文 ----
+// 聽英文揀圖
+function genEnPic(l){const pool=l<=1?EN[0]:l===2?EN[0].concat(EN[1]):EN[1].concat(EN[2]);const [t,d1,d2]=shuffle(pool).slice(0,3),w=IT[t][1];
+  return {prompt:'聽下係邊個？',speech:[{t:`Where is the ${w.toLowerCase()}?`,lang:'en-US'}],vis:`<div class="bigword enbig">${w}</div>`,opts:shuffle([t,d1,d2]).map(k=>O(E(k),k===t)),spell:w,ansSay:[{t:w.toLowerCase(),lang:'en-US'}]};}
+// 英文數數
+const ENUM=['ONE','TWO','THREE','FOUR','FIVE','SIX','SEVEN','EIGHT','NINE','TEN'];
+function genEnCount(l){const [e]=pick(COUNTS),mx=[5,7,10][l-1]||10,k=randi(1,mx),s=new Set([k]);for(const m of shuffle([k-1,k+1,k-2,k+2].filter(m=>m>=1&&m<=10)))if(s.size<3)s.add(m);
+  let h='';for(let i=0;i<k;i++)h+=`<span>${ico(e)}</span>`;
+  return {prompt:'有幾多個？（英文）',speech:[{t:'How many can you count?',lang:'en-US'}],vis:`<div class="grp" style="--es:${k<=5?62:48}px;max-width:640px">${h}</div>`,
+    opts:shuffle([...s]).map(m=>O(`<span class="word">${ENUM[m-1]}</span>`,m===k)),enCount:k,ansSay:[{t:ENUM[k-1].toLowerCase(),lang:'en-US'}]};}
+// 動物叫聲
+const ASOUND=[['cow','moo'],['dog','woof woof'],['cat','meow'],['duck','quack quack'],['pig','oink oink'],['lion','roar'],['mouse','squeak'],['frog','ribbit'],['bee','buzz'],['chick','cheep cheep']];
+function genEnSound(){const [t,d1,d2]=shuffle(ASOUND).slice(0,3),nm=IT[t[0]][1].toLowerCase();
+  return {prompt:'邊隻動物會咁叫？',speech:[{t:`Which animal says ${t[1]}?`,lang:'en-US'}],vis:`<div class="bigword enbig">“${t[1].toUpperCase()}”</div>`,opts:shuffle([t,d1,d2]).map(a=>O(E(a[0]),a===t)),
+    afterEn:[{t:`The ${nm} says ${t[1]}!`,lang:'en-US'}],ansSay:[{t:`The ${nm} says ${t[1]}!`,lang:'en-US'}]};}
+// big／small
+function genEnSize(l){const e=pick(SIZEI),big=l<=1?true:Math.random()<.5,tgt=big?1.1:0.45,word=big?'big':'small';
+  return {prompt:big?'邊個係 BIG？':'邊個係 SMALL？',speech:[{t:`Which one is ${word}?`,lang:'en-US'}],vis:`<div class="bigword enbig">${word.toUpperCase()}</div>`,
+    opts:shuffle([0.45,0.75,1.1]).map(s=>O(`<span style="font-size:${s*1.3}em;line-height:1">${ico(e)}</span>`,s===tgt)),afterEn:[{t:`This one is ${word}!`,lang:'en-US'}],ansSay:[{t:`This one is ${word}!`,lang:'en-US'}]};}
+// ---- 數學 ----
+// 數字配數量
+function genNumMatch(l){const [e]=pick(COUNTS),mx=[5,8,10][l-1]||10,n=randi(1,mx),s=new Set([n]);for(const m of shuffle([n-1,n+1,n-2,n+2].filter(m=>m>=1&&m<=10)))if(s.size<3)s.add(m);
+  const grp=m=>`<div class="optgrp small">${`<span>${ico(e)}</span>`.repeat(m)}</div>`;
+  return {prompt:`邊組有 ${n} 個？`,speech:[`邊一組有${n}個呀？`],vis:`<div class="bigword numbig">${n}</div>`,opts:shuffle([...s]).map(m=>O(grp(m),m===n)),after:[`係${n}個！`]};}
+// 數字火車（漏咗邊個數）
+function genNumTrain(l){let a,step=1;if(l<=1)a=1;else if(l===2)a=randi(1,6);else{step=pick([1,2,-1]);a=step<0?randi(6,10):randi(1,step>1?2:6);}
+  const seq=[0,1,2,3,4].map(i=>a+i*step),gap=l<=1?randi(1,4):randi(0,4),ans=seq[gap],s=new Set([ans]);for(const m of shuffle([ans-1,ans+1,ans+2,ans-2].filter(m=>m>=0)))if(s.size<3)s.add(m);
+  const cars=seq.map((n,i)=>`<span class="tcar${i===gap?' blank':''}">${i===gap?'?':n}</span>`).join('');
+  return {prompt:'火車卡漏咗邊個數字？',speech:['火車卡上面嘅數字，漏咗邊個呀？'],vis:`<div class="ntrain"><span class="tloco">${ico('loco')}</span>${cars}</div>`,opts:shuffle([...s]).map(m=>O(`<span class="num">${m}</span>`,m===ans)),after:[`係${ans}！`],ntFill:{gap,ans}};}
+// 第幾個（由左邊數起）
+const ORDZ=['一','二','三','四','五'],ORDI=['car','bus','train','bike','taxi','plane','ship','rocket','dog','cat','duck','rabbit'];
+function genOrdinal(l){const row=shuffle(ORDI).slice(0,5),mx=l<=1?3:5,i=randi(0,mx-1),t=row[i],ds=shuffle(row.filter(k=>k!==t)).slice(0,2);
+  return {prompt:`由左邊數起，第${ORDZ[i]}個係咩？`,speech:[`由左邊數起，第${ORDZ[i]}個係咩呀？`],vis:`<div class="ordrow"><span class="ordarrow">由左邊數起 ➜</span>${row.map(k=>`<span>${ico(k)}</span>`).join('')}</div>`,
+    opts:shuffle([t,...ds]).map(k=>O(E(k),k===t)),after:[`第${ORDZ[i]}個係${IT[t][0]}！`]};}
+// 邊個數字最大／最細
+function genNumCompare(l){const mx=[9,15,20][l-1]||20,n=l<=1?2:3,s=new Set();while(s.size<n)s.add(randi(1,mx));const arr=[...s],big=Math.random()<.5,ans=big?Math.max(...arr):Math.min(...arr);
+  return {prompt:big?'邊個數字最大？':'邊個數字最細？',speech:[big?'邊個數字最大呀？':'邊個數字最細呀？'],vis:`<div class="bigword">${IC('search')} ${big?'最大':'最細'}</div>`,opts:shuffle(arr).map(m=>O(`<span class="num">${m}</span>`,m===ans)),after:[`係${ans}！`]};}
+// ---- 推理 ----
+// 生活常識配對
+const PAIRS=[{a:'rain',b:'umbrella',q:'落雨要用咩呀？'},{a:'key',b:'door',q:'鎖匙用嚟開咩呀？'},{a:'bee',b:'flower',q:'蜜蜂最鍾意去邊度採蜜呀？'},{a:'monkey',b:'banana',q:'馬騮最鍾意食咩呀？'},
+  {a:'cat',b:'fish',q:'貓仔最鍾意食咩呀？'},{a:'snowflake',b:'snowman',q:'落雪可以砌咩呀？'},{a:'egg',b:'chick',q:'雞蛋孵出嚟係咩呀？'},{a:'cow',b:'milk',q:'牛可以俾我哋咩飲呀？'},
+  {a:'book',b:'bag',q:'返學啲書要放入咩度呀？'},{a:'moon',b:'star',q:'夜晚天空除咗月亮，仲有咩呀？'},{a:'bee',b:'honey',q:'蜜蜂會整咩嘢俾我哋食呀？'},{a:'pen',b:'book',q:'枝筆可以喺邊度寫字呀？'},
+  {a:'clock',b:'sun',q:'朝早起身，天空會見到咩呀？'},{a:'cake',b:'balloon',q:'生日會除咗蛋糕，仲有咩呀？'}];
+const PAIRD=['ball','car','hat','cup','apple','train','tree','duck','teddy','glasses','house','fish','umbrella','book','star'];
+function genPairs(){const p=pick(PAIRS),ds=shuffle(PAIRD.filter(k=>k!==p.b&&k!==p.a)).slice(0,2);
+  return {prompt:'佢哋係好朋友！',speech:[p.q],vis:`<div class="rebus"><span>${ico(p.a)}</span><b>＋</b><span class="qm">?</span></div><div class="hint">${p.q}</div>`,opts:shuffle([p.b,...ds]).map(k=>O(E(k),k===p.b)),after:[`係${IT[p.b]?IT[p.b][0]:''}！`]};}
+// 海陸空
+const HAB=[{n:'天上飛',q:'邊個喺天上飛？',e:['plane','rocket','butterfly','bee']},{n:'海度',q:'邊個喺海度？',e:['fish','whale','ship']},{n:'地上',q:'邊個喺地上面行？',e:['car','bus','train','bike','taxi','elephant','tiger','dog']}];
+function genHabitat(){const [g,...o]=shuffle(HAB),t=pick(g.e),ds=o.map(x=>pick(x.e));
+  return {prompt:g.q,speech:[g.q],vis:`<div class="bigword">${g.q.replace('？','')}</div>`,opts:shuffle([t,...ds]).map(k=>O(E(k),k===t)),after:[`${IT[t][0]}喺${g.n}！`]};}
+// 記憶遊戲：先記住幾樣嘢，蓋住之後少咗一樣，邊樣唔見咗？
+const MEMI=['apple','banana','cat','dog','car','bus','ball','star','duck','fish','teddy','cake','hat','flower','rabbit','train'];
+function genMemory(l){const n=l<=1?3:4,items=shuffle(MEMI).slice(0,n),gone=randi(0,n-1),t=items[gone];
+  const ds=l<=1?shuffle(items.filter(k=>k!==t)).slice(0,2):shuffle(MEMI.filter(k=>!items.includes(k))).slice(0,2);
+  return {prompt:'記住佢哋！',speech:['記住呢幾樣嘢！'],vis:`<div class="memrow">${items.map((k,i)=>`<span data-i="${i}">${ico(k)}</span>`).join('')}</div><div class="memtimer"><i></i></div>`,
+    opts:shuffle([t,...ds]).map(k=>O(E(k),k===t)),memo:{gone,ms:l<=1?3500:3000},after:[`唔見咗${IT[t]?IT[t][0]:''}！`]};}
 const QT={add:['math','加法',genAdd],sub:['math','減法',genSub],count:['math','數數',genCount],more:['math','比多少',genMore],
   enWord:['eng','英文認字',genEnWord],enSpell:['eng','英文串字',genEnSpell],zhWord:['chi','中文認字',genZhWord],zhFill:['chi','中文填字',genZhFill],
   riddle:['logic','謎語',genRiddle],rebus:['logic','睇圖估估',genRebus],shadow:['logic','黑影估估',genShadow],zoom:['logic','放大鏡',genZoom],pattern:['logic','找規律',genPattern],odd:['logic','邊個唔同類',genOdd],
-  find:['logic','搵水果',genFind],color:['chi','顏色字',genColor],shape:['math','認形狀',genShape],size:['math','比大細',genSize]};
+  find:['logic','搵水果',genFind],shape:['math','認形狀',genShape],size:['math','比大細',genSize],
+  zhPic:['chi','睇字揀圖',genZhPic],zhQuant:['chi','量詞',genZhQuant],zhOpp:['chi','相反詞',genZhOpp],zhNum:['chi','中文數字',genZhNum],zhPos:['chi','上下左右',genZhPos],
+  enPic:['eng','聽英文揀圖',genEnPic],enCount:['eng','英文數數',genEnCount],enSound:['eng','動物叫聲',genEnSound],enSize:['eng','big／small',genEnSize],
+  numMatch:['math','數字配數量',genNumMatch],numTrain:['math','數字火車',genNumTrain],ordinal:['math','第幾個',genOrdinal],numCompare:['math','比較數字',genNumCompare],
+  pairs:['logic','好朋友',genPairs],habitat:['logic','海陸空',genHabitat],memory:['logic','記憶遊戲',genMemory]};
 function makeQ(type,l){const [cat,name,gen]=QT[type];const q=gen(l);q.type=type;q.cat=cat;q.name=name;return q;}
 const typesOf=cat=>Object.keys(QT).filter(k=>QT[k][0]===cat);
 
@@ -3358,12 +4087,17 @@ let QS=null;
 function showCard(test){G.card=true;$('#qwrap').classList.remove('hidden');$('#qclose').classList.toggle('hidden',!test);}
 function hideCard(){G.card=false;$('#qwrap').classList.add('hidden');QS=null;}
 function renderQ(q,onDone){QS={q,onDone,locked:false,found:0};const cat=CATS[q.cat];
-  const card=$('#qcard');card.classList.remove('swap');void card.offsetWidth;card.classList.add('swap');
+  const card=$('#qcard');card.classList.remove('swap');void card.offsetWidth;card.classList.add('swap');card.classList.toggle('retry',!!q.retry);
   $('#qcat').innerHTML=`${IC(cat.i)}${cat.n}`;$('#qcat').style.background=cat.c;$('#qprompt').textContent=q.prompt;$('#qsay').classList.toggle('hidden',!q.speech.length);
   $('#qvis').innerHTML=q.vis;const box=$('#qopts');box.innerHTML='';box.className=q.opts.length?'n'+q.opts.length:'';
   q.opts.forEach(o=>{const b=document.createElement('button');b.className='opt';b.innerHTML=o.html;b.addEventListener('click',()=>answer(b,o.ok));box.appendChild(b);});
   if(q.find)$$('#qvis .fcell').forEach(c=>c.addEventListener('click',()=>{if(!QS||QS.locked||c.classList.contains('found'))return;if(c.dataset.ok==='1'){c.classList.add('found');blip();if(++QS.found>=q.find)answer(c,true);}else answer(c,false);}));
-  speakQ(q);}
+  if(q.memo)memoRun(q);else speakQ(q);}
+// 記憶遊戲：先睇幾秒，之後蓋住、拎走一樣，先畀撳答案
+async function memoRun(q){const my=QS,box=$('#qopts');box.classList.add('wait');speakQ(q);const bar=$('#qvis .memtimer i');if(bar){bar.style.transition=`width ${q.memo.ms}ms linear`;requestAnimationFrame(()=>requestAnimationFrame(()=>bar.style.width='0%'));}
+  await sleep(q.memo.ms);if(QS!==my)return;$$('#qvis .memrow span').forEach(e=>e.classList.add('cover'));await sleep(650);if(QS!==my)return;
+  const g=$(`#qvis .memrow span[data-i="${q.memo.gone}"]`);if(g)g.classList.add('gone');$$('#qvis .memrow span').forEach(e=>e.classList.remove('cover'));const t=$('#qvis .memtimer');if(t)t.remove();
+  $('#qprompt').textContent='邊樣唔見咗？';box.classList.remove('wait');await say('邊樣唔見咗呀？','zh-HK',true);}
 // 讀題：中文、數學、推理題用廣東話讀一次（用戶 10-01 要求；其他廣東話旁白照舊唔讀），英文題用英文讀
 async function speakQ(q){stopSpeech();await sleep(140);const my=QS;for(const p of q.speech){if(QS!==my||!my||my.locked)return;await say(p.t||p,p.lang||'zh-HK',true);}}
 // 英文答啱：逐個字母讀，讀完最後一個字母停一停，先讀成個字
@@ -3373,14 +4107,27 @@ async function answer(el,ok){if(!QS||QS.locked)return;QS.locked=true;const {q,on
   el.classList.add(ok?(q.find?'found':'good'):'bad');stopSpeech();$$('#qopts .opt').forEach(b=>b.disabled=true);
   // 填字題答啱：個「?」換返做答啱嘅字／字母，成個字完整顯示（10-02 用戶）；加減數：數線跳步去答案
   if(ok&&q.fill){const t=$('#qvis .tile.blank');if(t){t.textContent=q.fill;t.classList.remove('blank');t.classList.add('fillin');}}
+  if(ok&&q.ntFill){const t=$('#qvis .tcar.blank');if(t){t.textContent=q.ntFill.ans;t.classList.remove('blank');t.classList.add('fillin');}}
+  if(ok&&q.memo){const t=$('#qvis .memrow span.gone');if(t)t.classList.replace('gone','back');}
   if(ok&&q.nl)nlShow(q.nl);
-  if(ok){correctSfx();confetti();await sleep(300);if(q.spell)await spellOut(q.spell);for(const a of (q.after||[]))await say(a.t||a,a.lang||'zh-HK');await say(pick(PRAISE));}
-  else{wrongSfx();await say(pick(WRONG));}
-  await sleep(ok?1000:900);onDone(ok);}
-// 同一科一直出到答啱為止；答錯兩次就降一級，唔會轉去第二科（每站四科各 2 題要數得啱）；同一個站盡量唔重複題型
-function askUntilCorrect(level,cat,used=new Set()){return new Promise(res=>{const gen=G.gen;let last=null,wrongs=0;
-  const next=()=>{if(gen!==G.gen)return;const all=typesOf(cat);let pool=all.filter(k=>k!==last&&!used.has(k));if(!pool.length)pool=all.filter(k=>k!==last);if(!pool.length)pool=all;const type=pick(pool);last=type;used.add(type);showCard(false);
-    renderQ(makeQ(type,wrongs>=2?Math.max(1,level-1):level),ok=>{if(gen!==G.gen)return;if(ok){hideCard();res();}else{wrongs++;setTimeout(next,200);}});};next();});}
+  if(ok){correctSfx();confetti();await sleep(300);if(q.spell)await spellOut(q.spell);
+    if(q.enCount)for(let i=1;i<=q.enCount;i++){if(QS&&QS.q!==q)break;await say(ENUM[i-1].toLowerCase(),'en-US');}
+    for(const a of (q.afterEn||[]))await say(a.t,a.lang);for(const a of (q.after||[]))await say(a.t||a,a.lang||'zh-HK');await say(pick(PRAISE));}
+  else{
+    // 答錯（10-02 用戶）：揀錯嗰個打交叉，再喺正確答案打圈；英文題打圈之後讀出正確答案。呢題會喺下一個站重問
+    wrongSfx();el.classList.add('xmark');await sleep(650);markRight(q);
+    for(const a of (q.ansSay||[]))await say(a.t,a.lang);await sleep(q.ansSay?900:1700);}
+  await sleep(ok?1000:600);onDone(ok);}
+function markRight(q){if(q.find){$$('#qvis .fcell[data-ok="1"]:not(.found)').forEach(c=>c.classList.add('ring'));return;}
+  const k=q.opts.findIndex(o=>o.ok),b=$$('#qopts .opt')[k];if(b)b.classList.add('ring');}
+// 每個站答 QN 題：上個站答錯嘅題目排先重問（同一題、答案位置重新洗過），之後先出新題目；答錯唔會即刻再出另一題
+// planQs：每條重問佔返佢嗰科一個位，令每站總數不變
+function planQs(retry){const need=catOrder();for(const q of retry){const i=need.indexOf(q.cat);if(i>=0)need.splice(i,1);else need.pop();}
+  return retry.slice(0,QN).map(q=>({retry:q})).concat(need.slice(0,Math.max(0,QN-retry.length)).map(c=>({cat:c})));}
+function askOne(it,level,used){return new Promise(res=>{const gen=G.gen;let q;
+  if(it.retry){q={...it.retry,opts:shuffle(it.retry.opts),retry:true};}
+  else{const all=typesOf(it.cat);let pool=all.filter(k=>!used.has(k));if(!pool.length)pool=all;const type=pick(pool);used.add(type);q=makeQ(type,level);}
+  showCard(false);renderQ(q,ok=>{if(gen!==G.gen)return;hideCard();res({ok,q});});});}
 function confetti(n=70){const fx=$('#fx'),cols=['#ff5d5d','#ffd23f','#3ec1d3','#7bd389','#b388ff','#ff9f1c','#ff7eb6'];for(let i=0;i<n;i++){const p=document.createElement('i');p.className='cf';p.style.left=Math.random()*100+'%';p.style.background=pick(cols);p.style.setProperty('--dx',(Math.random()-.5)*30+'vw');p.style.setProperty('--r',(Math.random()*900-450)+'deg');p.style.animationDuration=(1.6+Math.random()*1.4)+'s';p.style.animationDelay=Math.random()*.35+'s';if(Math.random()<.4){p.style.borderRadius='50%';p.style.width=p.style.height='12px';}fx.appendChild(p);setTimeout(()=>p.remove(),3600);}}
 function stampHTML(st,cls){return `<div class="stamp ${cls}"><div class="s1">${LINE.tx.stamp}</div><div class="s2">${st.ja}</div><div class="s3">${IC('train')}</div><div class="s4">${st.en.toUpperCase()}</div></div>`;}
 async function stampFx(st){const el=$('#stampFx');el.innerHTML=stampHTML(st,'big');el.classList.remove('hidden');stampSfx();await sleep(1800);el.classList.add('hidden');}
@@ -3402,7 +4149,7 @@ const NA={3:1.0,2:0.72,1:0.42,0:-0.04,'-1':-0.5,'-2':-0.85,'-3':-1.15,'-4':-1.6}
 const CAM={side:10,up:7.5,fwd:-10,back:16,look:2.0,anchor:0,doorS:0,platL:{lat:-4.0,fwd:9.5,h:2.7,back:12,llat:-0.4,ly:1.9},platP:{lat:-3.7,fwd:8.5,h:2.7,back:12,llat:0.7,ly:1.9}};let camInit=false;
 function flash(){const f=$('#fade');f.style.transition='none';f.style.opacity='1';void f.offsetWidth;f.style.transition='opacity .6s';f.style.opacity='0';}
 function setCam(mode,anchor){if(G.cam===mode&&(anchor===undefined||CAM.anchor===anchor))return;const cut=G.cam!==mode;G.cam=mode;if(anchor!==undefined)CAM.anchor=anchor;if(cut){flash();camInit=false;}
-  if(CAB.group)CAB.group.visible=mode==='cab';if(TA&&TA.front)TA.front.visible=mode!=='cab';G.yaw=G.pitch=0;}
+  if(CAB.group)CAB.group.visible=mode==='cab';fronts();G.yaw=G.pitch=0;}
 // 月台嘅「發車」掣（10-01 用戶：發車廣播同關門合併做一個掣）
 function showActions(on){const a=$('#actions');a.classList.toggle('hidden',!on);$('#aGo').classList.toggle('hot',!!on);}
 const KB=(c,i,t)=>`<span class="k ${c}">${IC(i)}${t}</span>`;
@@ -3429,12 +4176,12 @@ function planSegs(Ld,ys){const N=Ld.st.length,H=ys.length-1,segs=[];let i=0;
 const TRIP={id:'jy',from:0,to:2,ys:[0,1,2],segs:[{base:0,i0:0,i1:2}],seg:0,done:0};
 // 主頁背景：擺去建議行程嘅起點
 function applyTripStart(){const sg=planSegs(LINE,tripStations(LINE,PROG.from,PROG.to))[0];applySectionBase(sg.base);applySectionVisuals();}
-function applySectionVisuals(){refreshStationSigns();refreshTrainLED();refreshParallelLine();refreshCabPaper();refreshLandmarks();refreshLandmarkSets();refreshTunnels();refreshIslands();refreshSuburb();lodScan();}
+function applySectionVisuals(){refreshStationSigns();refreshDoorMarks();refreshTrainLED();refreshParallelLine();refreshCabPaper();refreshLandmarks();refreshLandmarkSets();refreshTunnels();refreshIslands();refreshShinStations();refreshSuburb();lodScan();}
 function applySection(k){applySectionData(k);applySectionVisuals();}
 // 換綫：站牌／閘門、列車塗裝、駕駛室、遠景同街景、HUD 顏色同燈號
-function switchLineVisuals(){document.documentElement.style.setProperty('--jy',LINE.color);restyleStations();restyleTrains();restyleCab();restyleScenery();lodScan();
+function switchLineVisuals(){document.documentElement.style.setProperty('--jy',LINE.color);restyleStations();restyleTrains();restyleCab();restyleScenery();gaugeTicks();moveCab();lodScan();
   $('#tascLamp').textContent=LINE.tx.auto;$('#atsLamp').textContent=LINE.tx.ats;$('#doorLamp').textContent=LINE.tx.door;}
-function updTitleCard(){for(const id of ['jy','eal']){const p=progOf(id),t=$('#r'+id+'Txt');if(t)t.textContent=tripLabel(id,p.from,p.to);const c=$('#'+id+'Stamps');if(c)c.textContent=`${p.stamps.length}/${LINES[id].st.length}`;}}
+function updTitleCard(){for(const id of ['jy','eal','haya','koma']){const p=progOf(id),t=$('#r'+id+'Txt');if(t)t.textContent=tripLabel(id,p.from,p.to);const c=$('#'+id+'Stamps');if(c)c.textContent=`${p.stamps.length}/${LINES[id].st.length}`;}}
 // 揀站畫面（路線圖）：撳一個站做出發站、再撳一個站做到達站，之後撳「開始」；印章站係紅色
 const PICK={id:'jy',from:0,to:2,step:0};
 function openMap(id=LINE.id){const P=progOf(id);Object.assign(PICK,{id,from:P.from,to:P.to,step:0});drawPick();$('#ymap').classList.remove('hidden');}
@@ -3463,13 +4210,17 @@ function drawPick(){const id=PICK.id,P=progOf(id),Ld=LINES[id],S=Ld.st,N=S.lengt
       h+=node(y,X,Y,hl=>{const fs=nm.length>4?10:hl?14:13,anc=c>0.3?'start':c<-0.3?'end':'middle',lx=cx+c*(rx+16),ly=cy+sn*(ry+15)+(sn>0.3?fs:sn<-0.3?-3:4);
         return `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anc}" font-size="${fs}" font-weight="${hl?900:700}" fill="${hl?'#e65100':'#26323c'}">${nm}</text>`;},'#2e7d32',X-c*44,Y-sn*36);}
     h+=`<text x="${cx}" y="${cy-6}" text-anchor="middle" font-size="32" font-weight="900" fill="#2e7d32">${Ld.name}</text><text x="${cx}" y="${cy+28}" text-anchor="middle" font-size="18" font-weight="800" fill="#556">印章 ${P.stamps.length} / ${N}</text>`;}
-  else{// 直綫：金鐘喺下面、羅湖喺上面（好似真地圖咁由南向北），維港畫喺會展同紅磡之間
-    const X0=210,Yb=446,Yt=24,dy=(Yb-Yt)/(N-1),Y=i=>Yb-i*dy,XX=i=>X0+Math.sin(i/(N-1)*Math.PI*1.6)*26;
-    h+=`<path d="M0 ${(Y(1)+Y(2))/2+10} Q160 ${(Y(1)+Y(2))/2-4} 640 ${(Y(1)+Y(2))/2+8} L640 ${(Y(1)+Y(2))/2+22} Q160 ${(Y(1)+Y(2))/2+12} 0 ${(Y(1)+Y(2))/2+24}Z" fill="#b9e3f7"/><text x="560" y="${(Y(1)+Y(2))/2+19}" font-size="12" font-weight="800" fill="#4a90b8">維多利亞港</text>`;
+  else{// 直綫：起點喺下面、終點喺上面（好似真地圖咁由南向北）；東鐵綫維港畫喺會展同紅磡之間，はやぶさ津輕海峽喺新青森同木古內之間
+    const X0=210,Yb=446,Yt=24,dy=(Yb-Yt)/(N-1),Y=i=>Yb-i*dy,XX=i=>X0+Math.sin(i/(N-1)*Math.PI*1.6)*26,dk=id==='haya'?'#17614b':id==='koma'?'#a30d22':'#1f6f9c';
+    const sea=(a,b,name)=>{const c=(Y(a)+Y(b))/2;return `<path d="M0 ${c+10} Q160 ${c-4} 640 ${c+8} L640 ${c+22} Q160 ${c+12} 0 ${c+24}Z" fill="#b9e3f7"/><text x="632" y="${c+19}" text-anchor="end" font-size="12" font-weight="800" fill="#4a90b8">${name}</text>`;};
+    if(id==='eal')h+=sea(1,2,'維多利亞港');if(id==='haya')h+=sea(6,7,'津輕海峽（青函隧道）');
     h+=`<polyline points="${S.map((_,i)=>XX(i).toFixed(1)+','+Y(i).toFixed(1)).join(' ')}" fill="none" stroke="${col}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>`;
     if(on.size>1)h+=`<polyline points="${[...on].map(i=>XX(i).toFixed(1)+','+Y(i).toFixed(1)).join(' ')}" fill="none" stroke="${HI}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>`;
-    for(let i=0;i<N;i++)h+=node(i,XX(i),Y(i),hl=>`<text x="${(XX(i)+20).toFixed(1)}" y="${(Y(i)+5).toFixed(1)}" font-size="${hl?16:14}" font-weight="${hl?900:800}" fill="${hl?'#e65100':'#26323c'}">${S[i][0]}<tspan dx="6" font-size="11" font-weight="700" fill="#7a8896">${S[i][2]}</tspan></text>`,'#1f6f9c',XX(i)-42,Y(i));
-    h+=`<text x="470" y="120" text-anchor="middle" font-size="34" font-weight="900" fill="#1f6f9c">${Ld.name}</text><text x="470" y="146" text-anchor="middle" font-size="15" font-weight="800" fill="#7a8896">${Ld.en}</text><text x="470" y="184" text-anchor="middle" font-size="18" font-weight="800" fill="#556">印章 ${P.stamps.length} / ${N}</text><text x="470" y="212" text-anchor="middle" font-size="14" font-weight="800" fill="#7a8896">列車往羅湖方向行</text>`;}
+    for(let i=0;i<N;i++)h+=node(i,XX(i),Y(i),hl=>`<text x="${(XX(i)+20).toFixed(1)}" y="${(Y(i)+5).toFixed(1)}" font-size="${hl?16:14}" font-weight="${hl?900:800}" fill="${hl?'#e65100':'#26323c'}">${S[i][0]}<tspan dx="6" font-size="11" font-weight="700" fill="#7a8896">${S[i][2]}</tspan></text>`,dk,XX(i)-42,Y(i));
+    // 新幹線：盛岡標示 E5、E6 喺度分開
+    if(Ld.shin){const y=Y(MORIOKA);h+=`<rect x="372" y="${(y-13).toFixed(1)}" width="150" height="26" rx="13" fill="${col}"/><text x="447" y="${(y+5).toFixed(1)}" text-anchor="middle" font-size="13" font-weight="900" fill="#fff">盛岡：E5、E6 分開</text>`;}
+    const ty=Ld.shin?316:120;
+    h+=`<text x="470" y="${ty}" text-anchor="middle" font-size="34" font-weight="900" fill="${dk}">${Ld.name}</text><text x="470" y="${ty+26}" text-anchor="middle" font-size="15" font-weight="800" fill="#7a8896">${Ld.full||Ld.en}</text><text x="470" y="${ty+64}" text-anchor="middle" font-size="18" font-weight="800" fill="#556">印章 ${P.stamps.length} / ${N}</text><text x="470" y="${ty+92}" text-anchor="middle" font-size="14" font-weight="800" fill="#7a8896">列車往${S[N-1][0]}方向行</text>`;}
   svg.innerHTML=h;svg.querySelectorAll('.yst').forEach(g=>g.onclick=()=>pickTap(+g.dataset.y));
   const n=on.size-1;$('#ymFrom').textContent=S[f][0];$('#ymTo').textContent=t===null?'？':S[t][0];$('#ymN').textContent=t===null?'':`（${n} 個站）`;
   const go=$('#ymGo');go.disabled=t===null;go.style.background=col;
@@ -3477,8 +4228,11 @@ function drawPick(){const id=PICK.id,P=progOf(id),Ld=LINES[id],S=Ld.st,N=S.lengt
 function setDriveUI(on){for(const s of ['#deck','#cabBtns'])$(s).classList.toggle('hidden',!on);}
 function updNextBox(){const drive=G.state==='drive'||G.state==='stopped'||G.state==='closing',st=drive?ST[Math.min(G.next,ST.length-1)]:ST[G.reached||0];
   $('#nbLbl').textContent=drive?LINE.tx.next:LINE.tx.now;$('#nbName').textContent=st.ja;$('#nbEn').textContent=st.en;$('#nbLine').textContent=LINE.code;$('#nbCode').textContent=LINE.id==='jy'?st.code.slice(2):st.code;$('#nbDist').classList.toggle('hidden',!drive);refreshCarLCD(st,drive);}
-function buildNotchBar(){const bar=$('#notchBar');bar.innerHTML='';
-  $('#gTicks').innerHTML=[0,20,40,60,80,100,120].map(v=>{const a=v/120*1.5*Math.PI,c=Math.cos(a),s=Math.sin(a);return `<line x1="${(60+c*37).toFixed(1)}" y1="${(60+s*37).toFixed(1)}" x2="${(60+c*43).toFixed(1)}" y2="${(60+s*43).toFixed(1)}"/>`;}).join('');
+// 速度錶刻度同紅色區（超過最高速度）：換綫時重畫（新幹線 0–360）
+function gaugeTicks(){const gm=GMAX(),stp=gm>200?40:20,vs=[];for(let v=0;v<=gm;v+=stp)vs.push(v);
+  $('#gTicks').innerHTML=vs.map(v=>{const a=v/gm*1.5*Math.PI,c=Math.cos(a),s=Math.sin(a);return `<line x1="${(60+c*37).toFixed(1)}" y1="${(60+s*37).toFixed(1)}" x2="${(60+c*43).toFixed(1)}" y2="${(60+s*43).toFixed(1)}"/>`;}).join('');
+  const k=(LINE.kmax||80)/gm*75,r=$('#dGauge .g-red');if(r)r.style.strokeDasharray=`0 ${k.toFixed(1)} ${(75-k).toFixed(1)} 100`;}
+function buildNotchBar(){const bar=$('#notchBar');bar.innerHTML='';gaugeTicks();
   NOTCHES.forEach(n=>{const d=document.createElement('div');d.className='nt '+(n>0?'p':n===0?'n':n===-4?'eb':'b');d.textContent=NL[n];bar.appendChild(d);});
   const idxAt=(x,y)=>{const r=bar.getBoundingClientRect(),f=r.height>r.width?(r.bottom-y)/r.height:(x-r.left)/r.width;return clamp(Math.floor(f*NOTCHES.length),0,NOTCHES.length-1);};let drag=false;
   bar.addEventListener('pointerdown',e=>{drag=true;bar.setPointerCapture(e.pointerId);setMascon(NOTCHES[idxAt(e.clientX,e.clientY)]);});
@@ -3492,18 +4246,21 @@ function setMascon(n,silent){if(!silent&&G.state!=='drive')return;if(n===G.notch
   $$('#notchBar .nt').forEach((d,k)=>{const v=NOTCHES[k];d.classList.toggle('on',v===n);d.classList.toggle('lit',n!==0&&v!==n&&Math.sign(v)===Math.sign(n)&&Math.abs(v)<Math.abs(n));});
   if(!silent){clickSfx();G.idleT=0;}}
 const QN=8;   // 每個站答 8 題：中、英、數、推理各 2 題
-function qProg(k){$('#qprog').innerHTML=k<0?'':Array.from({length:QN},(_,i)=>`<i class="${i<k?'done':i===k?'cur':''}"></i>`).join('');}
+// 進度點：答啱綠、答錯紅、而家呢題黃
+function qProg(k,res=[]){$('#qprog').innerHTML=k<0?'':Array.from({length:QN},(_,i)=>`<i class="${i<k?(res[i]===false?'miss':'done'):i===k?'cur':''}"></i>`).join('');}
+// 答錯嘅題目（下一個站重問；一程完咗仲有就留到下一程第一個站）
+const RETRY=[];
 function catOrder(){const C=['chi','eng','math','logic'],a=shuffle(C.slice()),b=shuffle(C.slice());if(a[3]===b[0])[b[0],b[1]]=[b[1],b[0]];return a.concat(b);}
-function resetGame(i0=0,arr=false){G.gen++;G.reached=i0;G.next=Math.min(i0+1,ST.length-1);G.s=ST[i0].stop-(arr?ARR.D:0);G.prevS=G.s;G.v=0;G.a=0;G.arrT=arr?0:1;G.stars=0;G.doors=G.doorT=arr?0:1;G.tasc=G.ats=G.announced=G.annDone=G.annPrompt=G.annReady=false;G.idleT=0;onc.active=false;stopSpeech();
+function resetGame(i0=0,arr=false){G.gen++;G.reached=i0;G.next=Math.min(i0+1,ST.length-1);G.s=(arr?tgtS(ST[i0]):ST[i0].stop)-(arr?ARR.D:0);G.prevS=G.s;G.v=0;G.a=0;G.arrT=arr?0:1;G.stars=0;G.doors=G.doorT=arr?0:1;G.tasc=G.ats=G.announced=G.annDone=G.annPrompt=G.annReady=false;G.idleT=0;onc.active=false;stopSpeech();
   $('#starN').textContent='0';hideCard();qProg(-1);for(const s of ['#finish','#banner','#stampFx','#actions','#bOpen'])$(s).classList.add('hidden');setDriveUI(false);hideGuide();resetPeople();setMascon(0,true);}
 // 返主頁：起點站喺地底就用月台鏡頭（外面嘅環迴鏡頭會喺隧道外面）
-function goTitle(){updTitleCard();resetGame();SK.active=false;SK.timer=8;G.state='title';setCam(TUN.ug[0]?'platform':'title',ST[0].stop);$('#hud').classList.add('hidden');$('#title').classList.remove('hidden');}
+function goTitle(){updTitleCard();resetGame();shinReset(ST[0].y);moveCab();SK.active=false;SK.timer=8;G.state='title';setCam(TUN.ug[0]?'platform':'title',ST[0].stop);$('#hud').classList.add('hidden');$('#title').classList.remove('hidden');}
 // 開始行程：撳掣嗰下即刻講第一句廣播（iPhone／iPad 先會解鎖語音），重嘅換綫／換段畫面放喺之後
 async function startTrip(id,from,to){initAudio();initAudioExtra();const sw=id!==LINE.id;if(sw){setLineData(id);loadProg();}
   if(!tripOK(LINE,from,to)){from=PROG.from;to=PROG.to;}
   Object.assign(TRIP,{id:LINE.id,from,to,seg:0,done:0});TRIP.ys=tripStations(LINE,from,to);TRIP.segs=planSegs(LINE,TRIP.ys);PROG.from=from;PROG.to=to;saveProg();
   const S0=TRIP.segs[0],need=sw||S0.base!==SECB;if(need)applySectionBase(S0.base);
-  resetGame(S0.i0,true);const gen=G.gen;const annP=annWelcome(ST[S0.i0]);
+  shinReset(from);resetGame(S0.i0,true);moveCab();const gen=G.gen;const annP=annWelcome(ST[S0.i0]);
   if(sw)switchLineVisuals();if(need)applySectionVisuals();
   $('#title').classList.add('hidden');$('#ymap').classList.add('hidden');$('#hud').classList.remove('hidden');initHUD();await arrivePrep(gen,annP);}
 // 舊介面／測試用：第 k 段（3 個站），唔俾 k 就行建議行程
@@ -3517,17 +4274,19 @@ const ARR={D:160,VMAX:22};
 const clipDur=k=>VBUF[k]?VBUF[k].duration:Math.max(1.5,(VTXT[k]||'').length*(k[0]==='e'?0.075:0.2));
 function arrRetime(keys){if(G.state!=='arriving'||G.arrT>=1)return;const now=performance.now()/1000,d=0.3+keys.reduce((a,k)=>a+clipDur(k),0)+0.26*(keys.length-1);G.arrEnd=Math.max(now+1.2,Math.min(G.arr0+30,now+d));}
 function arrEstimate(parts){let t=0;for(const p of parts){if(typeof p==='function')continue;if(Array.isArray(p))t+=0.4+String(p[0]).length*(String(p[1]).startsWith('zh')?0.21:String(p[1]).startsWith('ja')?0.13:0.07);else t+=0.3+(p.c?clipDur(p.c):1.5)+0.26;}return t;}
-function updArrive(dt){const st=ST[G.reached],rem=st.stop-G.s,tau=G.arrEnd-performance.now()/1000;
-  if(rem<=0.02||tau<=0.02){G.s=st.stop;G.v=0;G.a=0;G.arrT=1;return;}
+function updArrive(dt){const st=ST[G.reached],tg=tgtS(st),rem=tg-G.s,tau=G.arrEnd-performance.now()/1000;
+  if(rem<=0.02||tau<=0.02){G.s=tg;G.v=0;G.a=0;G.arrT=1;return;}
   // 最後 4 秒直接跟目標速度（唔係就會早少少停）
-  const vT=Math.min(2*rem/tau,ARR.VMAX),v=tau<4?vT:G.v+(vT-G.v)*Math.min(1,dt*3);G.a=(v-G.v)/Math.max(dt,1e-3);G.v=v;G.s=Math.min(st.stop,G.s+v*dt);G.arrT=Math.min(0.999,1-rem/ARR.D);}
+  const vT=Math.min(2*rem/tau,ARR.VMAX),v=tau<4?vT:G.v+(vT-G.v)*Math.min(1,dt*3);G.a=(v-G.v)/Math.max(dt,1e-3);G.v=v;G.s=Math.min(tg,G.s+v*dt);G.arrT=Math.min(0.999,1-rem/ARR.D);}
 async function arrivePrep(gen,annP){const st=ST[G.reached],ok=()=>gen===G.gen;G.doorR=(st.side||-1)>0;
   if(LINE.id==='eal')await Promise.all(['p_pa','e_pa'].map(k=>clipBuf(k).catch(()=>null)));if(!ok())return;
   const now=performance.now()/1000,est=clamp(arrEstimate(annSet().welcome(st)),8,30);G.arr0=now;G.arrEnd=now+est;G.v=Math.min(ARR.VMAX,2*ARR.D/est);
   G.state='arriving';setCam('platform',st.stop);updNextBox();showBanner(st);guide('列車入站喇！');
   let annDone=false;Promise.resolve(annP).then(()=>{annDone=true;});
   while(G.arrT<1||(!annDone&&performance.now()/1000<G.arr0+32)){await sleep(100);if(!ok())return;}
-  hideGuide();await sleep(250);if(!ok())return;(LINE.id==='jy'?doorChime:mtrChime)();G.doorT=1;doorSfx();startAlighting(st);startBoarding(st,2.6);
+  hideGuide();await sleep(250);if(!ok())return;
+  if(needSplit(st)){await splitScene(gen);if(!ok())return;}
+  (LINE.jp?doorChime:mtrChime)();G.doorT=1;doorSfx();startAlighting(st);startBoarding(st,2.6);
   await sleep(1500);if(!ok())return;departPrep(gen,'arr');}
 // 一程行完但未到終點：喺同一個站換去下一程（白色蓋住畫面先換景，換完繼續上車）
 async function nextSeg(gen){TRIP.seg++;const S=TRIP.segs[TRIP.seg],fd=$('#fade');fd.style.transition='none';fd.style.opacity='1';
@@ -3542,23 +4301,31 @@ async function departPrep(gen,mode){const st=ST[G.reached],first=mode===true||mo
 // 港鐵（照港鐵東鐵綫報站片嘅次序）：「請勿靠近車門」粵普英講完先響 18 下嘟嘟，車門喺嘟嘟聲入面關；開車後先講「下一站」
 // 山手線：發車廣播＋發車旋律，之後「ドアが閉まります」＋關門鈴
 async function onDepart(){if(G.state!=='board'||G.annDone)return;const gen=G.gen,ok=()=>gen===G.gen&&G.state==='closing';G.annDone=true;G.state='closing';showActions(false);hideGuide();stopSpeech();updNextBox();
-  if(LINE.id==='jy'){await annDepart(ST[G.reached]);if(!ok())return;await sleep(departMelody()*0.85);if(!ok())return;annClose();doorChime();holdLate();await sleep(900);}
+  if(LINE.jp){await annDepart(ST[G.reached]);if(!ok())return;await sleep(departMelody()*0.85);if(!ok())return;annClose();doorChime();holdLate();await sleep(900);}
   else{holdLate();await annClose();if(!ok())return;mtrBeeps();await sleep(1500);}
   if(!ok())return;G.doorT=0;doorSfx();await sleep(2300);if(!ok())return;
   for(const p of PP.list)if(p.on&&p.tag==='q'+G.reached)p.on=false;
+  // こまち喺盛岡：E5 先自己開走，之後玩家轉揸 E6（10-02 用戶）
+  const atM=shinOn()&&ST[G.reached].y===MORIOKA&&!TSH.c,leave5=atM&&LINE.id==='koma'&&TSH.drive==='e5';
+  if(leave5){await e5Leaves(gen);if(!ok())return;}
   setCam('cab');G.state='drive';G.tasc=G.ats=G.announced=G.annPrompt=G.annGone=G.depAnn=false;G.idleT=0;setMascon(0,true);setDriveUI(true);$('#bAnn2').classList.add('hidden');spawnOncoming();SK.timer=7;updNextBox();
-  await sleep(800);if(gen!==G.gen)return;guide(`撳右邊${KB('p','power','加速')}，列車就會開動！`);}
+  await sleep(800);if(gen!==G.gen)return;
+  if(atM&&!leave5){guide(`こまち（E6）留喺盛岡，等陣自己去秋田。你繼續駕駛はやぶさ（E5）去新函館北斗！`);await sleep(3200);if(gen!==G.gen||G.state!=='drive')return;}
+  guide(`撳右邊${KB('p','power','加速')}，列車就會開動！`);}
 function onAnnApproach(){if(G.state!=='drive'||G.announced)return;G.announced=true;const b=$('#bAnn2');b.classList.add('hidden');b.classList.remove('hot');hideGuide();stopSpeech();annApproach(ST[G.next]);}
 function arriveStop(){G.state='stopped';setMascon(-4,true);$('#bAnn2').classList.add('hidden');$('#cabBtns').classList.add('hidden');airSfx(1.2,0.3);$('#bOpen').classList.remove('hidden');guide(`到站喇！撳${KB('g','door-open','開門')}！`);}
 async function onOpenDoor(){if(G.state!=='stopped')return;const gen=G.gen,ok=()=>gen===G.gen,idx=G.next,st=ST[idx];G.state='arrived';G.doorR=(st.side||-1)>0;$('#bOpen').classList.add('hidden');hideGuide();setDriveUI(false);
   G.reached=idx;updNextBox();setCam('platform',st.stop);showBanner(st);await sleep(500);if(!ok())return;
+  if(needSplit(st)){await splitScene(gen);if(!ok())return;}
   // 港鐵（10-02 用戶）：開門掣＝「請小心月台空隙」粵普英 → 叮噹 → 開門
   if(LINE.id==='eal'){await annGap();if(!ok())return;mtrChime();await sleep(700);if(!ok())return;}else doorChime();
   G.doorT=1;doorSfx();startAlighting(st);startBoarding(st,2.6);
-  await sleep(1700);if(!ok())return;CAM.doorS=st.stop-HEAD+2.47;{const m=-(st.side||-1);clearView(frame(CAM.doorS+2.7,-4.9*m,PT),frame(CAM.doorS-0.3,-2.2*m,PT),1.4);}setCam('door');await annArrive(st);if(!ok())return;await sleep(1800);if(!ok())return;
-  const last=TRIP.seg>=TRIP.segs.length-1&&idx>=TRIP.segs[TRIP.seg].i1;guide(last?`${st.ja}站！答啱 ${QN} 條題目就完成呢一程！`:`${st.ja}站！答啱 ${QN} 條題目就可以出發！`);await sleep(1600);if(!ok())return;hideGuide();
-  const lv=Math.min(3,Math.max(1+Math.floor(st.y*3/YN),1+Math.floor(TRIP.done/2))),order=catOrder(),used=new Set();   // 難度：條綫後段難啲，同一程行得耐都會難啲
-  for(let k=0;k<QN;k++){qProg(k);await askUntilCorrect(lv,order[k],used);if(!ok())return;G.stars++;$('#starN').textContent=G.stars;popStar();}
+  await sleep(1700);if(!ok())return;CAM.doorS=doorCamS(st);{const m=-(st.side||-1);clearView(frame(CAM.doorS+2.7,-4.9*m,PT),frame(CAM.doorS-0.3,-2.2*m,PT),1.4);}setCam('door');await annArrive(st);if(!ok())return;await sleep(1800);if(!ok())return;
+  const last=TRIP.seg>=TRIP.segs.length-1&&idx>=TRIP.segs[TRIP.seg].i1,nr=Math.min(QN,RETRY.length);
+  guide(nr?`${st.ja}站！先重新答上個站答錯嘅 ${nr} 題，再答新題目！`:last?`${st.ja}站！答完 ${QN} 條題目就完成呢一程！`:`${st.ja}站！答完 ${QN} 條題目就可以出發！`);await sleep(nr?2400:1600);if(!ok())return;hideGuide();
+  // 難度：條綫後段難啲，同一程行得耐都會難啲。答錯嘅題目留低（RETRY），下一個站重問（10-02 用戶）
+  const lv=Math.min(3,Math.max(1+Math.floor(st.y*3/YN),1+Math.floor(TRIP.done/2))),plan=planQs(RETRY.splice(0,QN)),used=new Set(),res=[];
+  for(let k=0;k<plan.length;k++){qProg(k,res);const r=await askOne(plan[k],lv,used);if(!ok())return;res.push(r.ok);if(r.ok){G.stars++;$('#starN').textContent=G.stars;popStar();}else RETRY.push(r.q);}
   qProg(-1);if(!PROG.stamps.includes(st.y)){PROG.stamps.push(st.y);saveProg();}await stampFx(st);if(!ok())return;TRIP.done++;
   if(idx>=TRIP.segs[TRIP.seg].i1)return TRIP.seg>=TRIP.segs.length-1?finishRoute(gen):nextSeg(gen);G.next=idx+1;departPrep(gen,false);}
 // 完成一程：下一程建議由呢個站再行兩個站（東鐵綫到咗羅湖就由金鐘開過）
@@ -3567,27 +4334,31 @@ async function finishRoute(gen){G.state='finish';fanfare();const N=YN,all=PROG.s
   $('#fTitle').textContent=all?(LINE.loop?`${LINE.name}一周完成！`:`${LINE.name}全程完成！`):`到達 ${st.ja}！`;$('#fNext').textContent=`下一程：${tripLabel(LINE.id,nf,nt)}`;
   $('#fstamps').innerHTML=TRIP.ys.slice(1).slice(-6).map(y=>stampHTML(ylObj(y),'mini')).join('');$('#fstars').innerHTML=`${IC('star')} × ${G.stars}　<span class="fcount">印章 ${PROG.stamps.length} / ${YN}</span>`;$('#finish').classList.remove('hidden');confetti(120);
   await annFinish();}
-function updDrive(dt){const st=ST[G.next],rem=st.stop-G.s;
+function updDrive(dt){const st=ST[G.next],tg=tgtS(st),rem=tg-G.s;
   if(!G.depAnn&&G.v>1.2){G.depAnn=true;annOnboard(st,ST[G.reached]);}
   // 靠站廣播掣：東鐵綫一開車就出（廣播「下一站」），山手線離站 470 米先出；列車入月台前 10 秒收埋（10-02 用戶）
   const tEnter=(st.stop-PB-G.s)/Math.max(G.v,0.5);
-  if(!G.announced&&!G.annPrompt&&(LINE.id==='eal'?G.v>1.2:rem<470)&&tEnter>10){G.annPrompt=true;const b=$('#bAnn2');b.classList.remove('hidden');b.classList.add('hot');guide(LINE.id==='eal'?`撳${KB('g','mic','靠站廣播')}，話乘客知下一站係邊度！`:`快到站喇！撳${KB('g','mic','靠站廣播')}！`);}
+  if(!G.announced&&!G.annPrompt&&(LINE.id==='eal'||LINE.shin?G.v>1.2:rem<470)&&tEnter>10){G.annPrompt=true;const b=$('#bAnn2');b.classList.remove('hidden');b.classList.add('hot');guide(LINE.id==='eal'||LINE.shin?`撳${KB('g','mic','靠站廣播')}，話乘客知下一站係邊度！`:`快到站喇！撳${KB('g','mic','靠站廣播')}！`);}
   if(G.annPrompt&&!G.annGone&&!G.announced&&tEnter<10){G.annGone=true;const b=$('#bAnn2');b.classList.add('hidden');b.classList.remove('hot');hideGuide();}
-  if(!G.tasc&&rem<290&&G.notch<0){G.tasc=true;guide(`好叻！${LINE.tx.auto} 會幫你停喺停車位置！`);}
-  if(!G.tasc&&rem<150){G.tasc=G.ats=true;guide('要剎車喇！自動剎車幫你停站！');}
-  let a=NA[G.notch];if(G.notch>0)a*=1-Math.pow(G.v/VMAX,2);let v=clamp(G.v+a*dt,0,VMAX);
-  if(G.tasc){const vt=Math.sqrt(2*0.85*Math.max(0,rem));v=Math.min(v,vt);v=Math.max(v,Math.min(vt,3.2));}
-  G.s=Math.min(st.stop,G.s+(G.v+v)/2*dt);G.a=(v-G.v)/Math.max(dt,1e-3);G.v=v;
+  // 新幹線：加速、剎車都快 1.4 倍；自動剎車／TASC 按而家速度嘅剎車距離提早開始（唔會突然減速）
+  const sh=LINE.shin,dec=sh?1.2:0.85,bd=G.v*G.v/(2*dec);
+  if(!G.tasc&&rem<Math.max(290,bd+80)&&G.notch<0){G.tasc=true;guide(`好叻！${LINE.tx.auto} 會幫你停喺停車位置！`);}
+  if(!G.tasc&&rem<Math.max(150,bd+15)){G.tasc=G.ats=true;guide('要剎車喇！自動剎車幫你停站！');}
+  let a=NA[G.notch]*(sh?1.4:1);if(G.notch>0)a*=1-Math.pow(G.v/VMAX,2);let v=clamp(G.v+a*dt,0,VMAX);
+  if(G.tasc){const vt=Math.sqrt(2*dec*Math.max(0,rem));v=Math.min(v,Math.max(vt,G.v-dec*1.6*dt));v=Math.max(v,Math.min(vt,3.2));}
+  G.s=Math.min(tg,G.s+(G.v+v)/2*dt);G.a=(v-G.v)/Math.max(dt,1e-3);G.v=v;
   if(G.v<0.1&&G.notch<=0&&!G.tasc){G.idleT=(G.idleT||0)+dt;if(G.idleT>10){G.idleT=0;guide(`撳右邊${KB('p','power','加速')}，列車就會行㗎！`);}}
-  if(st.stop-G.s<0.03&&G.v<0.1){G.s=st.stop;G.v=0;G.a=0;arriveStop();}}
-function updDriveHUD(){const st=ST[Math.min(G.next,ST.length-1)],pv=ST[Math.max(0,G.next-1)],kmh=Math.round(G.v*3.6),rem=Math.max(0,Math.round(st.stop-G.s)),span=Math.max(1,st.stop-pv.stop);
-  hudW('#spdN',kmh,(e,v)=>e.textContent=v);hudW('#distN',rem,(e,v)=>e.textContent=v);hudW('#gArc',(Math.min(120,kmh)/120*75).toFixed(1),(e,v)=>e.style.strokeDasharray=v+' 100');
+  if(tg-G.s<0.03&&G.v<0.1){G.s=tg;G.v=0;G.a=0;arriveStop();}}
+function updDriveHUD(){const st=ST[Math.min(G.next,ST.length-1)],pv=ST[Math.max(0,G.next-1)],kmh=KMH(G.v),gm=GMAX(),rem=Math.max(0,Math.round(tgtS(st)-G.s)),span=Math.max(1,st.stop-pv.stop);
+  hudW('#spdN',kmh,(e,v)=>e.textContent=v);hudW('#distN',rem,(e,v)=>e.textContent=v);hudW('#gArc',(Math.min(gm,kmh)/gm*75).toFixed(1),(e,v)=>e.style.strokeDasharray=v+' 100');
   hudW('#nbRing',(clamp(1-rem/span,0,1)*100).toFixed(1),(e,v)=>e.style.strokeDasharray=v+' 100');for(const [id,on] of [['#tascLamp',G.tasc],['#atsLamp',!!G.ats],['#doorLamp',G.doors<0.02]])hudW(id,on,(e,v)=>e.classList.toggle('on',v));}
 // 介面數字／燈：數值有變先寫落網頁（每格都寫會令 iPad 每格重新排版）
 const HUDC={};
 function hudW(sel,v,f){if(HUDC[sel]===v)return;HUDC[sel]=v;const e=$(sel);if(e)f(e,v);}
-function spawnOncoming(){onc.active=true;onc.s=Math.min(L-110,ST[G.next].stop+160);onc.honk=false;onc.woosh=false;}
-function updOnc(dt){if(!onc.active){for(const c of TB.cars)c.visible=false;return;}onc.s-=onc.v*dt;if(onc.s<-110){onc.active=false;return;}placeTrain(TB,onc.s,lat1,true);
+function spawnOncoming(){onc.active=true;onc.s=Math.min(L-110,ST[G.next].stop+160);onc.v=LINE.shin?27:18;onc.honk=false;onc.woosh=false;}
+// 新幹線綫：對面嚟嘅係 E5（山手線背景嗰架），TB 收埋
+function updOnc(dt){const sh=LINE.shin&&TSO;if(sh&&TB.cars[0].visible)for(const c of TB.cars)c.visible=false;if(!sh&&TSO&&TSO.u5.cars[0].visible)hideOnc();
+  if(!onc.active){if(sh)hideOnc();else for(const c of TB.cars)c.visible=false;return;}onc.s-=onc.v*dt;if(onc.s<-260){onc.active=false;return;}if(sh)placeOnc(onc.s);else placeTrain(TB,onc.s,lat1,true);
   const gap=onc.s-G.s;if(!onc.honk&&gap<300&&gap>0){onc.honk=true;hornSfx();}if(!onc.woosh&&gap<14){onc.woosh=true;whoosh();}}
 
 
@@ -3598,13 +4369,16 @@ function fovFor(mode){const a=camera.aspect,h=mode==='cab'?70:mode==='door'?58:6
 // 邊個站（停車位最近）嘅月台喺邊：−1 左、+1 右（島式）
 function sideAt(s){let b=ST[0];for(const q of ST)if(Math.abs(q.stop-s)<Math.abs(b.stop-s))b=q;return b.side||-1;}
 function updCam(dt){if(G.cam==='free')return;const t=G.time,fv=fovFor(G.cam);if(Math.abs(camera.fov-fv)>0.01){camera.fov=fv;camera.updateProjectionMatrix();}
-  if(G.cam==='cab'){const car=TA.cars[0],vf=G.v/VMAX;_eye.copy(EYE);_eye.x+=Math.sin(t*1.3)*0.008*vf;_eye.y+=Math.sin(t*2.7)*0.006*vf+(G.bump||0);
+  if(G.cam==='cab'){const car=cabCar(),vf=G.v/VMAX;_eye.copy(EYE).add(CAB.off);_eye.x+=Math.sin(t*1.3)*0.008*vf;_eye.y+=Math.sin(t*2.7)*0.006*vf+(G.bump||0);
     car.updateMatrixWorld();camera.position.copy(_eye.applyMatrix4(car.matrixWorld));
     if(!lookDrag){G.yaw*=Math.exp(-dt*1.2);G.pitch*=Math.exp(-dt*1.2);}
     _qe.set(-0.10+G.pitch,0.05+G.yaw,Math.sin(t*1.1)*0.003*vf,'YXZ');_ql.setFromEuler(_qe);camera.quaternion.copy(car.quaternion).multiply(_ql);return;}
   // 月台鏡頭、開門特寫：島式月台（右邊）打橫位置正負調轉
   if(G.cam==='platform'){const a=CAM.anchor,P=camera.aspect<1?CAM.platP:CAM.platL,m=-sideAt(a);posAt(a,_h);dirAt(a,_f);const rx=-_f.z,rz=_f.x;
     camera.position.set(_h.x+rx*P.lat*m+_f.x*P.fwd+Math.sin(t*0.3)*0.08,PT+P.h,_h.z+rz*P.lat*m+_f.z*P.fwd);posAt(a-P.back,_cl);_cl.x+=rx*P.llat*m;_cl.z+=rz*P.llat*m;_cl.y=RT+P.ly;camera.lookAt(_cl);return;}
+  // 盛岡分離：月台上望住兩個車鼻連結位；こまち：月台望住 E5 開走
+  if(G.cam==='split'){const s=CAM.splitS,m=-sideAt(s);frame(s-6.2,-3.3*m,PT+2.0,camera.position);frame(s+0.9,0,RT+1.35,_cl);camera.lookAt(_cl);return;}   // 鏡頭喺連結位後面（E6 嗰邊）向前望，避開月台企牌
+  if(G.cam==='leave'){const s=CAM.leaveS,m=-sideAt(s);frame(s-3,-2.6*m,PT+2.0,camera.position);frame(s+30,0.4*m,RT+1.7,_cl);camera.lookAt(_cl);return;}
   if(G.cam==='door'){const s=CAM.doorS,m=-sideAt(s);frame(s+2.7+Math.sin(t*0.25)*0.12,-4.9*m,PT+1.55,camera.position);frame(s-0.3,-1.0*m,RT+2.0,_cl);camera.lookAt(_cl);return;}
   const a=Math.sin(t*0.05),tg={side:10,up:7.5+1.5*Math.sin(t*0.09),fwd:a*27-12,back:16,look:2.0},k=camInit?1-Math.exp(-dt*1.4):1;camInit=true;
   for(const key in tg)CAM[key]+=(tg[key]-CAM[key])*k;
@@ -3624,7 +4398,7 @@ function lodBox(E){const o=E.o,g=o.geometry,e=o.matrixWorld.elements;E.tx=e[12];
   let w=[_lb.max.x-_lb.min.x,_lb.max.y-_lb.min.y,_lb.max.z-_lb.min.z];
   if(o.isInstancedMesh){if(!g.boundingBox)g.computeBoundingBox();const q=g.boundingBox,sc=Math.sqrt(Math.max(e[0]*e[0]+e[1]*e[1]+e[2]*e[2],e[4]*e[4]+e[5]*e[5]+e[6]*e[6],e[8]*e[8]+e[9]*e[9]+e[10]*e[10]));w=[(q.max.x-q.min.x)*sc,(q.max.y-q.min.y)*sc,(q.max.z-q.min.z)*sc];}
   w.sort((p,q)=>q-p);E.sz=isFinite(w[1])?w[1]:1e9;}
-function lodScan(){scene.updateMatrixWorld();const skip=new Set();for(const r of [CAB.group,sky,...(TA?TA.cars:[])])if(r)r.traverse(o=>skip.add(o));LODS.list=[];
+function lodScan(){scene.updateMatrixWorld();const skip=new Set();for(const r of [CAB.group,sky,...(TA?TA.cars:[]),...(TS?TS.cars:[])])if(r)r.traverse(o=>skip.add(o));LODS.list=[];
   scene.traverse(o=>{if(LOWQ&&o.material)for(const m of [].concat(o.material))if(m.isMeshPhysicalMaterial&&(m.clearcoat||m.sheen)){m.clearcoat=0;m.sheen=0;}   // iPad：冇清漆反光層（每點少計一層高光）
     if(!o.isMesh||skip.has(o)||o.frustumCulled===false)return;if(o.isInstancedMesh&&(o.count>120||o===carIM||o===busIM))return;
     const E={o};lodBox(E);LODS.list.push(E);});
@@ -3657,7 +4431,7 @@ let last=performance.now();
 function frameLoop(now){requestAnimationFrame(frameLoop);const t0=performance.now(),raw=(now-last)/1000,dt=Math.min(0.05,raw);last=now;G.time+=dt;
   if(G.state==='drive')updDrive(dt);else if(G.state==='arriving')updArrive(dt);
   const dd=G.doorT-G.doors;G.doors+=Math.sign(dd)*Math.min(Math.abs(dd),dt/1.6);
-  placeTrain(TA,G.s,0,false);setLeaves(TA,G.doorR?0:G.doors,G.doorR?G.doors:0);TM.doorLamp.color.setHex(G.doors>0.02?0xff3030:0x3a1010);
+  updShin(dt);placePlayer();TM.doorLamp.color.setHex(G.doors>0.02?0xff3030:0x3a1010);
   updPSD(dt);updLandmarks(G.time);updOnc(dt);updE5(dt);updBoats(dt);updPeople(dt);updCars(dt);texWaterN.offset.x+=dt*0.004;texWaterN.offset.y+=dt*0.012;
   if(G.v>2&&Math.floor(G.prevS/25)!==Math.floor(G.s/25)){jointClacks(G.v);G.bumpE=0.008+0.012*G.v/VMAX;}G.prevS=G.s;G.bump=(G.bumpE||0)*Math.sin(G.time*38);G.bumpE=(G.bumpE||0)*Math.exp(-dt*9);
   updCam(dt);updSun();updTunnelLight(dt);updCab(dt);
@@ -3670,7 +4444,7 @@ function frameLoop(now){requestAnimationFrame(frameLoop);const t0=performance.no
 
 /* ======================= 按鍵／鍵盤／拖曳望 ======================= */
 // 主頁揀咗條綫：先開揀站畫面（出發站、到達站），再撳「開始」
-$('#rJY').onclick=()=>{initAudio();openMap('jy');};$('#rEAL').onclick=()=>{initAudio();openMap('eal');};$('#ymGo').onclick=()=>{if(PICK.to!==null)startTrip(PICK.id,PICK.from,PICK.to);};
+$('#rJY').onclick=()=>{initAudio();openMap('jy');};$('#rEAL').onclick=()=>{initAudio();openMap('eal');};$('#rHAYA').onclick=()=>{initAudio();openMap('haya');};$('#rKOMA').onclick=()=>{initAudio();openMap('koma');};$('#ymGo').onclick=()=>{if(PICK.to!==null)startTrip(PICK.id,PICK.from,PICK.to);};
 $('#btnMap').onclick=()=>{initAudio();openMap('jy');};$('#btnMapE').onclick=()=>{initAudio();openMap('eal');};$('#ymClose').onclick=()=>$('#ymap').classList.add('hidden');
 $('#btnHome').onclick=()=>goTitle();
 // 試聲：叮噹（網頁音效）＋普通話、英文聲檔；聽唔到＝iPad 靜音模式（網頁音效會被靜音，系統語音唔會）
@@ -3708,9 +4482,9 @@ function boot(){try{
     buildTrack();{const n0=scene.children.length;buildShinViaduct();LMK.shv=scene.children.slice(n0);}buildStreets();buildCity();planStreetTrees();buildScenery();buildScenery2();buildTrees();buildHouses();buildStations();buildPeople();
     TA=buildTrain('e235',5);TB=buildTrain('e233',5);for(const c of TB.cars)c.visible=false;
     if(LOWQ)for(const T0 of [TA,TB])for(const c of T0.cars)c.traverse(o=>{if(o.isMesh&&o.castShadow&&o.material!==TM.steel&&o.material!==T0.face)o.castShadow=false;});   // iPad：車門、座位、車底細件唔投影
-    TE=buildE5(6);for(const c of TE.cars)c.visible=false;buildCab(TA.cars[0]);ensureHeadlight();buildNotchBar();
+    TE=shinTE();buildShinTrain();buildCab(TA.cars[0]);ensureHeadlight();buildNotchBar();
     loadProg();applyTripStart();updTitleCard();if(IOS)$('#sndTip').classList.remove('hidden');
-    G.s=ST[0].stop;G.prevS=G.s;resetPeople();placeTrain(TA,G.s,0,false);G.state='title';updCam(0);updSun();lodScan();renderer.compile(scene,camera);
+    G.s=ST[0].stop;G.prevS=G.s;resetPeople();placePlayer();G.state='title';updCam(0);updSun();lodScan();renderer.compile(scene,camera);
     $('#loading').classList.add('hidden');$('#title').classList.remove('hidden');icoWarm();requestAnimationFrame(t=>{last=t;frameLoop(t);});
   }catch(e){console.error(e);$('#loading').innerHTML=`<div>載入失敗，請重新整理</div><div style="font-size:14px;max-width:80vw;color:#a33">${e&&e.message}</div>`;}}
 function iconSheet(keys){const d=document.createElement('div');d.id='sheet';d.style.cssText='position:fixed;inset:0;z-index:99;background:#e9eef3;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:4px;padding:8px';
@@ -3720,7 +4494,7 @@ function dbgPick(nx,ny){const rc=new THREE.Raycaster();rc.setFromCamera(new THRE
   const h=rc.intersectObjects(scene.children,true).filter(i=>vis(i.object)&&i.object.isMesh)[0];if(!h)return null;const o=h.object,g=o.geometry;if(!g.boundingBox)g.computeBoundingBox();const bb=g.boundingBox;
   const path=[];for(let q=o;q&&q!==scene;q=q.parent)path.push(q.type+(q.name?':'+q.name:'')+'#'+(q.parent?q.parent.children.indexOf(q):''));
   return {d:+h.distance.toFixed(1),p:[h.point.x,h.point.y,h.point.z].map(v=>+v.toFixed(1)),mat:o.material.type,col:o.material.color&&o.material.color.getHexString(),vc:!!o.material.vertexColors,verts:g.attributes.position.count,bb:[bb.min.x,bb.min.y,bb.min.z,bb.max.x,bb.max.y,bb.max.z].map(v=>Math.round(v)),path:path.join('<'),inst:!!o.isInstancedMesh};}
-window.__kg={get AC(){return AC;},get BUS(){return BUS;},get LINE(){return LINE;},setLineData,switchLineVisuals,loadProg,applySection,get LMK(){return LMK;},qtest:(k,l=2)=>{$('#title').classList.add('hidden');showCard(true);renderQ(makeQ(k,l),()=>{});return Object.keys(QT);},iconSheet,icon,get IB(){return IB;},get TE(){return TE;},SK,G,ST,CAM,startRoute,goTitle,setCam,setMascon,stepNotch,onc,CAB,PP,renderer,camera,scene,composer,get QS(){return QS;},onDepart,onOpenDoor,onAnnApproach,annSet,sayAll,clipBuf,get VCLIP(){return VCLIP;},get VTXT(){return VTXT;},posAt,dirAt,frame,get TUN(){return TUN;},get TA(){return TA;},get TB(){return TB;},get PERF(){return PERF;},get LODS(){return LODS;},LOWQ,setPR,get PR(){return PR;},startTrip,TRIP,PICK,openMap,pickTap,planSegs,tripStations,get SECB(){return SECB;},get VGAIN(){return VGAIN;},get TDUCK(){return TDUCK;},initAudio,pick:dbgPick};
+window.__kg={get AC(){return AC;},get BUS(){return BUS;},get LINE(){return LINE;},setLineData,switchLineVisuals,loadProg,applySection,get LMK(){return LMK;},qtest:(k,l=2)=>{$('#title').classList.add('hidden');showCard(true);renderQ(makeQ(k,l),()=>{});return Object.keys(QT);},iconSheet,icon,get IB(){return IB;},get TE(){return TE;},SK,G,ST,CAM,startRoute,goTitle,setCam,setMascon,stepNotch,onc,CAB,PP,renderer,camera,scene,composer,get QS(){return QS;},onDepart,onOpenDoor,onAnnApproach,annSet,sayAll,clipBuf,get VCLIP(){return VCLIP;},get VTXT(){return VTXT;},posAt,dirAt,frame,get TUN(){return TUN;},get TA(){return TA;},get TB(){return TB;},get TS(){return TS;},TSH,shinOn,moveCab,placeShin,get PERF(){return PERF;},get LODS(){return LODS;},LOWQ,setPR,get PR(){return PR;},startTrip,TRIP,PICK,openMap,pickTap,planSegs,tripStations,get SECB(){return SECB;},get VGAIN(){return VGAIN;},get TDUCK(){return TDUCK;},initAudio,pick:dbgPick};
 setTimeout(boot,60);
 
 </script>
